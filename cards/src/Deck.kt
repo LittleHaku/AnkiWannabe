@@ -9,14 +9,25 @@ class Deck (
 
     fun addCard() {
         println("Adding card to deck")
+        print("Type the type (0 -> Card 1 -> Cloze): ")
+        val type = readlnOrNull()?.toIntOrNull()
+        if (type == null || type < 0 || type > 1) {
+            println("That type is not valid...")
+            return
+        }
         print("Type the question: ")
         val question = readlnOrNull()
         print("Type the answer: ")
         val answer = readlnOrNull()
-        if (answer == null || question == null)
+        if (answer == null || question == null) {
             println("There was an error")
-        else {
-            cards.add(Card(question, answer))
+        } else {
+            val card = if (type == 0) {
+                Card(question, answer)
+            } else {
+                Cloze(question, answer)
+            }
+            cards.add(card)
             println("Card added successfully")
         }
     }

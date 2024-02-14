@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.math.roundToLong
 
-class Card(
+open class Card(
     var question: String,
     var answer: String,
     var date: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
@@ -15,7 +15,7 @@ class Card(
     var easiness: Double = 2.5
 
 ) {
-    fun show() {
+    open fun show() {
         print("\n${this.question} (ENTER to see answer)")
         readln()
         print("${this.answer} (Type 0 -> Difficult 3 -> Doubt 5 -> Easy): ")

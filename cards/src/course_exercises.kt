@@ -1,21 +1,26 @@
-interface Drawable {
-    fun draw()
-    fun report() = println("I am drawable")
+interface ButtonListener {
+    fun onClicked()
+}
+
+class Button {
+    lateinit private var listener: ButtonListener
+    fun addListener(e: ButtonListener) {
+        listener = e
+    }
+
+    fun click() = listener.onClicked()
 }
 
 fun main() {
-    open class View(val id: Int) {
-        open fun draw() = println("I am view $id")
-    }
-    class Button(var isButton: Boolean, id: Int) : View(id) {
-        override fun draw() = println("I am button $id")
-    }
+    var button = Button()
 
+    button.addListener(object : ButtonListener {
+        override fun onClicked() = println("The button has been clicked")
+    })
 
+    button.addListener(object : ButtonListener {
+        override fun onClicked() = println("I've been clicked but now I'm behaving differently")
+    })
 
-
-
-
-
-
+    button.click()
 }
