@@ -22,13 +22,17 @@ class Deck (
         if (answer == null || question == null) {
             println("There was an error")
         } else {
-            val card = if (type == 0) {
-                Card(question, answer)
-            } else {
-                Cloze(question, answer)
+            try {
+                val card = if (type == 0) {
+                    Card(question, answer)
+                } else {
+                    Cloze(question, answer)
+                }
+                cards.add(card)
+                println("Card added successfully")
+            } catch (e: IllegalArgumentException) {
+                println("Error creating card: ${e.message}")
             }
-            cards.add(card)
-            println("Card added successfully")
         }
     }
 

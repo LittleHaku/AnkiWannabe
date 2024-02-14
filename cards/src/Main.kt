@@ -1,8 +1,5 @@
 fun main() {
-    var newDeck = Deck("English")
-    newDeck.cards.add(Card("To wake up", "Despertarse"))
-    newDeck.cards.add(Card("To come up with", "Proponer"))
-
+    val newDeck = Deck("English")
 
     do {
         print(
@@ -13,7 +10,7 @@ fun main() {
                     "Choose an option: "
         )
 
-        val option: Int? = readLine()?.toIntOrNull()
+        val option: Int? = readlnOrNull()?.toIntOrNull()
         if (option == null) {
             println("Not a valid option")
             return

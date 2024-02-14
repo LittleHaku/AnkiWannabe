@@ -1,12 +1,16 @@
 class Cloze(question: String, answer: String) : Card(question, answer) {
+    init {
+        require(question.count { it == '*' } == 2) { "Question must contain exactly two asterisks" }
+    }
+
     override fun show() {
         print("\n${this.question} (ENTER to see answer)")
-        readlnOrNull()
+        readln()
         val questionWithAnswer = this.question.run {
-            val start = this.indexOf('*')
-            val end = this.lastIndexOf('*')
+            val start = indexOf('*')
+            val end = lastIndexOf('*')
             if (start != -1 && end != -1 && start < end) {
-                this.replaceRange(start, end + 1, answer)
+                replaceRange(start, end + 1, answer)
             } else {
                 this
             }

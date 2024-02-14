@@ -19,7 +19,7 @@ open class Card(
         print("\n${this.question} (ENTER to see answer)")
         readln()
         print("${this.answer} (Type 0 -> Difficult 3 -> Doubt 5 -> Easy): ")
-        val quality = readLine()?.toIntOrNull() ?: -1
+        val quality = readlnOrNull()?.toIntOrNull() ?: -1
         if (quality == 0 || quality == 3 || quality == 5)
             this.quality = quality
         else
