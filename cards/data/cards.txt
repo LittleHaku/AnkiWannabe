@@ -1,0 +1,2 @@
+card | hola | hello | 2024-02-20 | 95fd4ac0-1f9a-4ad9-870b-6566cc2c0a37 | 0 | 0 | 1 | 2024-02-20 | 2.5
+cloze | estoy *comienod* queso | eating | 2024-02-20 | cdceaced-c48b-4d53-84d5-8f8df3c7b1d4 | 0 | 0 | 1 | 2024-02-20 | 2.5
