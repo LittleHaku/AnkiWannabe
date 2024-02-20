@@ -6,7 +6,9 @@ fun main() {
             "\n1. Add card\n" +
                     "2. List of cards\n" +
                     "3. Simulation\n" +
-                    "4. Exit\n" +
+                    "4. Read cards from file\n" +
+                    "5. Write cards to file\n" +
+                    "6. Exit\n" +
                     "Choose an option: "
         )
 
@@ -19,7 +21,9 @@ fun main() {
             1 -> newDeck.addCard()
             2 -> newDeck.listCards()
             3 -> newDeck.simulate(10)
-            4 -> println("Bye bye!")
+            4 -> newDeck.readCards("cards")
+            5 -> newDeck.writeCards("cards")
+            6 -> println("Bye bye!")
         }
-    } while (option != 4)
+    } while (option != 6)
 }

@@ -1,3 +1,4 @@
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -59,5 +60,39 @@ class Deck (
             }
             now = now.plusDays(1)
         }
+    }
+
+    fun writeCards(name: String) {
+        val file = File("cards/data/$name.txt")
+        file.bufferedWriter().use { writer ->
+            cards.forEach { card ->
+                writer.write(card.toString())
+                writer.newLine() // Add a newline after each card
+            }
+        }
+        println("Cards have been written to $name.txt")
+    }
+
+    fun readCards(name: String) {
+        val file = File("cards/data/$name.txt")
+        file.bufferedReader().useLines { lines ->
+            lines.forEach { line ->
+                val parts = line.split("|").map { it.trim() }
+                when (parts[0])  {
+                    "card" -> {
+                        val card = Card.fromString(line)
+                        cards.add(card)
+                    }
+                    "cloze" -> {
+                        val card = Cloze.fromString(line)
+                        cards.add(card)
+                    }
+                    else -> {
+                        throw IllegalArgumentException("Unrecognized card format: ${parts[0]}")
+                    }
+                }
+            }
+        }
+        println("Cards have been read from $name.txt")
     }
 }

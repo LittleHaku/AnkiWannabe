@@ -1,26 +1,28 @@
-interface ButtonListener {
-    fun onClicked()
-}
+import java.io.File
 
-class Button {
-    lateinit private var listener: ButtonListener
-    fun addListener(e: ButtonListener) {
-        listener = e
-    }
-
-    fun click() = listener.onClicked()
-}
+class Country(var name: String, var beer: Int, var spirits: Int, var wine: Int)
 
 fun main() {
-    var button = Button()
+    val lines: List<String> = File("cards/data/drinks.txt").readLines()
+    val countries: MutableList<Country> = mutableListOf()
+    var chunks: List<String>
+    var name: String
+    var beer: Int
+    var spirits: Int
+    var wine: Int
 
-    button.addListener(object : ButtonListener {
-        override fun onClicked() = println("The button has been clicked")
-    })
+    for (line in lines) {
+        chunks = line.split(",")
+        name = chunks[0]
+        beer = chunks[1].toInt()
+        spirits = chunks[2].toInt()
+        wine = chunks[3].toInt()
+        countries += Country(name, beer, spirits, wine)
+    }
 
-    button.addListener(object : ButtonListener {
-        override fun onClicked() = println("I've been clicked but now I'm behaving differently")
-    })
-
-    button.click()
+    fun selector(country: Country) : Int {
+        return maxOf(country.beer, country.spirits, country.wine)
+    }
+    countries.sortByDescending { selector(it) }
+    countries.forEach { println("${it.name} : ${it.beer} ${it.spirits} ${it.wine} ") }
 }

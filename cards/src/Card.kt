@@ -15,6 +15,28 @@ open class Card(
     var easiness: Double = 2.5
 
 ) {
+    companion object {
+        fun fromString(string: String): Card {
+            val parts = string.split("|").map { it.trim() }
+            val question = parts[1]
+            val answer = parts[2]
+            val date = parts[3]
+            val id = parts[4]
+            val quality = parts[5].toInt()
+            val repetitions = parts[6].toInt()
+            val interval = parts[7].toLong()
+            val nextPracticeDate = parts[8]
+            val easiness = parts[9].toDouble()
+
+            return Card(question, answer, date, id, quality, repetitions, interval, nextPracticeDate, easiness)
+        }
+    }
+
+
+    override fun toString(): String {
+        return "card | ${this.question} | ${this.answer} | ${this.date} | ${this.id} | ${this.quality} | ${this.repetitions} | ${this.interval} | ${this.nextPracticeDate} | ${this.easiness}"
+    }
+
     open fun show() {
         print("\n${this.question} (ENTER to see answer)")
         readln()
