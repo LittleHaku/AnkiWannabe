@@ -1,4 +1,5 @@
 import java.time.LocalDateTime
+import java.time.LocalDateTime.*
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.math.roundToLong
@@ -6,7 +7,7 @@ import kotlin.math.roundToLong
 open class Card(
     var question: String,
     var answer: String,
-    var date: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+    var date: String = now().toString(),
     var id: String = UUID.randomUUID().toString(),
     var quality: Int = 0,
     var repetitions: Int = 0,
@@ -65,13 +66,15 @@ open class Card(
         }
 
         // date
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        this.nextPracticeDate = currentDate.plusDays(interval).format(formatter)
+        this.nextPracticeDate = currentDate.plusDays(interval).toString()
     }
 
     fun details() {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = parse(this.nextPracticeDate).format(formatter)
+
         println(
-            "eas = %.2f rep = ${this.repetitions} int = ${this.interval} next = ${this.nextPracticeDate}".format(
+            "eas = %.2f rep = ${this.repetitions} int = ${this.interval} next = $date".format(
                 this.easiness
             )
         )
@@ -79,12 +82,12 @@ open class Card(
 
     fun simulate(period: Long) {
         println("Simulation of the card $question:")
-        var now = LocalDateTime.now()
+        var now = now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         for (i in 1..period) {
             println("Date: ${now.format(formatter)}")
-            if (now.format(formatter) == this.nextPracticeDate) {
+            if (now >= parse(nextPracticeDate)) {
                 this.show()
                 this.update(now)
                 this.details()

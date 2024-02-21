@@ -1,5 +1,6 @@
 import java.io.File
 import java.time.LocalDateTime
+import java.time.LocalDateTime.*
 import java.time.format.DateTimeFormatter
 
 class Deck (
@@ -46,13 +47,13 @@ class Deck (
 
     fun simulate(period: Int) {
         println("Simulation of deck $name:")
-        var now = LocalDateTime.now()
+        var now = now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-        for (i in 1..period) {
+        for (i in 0 until period) {
             println("Day: ${now.format(formatter)}")
             for (card in cards) {
-                if (now.format(formatter) == card.nextPracticeDate) {
+                if (now >= parse(card.nextPracticeDate)) {
                     card.show()
                     card.update(now)
                     card.details()
