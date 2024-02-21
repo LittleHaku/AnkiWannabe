@@ -10,11 +10,8 @@ fun main() {
                     "4. Read cards from file to current deck\n" +
                     "5. Write cards from current deck to file\n" +
                     "6. Example Histogram (1000 cards over 30 days with 90% chance)\n" +
-                    "7. List all decks\n" +
-                    "8. Add new deck\n" +
-                    "9. Remove a deck\n" +
-                    "10. Choose the working deck\n" +
-                    "11. Exit\n" +
+                    "7. Deck Options\n" +
+                    "8. Exit\n" +
                     "Choose an option: "
         )
 
@@ -27,28 +24,48 @@ fun main() {
             1 -> currentDeck.addCard()
             2 -> currentDeck.listCards()
             3 -> simulate(currentDeck)
-            4 -> currentDeck.readCards("cards")
-            5 -> currentDeck.writeCards("cards")
+            4 -> {
+                print("Choose the name of the file (no .txt) or empty for deck's name: ")
+                var name = readlnOrNull() ?: currentDeck.name
+                if (name == "") name = currentDeck.name
+                try {
+                    currentDeck.readCards(name)
+                } catch (e: Exception) {
+                    println("That file doesn't exist")
+                }
+            }
+            5 -> {
+                print("Choose the name of the file to load (no .txt) or empty for deck's name: ")
+                var name = readlnOrNull() ?: currentDeck.name
+                if (name == "") name = currentDeck.name
+                currentDeck.writeCards(name)
+            }
             6 -> {
                 val cards = simulate(30, 1000, 0.90, 0.08, 0.02)
                 histogram(cards)
             }
             7 -> {
+                print(
+                    "\n1. List all decks\n" +
+                            "2. Add new deck\n" +
+                            "3. Remove a deck\n" +
+                            "4. Choose the working deck\n" +
+                            "Choose an option: "
+                )
 
-                decks.forEachIndexed { index, deck ->
-                    println("${index + 1}. ${deck.name}")
+                val deckOption: Int? = readlnOrNull()?.toIntOrNull()
+                if (deckOption == null) {
+                    println("Not a valid option")
+                    return
+                }
+                when (deckOption) {
+                    1 -> listDecks(decks)
+                    2 -> currentDeck = addNewDeck(decks, currentDeck)
+                    3 -> currentDeck = removeDeck(decks, currentDeck)
+                    4 -> currentDeck = changeDeck(decks, currentDeck)
                 }
             }
             8 -> {
-                currentDeck = addNewDeck(decks, currentDeck)
-            }
-            9 -> {
-                currentDeck = removeDeck(decks, currentDeck)
-            }
-            10 -> {
-                currentDeck = changeDeck(decks, currentDeck)
-            }
-            11 -> {
                 println("Bye bye!")
                 return;
             }
@@ -74,9 +91,7 @@ private fun removeDeck(decks: MutableList<Deck>, currentDeck: Deck): Deck {
     if (decks.size == 1) {
         println("You only have one deck, dont remove it!")
     } else {
-        decks.forEachIndexed { index, deck ->
-            println("${index + 1}. ${deck.name}")
-        }
+        listDecks(decks)
         print("Enter the number of the deck to remove: ")
         val deckNumber = readlnOrNull()?.toIntOrNull()
         if (deckNumber != null && deckNumber in 1..decks.size) {
@@ -92,6 +107,12 @@ private fun removeDeck(decks: MutableList<Deck>, currentDeck: Deck): Deck {
         println("Now working on ${currentDeck1.name}")
     }
     return currentDeck1
+}
+
+private fun listDecks(decks: MutableList<Deck>) {
+    decks.forEachIndexed { index, deck ->
+        println("${index + 1}. ${deck.name}")
+    }
 }
 
 private fun addNewDeck(decks: MutableList<Deck>, currentDeck: Deck): Deck {
