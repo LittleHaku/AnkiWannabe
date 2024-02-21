@@ -40,8 +40,8 @@ class Deck (
 
     fun listCards() {
         println("\nList of Cards: ")
-        for (card in cards) {
-            println("${card.question} -> ${card.answer}")
+        for ((index, card) in cards.withIndex()) {
+            println("${index + 1}. ${card.question} -> ${card.answer}")
         }
     }
 

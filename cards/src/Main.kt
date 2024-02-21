@@ -4,15 +4,17 @@ fun main() {
 
     do {
         print(
-            "\n1. Add card\n" +
-                    "2. List cards\n" +
-                    "3. Simulate current deck\n" +
-                    "4. Read cards from file to current deck\n" +
-                    "5. Write cards from current deck to file\n" +
-                    "6. Example Histogram (1000 cards over 30 days with 90% chance)\n" +
-                    "7. Deck Options\n" +
-                    "8. Exit\n" +
-                    "Choose an option: "
+            """
+1. Add card
+2. List cards
+3. Remove Cards
+4. Simulate current deck
+5. Read cards from file to current deck
+6. Write cards from current deck to file
+7. Example Histogram (1000 cards over 30 days with 90% chance)
+8. Deck Options
+9. Exit
+Choose an option: """
         )
 
         val option: Int? = readlnOrNull()?.toIntOrNull()
@@ -23,28 +25,12 @@ fun main() {
         when (option) {
             1 -> currentDeck.addCard()
             2 -> currentDeck.listCards()
-            3 -> simulate(currentDeck)
-            4 -> {
-                print("Choose the name of the file (no .txt) or empty for deck's name: ")
-                var name = readlnOrNull() ?: currentDeck.name
-                if (name == "") name = currentDeck.name
-                try {
-                    currentDeck.readCards(name)
-                } catch (e: Exception) {
-                    println("That file doesn't exist")
-                }
-            }
-            5 -> {
-                print("Choose the name of the file to load (no .txt) or empty for deck's name: ")
-                var name = readlnOrNull() ?: currentDeck.name
-                if (name == "") name = currentDeck.name
-                currentDeck.writeCards(name)
-            }
-            6 -> {
-                val cards = simulate(30, 1000, 0.90, 0.08, 0.02)
-                histogram(cards)
-            }
-            7 -> {
+            3 -> deleteCard(currentDeck, decks)
+            4 -> simulate(currentDeck)
+            5 -> loadDeck(currentDeck)
+            6 -> saveDeck(currentDeck)
+            7 -> histogram(simulate(30, 1000, 0.90, 0.08, 0.02))
+            8 -> {
                 print(
                     "\n1. List all decks\n" +
                             "2. Add new deck\n" +
@@ -65,12 +51,42 @@ fun main() {
                     4 -> currentDeck = changeDeck(decks, currentDeck)
                 }
             }
-            8 -> {
+            9 -> {
                 println("Bye bye!")
-                return;
+                return
             }
         }
     } while (true)
+}
+
+private fun saveDeck(currentDeck: Deck) {
+    print("Choose the name of the file to load (no .txt) or empty for deck's name: ")
+    var name = readlnOrNull() ?: currentDeck.name
+    if (name == "") name = currentDeck.name
+    currentDeck.writeCards(name)
+}
+
+private fun loadDeck(currentDeck: Deck) {
+    print("Choose the name of the file (no .txt) or empty for deck's name: ")
+    var name = readlnOrNull() ?: currentDeck.name
+    if (name == "") name = currentDeck.name
+    try {
+        currentDeck.readCards(name)
+    } catch (e: Exception) {
+        println("That file doesn't exist")
+    }
+}
+
+private fun deleteCard(currentDeck: Deck, decks: MutableList<Deck>) {
+    currentDeck.listCards()
+    print("Enter the number of the card to remove: ")
+    val cardNumber = readlnOrNull()?.toIntOrNull()
+    if (cardNumber != null && cardNumber in 1..decks.size) {
+        val removedCard = currentDeck.cards.removeAt(cardNumber - 1)
+        println("Removed the ${removedCard.question} card")
+    } else {
+        println("Not a valid card number")
+    }
 }
 
 private fun changeDeck(decks: MutableList<Deck>, currentDeck: Deck): Deck {
