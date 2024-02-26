@@ -35,13 +35,13 @@ open class Card(
 
 
     override fun toString(): String {
-        return "card | ${this.question} | ${this.answer} | ${this.date} | ${this.id} | ${this.quality} | ${this.repetitions} | ${this.interval} | ${this.nextPracticeDate} | ${this.easiness}"
+        return "card | $question | $answer | $date | $id | $quality | $repetitions | $interval | $nextPracticeDate | $easiness"
     }
 
     open fun show() {
-        print("\n${this.question} (ENTER to see answer)")
+        print("\n$question (ENTER to see answer)")
         readln()
-        print("${this.answer} (Type 0 -> Difficult 3 -> Doubt 5 -> Easy): ")
+        print("$answer (Type 0 -> Difficult 3 -> Doubt 5 -> Easy): ")
         val quality = readlnOrNull()?.toIntOrNull() ?: -1
         if (quality == 0 || quality == 3 || quality == 5)
             this.quality = quality
@@ -51,32 +51,30 @@ open class Card(
 
     fun update(currentDate: LocalDateTime) {
         // easiness
-        val newEasiness = this.easiness + 0.1 - (5 - this.quality) * (0.08 + (5 - this.quality) * 0.02)
-        this.easiness = if (newEasiness < 1.3) 1.3 else newEasiness
+        val newEasiness = easiness + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)
+        easiness = if (newEasiness < 1.3) 1.3 else newEasiness
 
         // reps
-        this.repetitions = if (this.quality < 3) 0 else this.repetitions + 1
+        repetitions = if (quality < 3) 0 else repetitions + 1
 
 
         // interval
-        this.interval = when (this.repetitions) {
+        interval = when (repetitions) {
             0, 1 -> 1
             2 -> 6
-            else -> (this.interval * this.easiness).roundToLong()
+            else -> (interval * easiness).roundToLong()
         }
 
         // date
-        this.nextPracticeDate = currentDate.plusDays(interval).toString()
+        nextPracticeDate = currentDate.plusDays(interval).toString()
     }
 
     fun details() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val date = parse(this.nextPracticeDate).format(formatter)
+        val date = parse(nextPracticeDate).format(formatter)
 
         println(
-            "eas = %.2f rep = ${this.repetitions} int = ${this.interval} next = $date".format(
-                this.easiness
-            )
+            "eas = %.2f rep = $repetitions int = $interval next = $date".format(easiness)
         )
     }
 
@@ -88,9 +86,9 @@ open class Card(
         for (i in 1..period) {
             println("Date: ${now.format(formatter)}")
             if (now >= parse(nextPracticeDate)) {
-                this.show()
-                this.update(now)
-                this.details()
+                show()
+                update(now)
+                details()
             }
             now = now.plusDays(1)
         }

@@ -37,13 +37,13 @@ class Cloze(question: String, answer: String) : Card(question, answer) {
     )
 
     override fun toString(): String {
-        return "cloze | ${this.question} | ${this.answer} | ${this.date} | ${this.id} | ${this.quality} | ${this.repetitions} | ${this.interval} | ${this.nextPracticeDate} | ${this.easiness}"
+        return "cloze | $question | $answer | $date | $id | $quality | $repetitions | $interval | $nextPracticeDate | $easiness"
     }
 
     override fun show() {
-        print("\n${this.question} (ENTER to see answer)")
+        print("\n${question} (ENTER to see answer)")
         readln()
-        val questionWithAnswer = this.question.run {
+        val questionWithAnswer = question.run {
             val start = indexOf('*')
             val end = lastIndexOf('*')
             if (start != -1 && end != -1 && start < end) {
