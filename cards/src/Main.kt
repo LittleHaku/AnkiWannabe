@@ -148,7 +148,7 @@ private fun addNewDeck(decks: MutableList<Deck>, currentDeck: Deck): Deck {
 
 private fun simulate(deck: Deck) {
     print("For how many days do you want to simulate the deck? ")
-    val days = readlnOrNull()?.toInt()
+    val days = readlnOrNull()?.toIntOrNull()
     if (days == null) {
         println("Not a valid time period")
     } else {
