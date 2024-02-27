@@ -1,7 +1,5 @@
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalDateTime.*
-import java.time.format.DateTimeFormatter
 
 fun histogram(cards: List<Card>) {
     val groups = cards.groupBy {
