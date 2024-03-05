@@ -19,29 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 
-
-@Composable
-fun CardItem(
-    card: Card,
-    switchState: Boolean,
-    onSwitchChange: (Boolean) -> Unit,
-    modifier: Modifier
-) {
-
-    var switchState by remember { mutableStateOf(false) }
-    val onSwitchChange = { it: Boolean -> switchState = it }
-
-
-    Row(
-        modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
-    ) {
-
-        CardData(card = card, switchState, onSwitchChange)
-    }
-}
 
 @Composable
 fun CardView(cards: List<Card>) {
@@ -55,6 +34,8 @@ fun CardView(cards: List<Card>) {
     val onAnswered = { value: Boolean ->
         answered = value
     }
+
+
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
@@ -67,18 +48,22 @@ fun CardView(cards: List<Card>) {
 
 @Composable
 fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit) {
-
+    val onDifficultyChecked = { value: Int ->
+        card.quality = value
+        card.update(now())
+    }
     Column {
         Row {
             Text(card.question)
         }
 
-        Row {
+        Column {
             if (answered) {
                 Text(card.answer)
+                DifficultyButtons(onAnswered, onDifficultyChecked)
 
             } else {
-                ViewAnswerButton(answered, onAnswered)
+                ViewAnswerButton(onAnswered)
             }
         }
     }
@@ -86,10 +71,37 @@ fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit) {
 }
 
 @Composable
-fun ViewAnswerButton(answered: Boolean, onValueChange: (Boolean) -> Unit) {
-    Button(onClick = { onValueChange(!answered) }) {
+fun ViewAnswerButton(onAnswered: (Boolean) -> Unit) {
+    Button(onClick = { onAnswered(true) }) {
         Text(text = "View Answer")
 
+    }
+}
+
+@Composable
+fun DifficultyButtons(
+    onAnswered: (Boolean) -> Unit,
+    onDifficultyChecked: (Int) -> Unit
+) {
+    Row {
+        Button(onClick = {
+            onDifficultyChecked(0)
+            onAnswered(false)
+        }) {
+            Text("Easy")
+        }
+        Button(onClick = {
+            onDifficultyChecked(3)
+            onAnswered(false)
+        }) {
+            Text("Doubt")
+        }
+        Button(onClick = {
+            onDifficultyChecked(5)
+            onAnswered(false)
+        }) {
+            Text("Hard")
+        }
     }
 }
 
@@ -102,17 +114,4 @@ fun Screen() {
         //CardItem(Card("To slow down", "Ralentizar"))
     }
 
-}
-
-@Composable
-fun SwitchICon(switchState: Boolean, onSwitchChange: (Boolean) -> Unit) {
-    val drawableResource = if (switchState) R.drawable.rounded_arrow_drop_up_24
-    else R.drawable.rounded_arrow_right_24
-
-    Icon(
-        painter = painterResource(id = drawableResource),
-        contentDescription = "contentDescription",
-        modifier = Modifier
-            .clickable { onSwitchChange(!switchState) }
-    )
 }

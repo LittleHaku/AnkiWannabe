@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
             CardsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    CardView(listOf(Card("To wake up", "Despertarse")))
+                    CardView(listOf(Card("To wake up", "Despertarse"),
+                        Card("To slow down", "Ralentizar")))
                 }
             }
         }
