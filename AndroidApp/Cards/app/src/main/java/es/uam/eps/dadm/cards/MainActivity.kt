@@ -44,8 +44,13 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    CardView(listOf(Card("To wake up", "Despertarse"),
-                        Card("To slow down", "Ralentizar")))
+                    /*CardView(
+                        listOf(
+                            Card("To wake up", "Despertarse"),
+                            Card("To slow down", "Ralentizar")
+                        )
+                    )*/
+                    CardItem(card = Card("To wake up", "Despertarse") )
                 }
             }
         }
