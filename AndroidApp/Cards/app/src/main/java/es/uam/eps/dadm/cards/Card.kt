@@ -9,6 +9,7 @@ open class Card(
     var answer: String,
     var date: String = now().toString(),
     var id: String = UUID.randomUUID().toString(),
+    var deckId: String = UUID.randomUUID().toString(),
     var quality: Int = 0,
     var repetitions: Int = 0,
     var interval: Long = 1L,
@@ -23,19 +24,20 @@ open class Card(
             val answer = parts[2]
             val date = parts[3]
             val id = parts[4]
-            val quality = parts[5].toInt()
-            val repetitions = parts[6].toInt()
-            val interval = parts[7].toLong()
-            val nextPracticeDate = parts[8]
-            val easiness = parts[9].toDouble()
+            val deckId = parts[5]
+            val quality = parts[6].toInt()
+            val repetitions = parts[7].toInt()
+            val interval = parts[8].toLong()
+            val nextPracticeDate = parts[9]
+            val easiness = parts[10].toDouble()
 
-            return Card(question, answer, date, id, quality, repetitions, interval, nextPracticeDate, easiness)
+            return Card(question, answer, date, id, deckId,quality, repetitions, interval, nextPracticeDate, easiness)
         }
     }
 
 
     override fun toString(): String {
-        return "card | $question | $answer | $date | $id | $quality | $repetitions | $interval | $nextPracticeDate | $easiness"
+        return "card | $question | $answer | $date | $id | $deckId |$quality | $repetitions | $interval | $nextPracticeDate | $easiness"
     }
 
     open fun show() {

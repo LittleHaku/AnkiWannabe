@@ -44,12 +44,31 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+                    val decks = mutableListOf<Deck>()
+                    val english =
+                        Deck(
+                            name = "English",
+                            description = "English phrasal verbs"
+                        )
                     val cards = mutableListOf<Card>()
-                    cards += Card("To wake up", "Despertarse")
-                    cards += Card("To slow down", "Ralentizar")
-                    cards += Card("To give up", "Rendirse")
-                    cards += Card("To come up", "Acercarse")
-                    CardList(cards)
+                    cards += Card("To wake up", "Despertarse", deckId = english.deckId)
+                    cards += Card("To slow down", "Ralentizar", deckId = english.deckId)
+                    cards += Card("To give up", "Rendirse", deckId = english.deckId)
+                    cards += Card("To come up", "Acercarse", deckId = english.deckId)
+
+                    val french = Deck(
+                        name = "French",
+                        description = "French verbs"
+                    )
+                    cards += Card("Se réveiller", "Despertarse", deckId = french.deckId)
+                    cards += Card("Ralentir", "Ralentizar", deckId = french.deckId)
+                    cards += Card("Abandonner", "Rendirse", deckId = french.deckId)
+                    cards += Card("Approcher", "Acercarse", deckId = french.deckId)
+
+                    decks += english
+                    decks += french
+
+                    DeckList(cards, decks)
                 }
             }
         }
