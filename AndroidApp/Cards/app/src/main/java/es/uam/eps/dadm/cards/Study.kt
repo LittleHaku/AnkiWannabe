@@ -97,7 +97,8 @@ fun CardList(cards: List<Card>) {
             Text(
                 "LIST OF CARDS",
                 Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayLarge
             )
         }
         items(cards) { card ->
