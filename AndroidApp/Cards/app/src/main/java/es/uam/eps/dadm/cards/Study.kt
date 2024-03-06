@@ -1,13 +1,10 @@
 package es.uam.eps.dadm.cards
 
 import Card
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,8 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
@@ -28,22 +23,24 @@ fun CardView(cards: List<Card>) {
     var answered by remember { mutableStateOf(false) }
 
     val card = cards.filter {
-        LocalDateTime.parse(it.nextPracticeDate) <= LocalDateTime.now()
-    }.random()
+        LocalDateTime.parse(it.nextPracticeDate) <= now()
+    }.let{
+        if (it.any()) it.random() else null
+    }
 
     val onAnswered = { value: Boolean ->
         answered = value
     }
 
+    card?.let {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
-    ) {
-
-        CardData(card, answered, onAnswered)
+            CardData(card, answered, onAnswered)
+        }
     }
-
 }
 
 @Composable
