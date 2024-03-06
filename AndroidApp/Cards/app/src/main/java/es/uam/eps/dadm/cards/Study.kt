@@ -1,6 +1,7 @@
 package es.uam.eps.dadm.cards
 
 import Card
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,22 +35,6 @@ val YELLOW = Color(0xfff7e848)
 val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
-
-@Composable
-fun CardList(cards: List<Card>) {
-    LazyColumn() {
-        item {
-            Text(
-                "LIST OF CARDS",
-                Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
-        }
-        items(cards) { card ->
-            CardItem(card = card)
-        }
-    }
-}
 
 @Composable
 fun CardView(cards: List<Card>) {
@@ -96,12 +82,42 @@ fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit) {
 }
 
 @Composable
+fun CardList(cards: List<Card>) {
+    val context = LocalContext.current
+    val onItemClick = { card: Card ->
+        Toast.makeText(
+            context,
+            card.question,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    LazyColumn() {
+        item {
+            Text(
+                "LIST OF CARDS",
+                Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        items(cards) { card ->
+            CardItem(card, onItemClick)
+        }
+    }
+}
+
+@Composable
 fun CardItem(
     card: Card,
+    onItemClick: (Card) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Row(
-        modifier.fillMaxWidth(),
+        modifier
+            .fillMaxWidth()
+            .padding(all = 5.dp)
+            .clickable { onItemClick(card) },
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
     ) {
@@ -113,9 +129,11 @@ fun CardItem(
             SwitchIcon(switchState, onSwitchState)
         }
 
-        Column(modifier = Modifier
-            .padding(start = 16.dp)
-            .weight(1f)) {
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .weight(1f)
+        ) {
             Text(
                 card.question,
                 fontWeight = FontWeight.Bold,
@@ -132,7 +150,7 @@ fun CardItem(
             }
         }
 
-        Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End){
+        Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
             Text(card.date.toString().substring(0..9))
         }
     }
