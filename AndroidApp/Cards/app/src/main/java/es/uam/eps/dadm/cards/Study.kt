@@ -3,6 +3,8 @@ package es.uam.eps.dadm.cards
 import Card
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
@@ -30,6 +33,22 @@ val YELLOW = Color(0xfff7e848)
 val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
+
+@Composable
+fun CardList(cards: List<Card>) {
+    LazyColumn() {
+        item {
+            Text(
+                "LIST OF CARDS",
+                Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        items(cards) { card ->
+            CardItem(card = card)
+        }
+    }
+}
 
 @Composable
 fun CardView(cards: List<Card>) {
@@ -83,7 +102,7 @@ fun CardItem(
 ) {
     Row(
         modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
     ) {
         var switchState: Boolean by remember { mutableStateOf(false) }
@@ -92,10 +111,11 @@ fun CardItem(
         }
         Column {
             SwitchIcon(switchState, onSwitchState)
-
         }
 
-        Column {
+        Column(modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)) {
             Text(
                 card.question,
                 fontWeight = FontWeight.Bold,
@@ -112,11 +132,12 @@ fun CardItem(
             }
         }
 
-        Column() {
+        Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End){
             Text(card.date.toString().substring(0..9))
         }
     }
 }
+
 
 @Composable
 fun SwitchIcon(switchState: Boolean, onSwitchChange: (Boolean) -> Unit) {
@@ -181,13 +202,11 @@ fun DifficultyButtons(
 @Composable
 fun Screen() {
     CardsTheme {
-        /*val cards = mutableListOf<Card>()
+        val cards = mutableListOf<Card>()
         cards += Card("To wake up", "Despertarse")
         cards += Card("To slow down", "Ralentizar")
         cards += Card("To give up", "Rendirse")
         cards += Card("To come up", "Acercarse")
-        CardList(cards)*/
-
-        CardItem(card = Card("To slow down", "Ralentizar"))
+        CardList(cards)
     }
 }

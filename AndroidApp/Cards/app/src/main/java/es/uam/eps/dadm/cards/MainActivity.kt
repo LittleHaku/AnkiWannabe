@@ -44,13 +44,12 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    /*CardView(
-                        listOf(
-                            Card("To wake up", "Despertarse"),
-                            Card("To slow down", "Ralentizar")
-                        )
-                    )*/
-                    CardItem(card = Card("To wake up", "Despertarse") )
+                    val cards = mutableListOf<Card>()
+                    cards += Card("To wake up", "Despertarse")
+                    cards += Card("To slow down", "Ralentizar")
+                    cards += Card("To give up", "Rendirse")
+                    cards += Card("To come up", "Acercarse")
+                    CardList(cards)
                 }
             }
         }
