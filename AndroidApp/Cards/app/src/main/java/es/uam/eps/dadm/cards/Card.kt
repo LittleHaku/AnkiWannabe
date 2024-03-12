@@ -1,13 +1,20 @@
+package es.uam.eps.dadm.cards
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import java.time.LocalDateTime.*
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.math.roundToLong
 
+@Entity(tableName = "cards_table")
 open class Card(
+    @ColumnInfo(name = "card_question")
     var question: String,
     var answer: String,
     var date: String = now().toString(),
+    @PrimaryKey
     var id: String = UUID.randomUUID().toString(),
     var deckId: String = UUID.randomUUID().toString(),
     var quality: Int = 0,

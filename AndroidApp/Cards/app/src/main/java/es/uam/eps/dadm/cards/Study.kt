@@ -1,6 +1,5 @@
 package es.uam.eps.dadm.cards
 
-import Card
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +13,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -82,7 +82,9 @@ fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit) {
 }
 
 @Composable
-fun CardList(cards: List<Card>) {
+fun CardList(viewModel: CardViewModel) {
+    val cards by viewModel.cards.observeAsState()
+
     val context = LocalContext.current
     val onItemClick = { card: Card ->
         Toast.makeText(
@@ -101,8 +103,10 @@ fun CardList(cards: List<Card>) {
                 style = MaterialTheme.typography.displayLarge
             )
         }
-        items(cards) { card ->
-            CardItem(card, onItemClick)
+        cards?.let {
+            items(it) { card ->
+                CardItem(card, onItemClick)
+            }
         }
     }
 }
@@ -279,9 +283,11 @@ fun DeckItem(
 
         }
         Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
-            val numberOfCardsInDeck = cards.filter {it.deckId == deck.deckId }.size
-            Text("$numberOfCardsInDeck cards",
-                style=MaterialTheme.typography.bodyMedium)
+            val numberOfCardsInDeck = cards.filter { it.deckId == deck.deckId }.size
+            Text(
+                "$numberOfCardsInDeck cards",
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 
