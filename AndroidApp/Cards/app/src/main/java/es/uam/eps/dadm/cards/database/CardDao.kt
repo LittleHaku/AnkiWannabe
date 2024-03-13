@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import es.uam.eps.dadm.cards.Card
 
 
@@ -17,4 +18,11 @@ interface CardDao {
 
     @Insert
     suspend fun addCard(card: Card)
+
+    @Query("DELETE FROM cards_table")
+    suspend fun deleteCards()
+
+    @Update
+    suspend fun updateCard(card: Card)
+
 }

@@ -78,6 +78,9 @@ open class Card(
         nextPracticeDate = currentDate.plusDays(interval).toString()
     }
 
+    fun isDue(date: LocalDateTime) =
+        LocalDateTime.parse(nextPracticeDate) <= date
+
     fun details() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val date = parse(nextPracticeDate).format(formatter)
@@ -102,6 +105,8 @@ open class Card(
             now = now.plusDays(1)
         }
     }
+
+
 
 
 }

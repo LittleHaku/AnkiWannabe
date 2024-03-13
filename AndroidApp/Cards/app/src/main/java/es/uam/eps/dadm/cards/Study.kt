@@ -9,7 +9,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,23 +35,38 @@ val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
 
+
 @Composable
-fun CardView(cards: List<Card>) {
+fun Study(viewModel: CardViewModel) {
+    val card by viewModel.dueCard.observeAsState()
+    val nCards by viewModel.nDueCards.observeAsState(initial = 0)
+    card?.let {
+        CardView(viewModel = viewModel, it, nCards)
+    } ?: Toast.makeText(LocalContext.current, "No more cards left", Toast.LENGTH_SHORT).show()
+
+}
+@Composable
+fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
 
     var answered by remember { mutableStateOf(false) }
 
-    val card = getCard(cards)
+    //val card = getCard(cards)
 
     val onAnswered = { value: Boolean ->
         answered = value
     }
 
-    card?.let {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Remaining cards: $nCards",
+            modifier = Modifier.padding(top = 50.dp),
+            style = MaterialTheme.typography.bodyLarge)
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CardData(card, answered, onAnswered)
+            CardData(card, answered, onAnswered, viewModel)
         }
     }
+
+
 }
 
 @Composable
@@ -61,13 +75,15 @@ private fun getCard(cards: List<Card>) = cards.filter {
 }.getOrNull(0)
 
 @Composable
-fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit) {
+fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit, viewModel: CardViewModel) {
     val onDifficultyChecked = { value: Int ->
         card.quality = value
+        viewModel.updateCard(card)
         card.update(now())
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
         Text(card.question)
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -293,6 +309,8 @@ fun DeckItem(
 
 
 }
+
+
 
 
 @Preview(showBackground = true)

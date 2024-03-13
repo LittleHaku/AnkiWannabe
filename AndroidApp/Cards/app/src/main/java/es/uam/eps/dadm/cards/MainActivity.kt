@@ -31,7 +31,8 @@ class MainActivity : ComponentActivity() {
                             CardViewModelFactory(LocalContext.current.applicationContext as Application)
                         )
 
-                        CardList(viewModel)
+                        //CardList(viewModel)
+                        Study(viewModel)
                     }
                 }
             }
