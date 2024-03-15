@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +46,7 @@ fun Study(viewModel: CardViewModel) {
     } ?: Toast.makeText(LocalContext.current, "No more cards left", Toast.LENGTH_SHORT).show()
 
 }
+
 @Composable
 fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
@@ -58,9 +60,11 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Remaining cards: $nCards",
+        Text(
+            "Remaining cards: $nCards",
             modifier = Modifier.padding(top = 50.dp),
-            style = MaterialTheme.typography.bodyLarge)
+            style = MaterialTheme.typography.bodyLarge
+        )
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CardData(card, answered, onAnswered, viewModel)
         }
@@ -75,7 +79,9 @@ private fun getCard(cards: List<Card>) = cards.filter {
 }.getOrNull(0)
 
 @Composable
-fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit, viewModel: CardViewModel) {
+fun CardData(
+    card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit, viewModel: CardViewModel
+) {
     val onDifficultyChecked = { value: Int ->
         card.quality = value
         viewModel.updateCard(card)
@@ -101,12 +107,19 @@ fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit, viewM
 fun CardList(viewModel: CardViewModel) {
     val cards by viewModel.getCardsByDeckName("English").observeAsState(listOf())
 
+    val all by viewModel.getCardsAndDecks().observeAsState()
+
+    all?.let {
+        it.forEach { deck, cards ->
+            println(deck.name)
+            cards.forEach { println(it.question) }
+        }
+    }
+
     val context = LocalContext.current
     val onItemClick = { card: Card ->
         Toast.makeText(
-            context,
-            card.question,
-            Toast.LENGTH_SHORT
+            context, card.question, Toast.LENGTH_SHORT
         ).show()
     }
 
@@ -129,9 +142,7 @@ fun CardList(viewModel: CardViewModel) {
 
 @Composable
 fun CardItem(
-    card: Card,
-    onItemClick: (Card) -> Unit,
-    modifier: Modifier = Modifier
+    card: Card, onItemClick: (Card) -> Unit, modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     Row(
@@ -163,8 +174,7 @@ fun CardItem(
             Text(card.answer, modifier, style = MaterialTheme.typography.bodyMedium)
             if (switchState) {
                 Text(
-                    "Quality = ${card.quality}\nEasiness = ${card.easiness}" +
-                            "\nRepetitions = ${card.repetitions}",
+                    "Quality = ${card.quality}\nEasiness = ${card.easiness}" + "\nRepetitions = ${card.repetitions}",
                     modifier,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -183,19 +193,15 @@ fun SwitchIcon(switchState: Boolean, onSwitchChange: (Boolean) -> Unit) {
     val drawableResource = if (switchState) R.drawable.rounded_arrow_drop_down_24
     else R.drawable.rounded_arrow_right_24
 
-    Icon(
-        painter = painterResource(id = drawableResource),
+    Icon(painter = painterResource(id = drawableResource),
         contentDescription = "contentDescription",
-        modifier = Modifier
-            .clickable { onSwitchChange(!switchState) }
-    )
+        modifier = Modifier.clickable { onSwitchChange(!switchState) })
 }
 
 @Composable
 fun ViewAnswerButton(onAnswered: (Boolean) -> Unit) {
     Button(
-        onClick = { onAnswered(true) },
-        colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+        onClick = { onAnswered(true) }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
     ) {
         Text(text = "View Answer", color = BLACK)
     }
@@ -203,16 +209,14 @@ fun ViewAnswerButton(onAnswered: (Boolean) -> Unit) {
 
 @Composable
 fun DifficultyButtons(
-    onAnswered: (Boolean) -> Unit,
-    onDifficultyChecked: (Int) -> Unit
+    onAnswered: (Boolean) -> Unit, onDifficultyChecked: (Int) -> Unit
 ) {
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
         Button(
             onClick = {
                 onDifficultyChecked(0)
                 onAnswered(false)
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+            }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
         ) {
             Text("Easy", color = BLACK)
         }
@@ -220,8 +224,7 @@ fun DifficultyButtons(
             onClick = {
                 onDifficultyChecked(3)
                 onAnswered(false)
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = YELLOW)
+            }, colors = ButtonDefaults.buttonColors(containerColor = YELLOW)
         ) {
             Text("Doubt", color = BLACK)
         }
@@ -229,8 +232,7 @@ fun DifficultyButtons(
             onClick = {
                 onDifficultyChecked(5)
                 onAnswered(false)
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = RED)
+            }, colors = ButtonDefaults.buttonColors(containerColor = RED)
         ) {
             Text("Hard", color = BLACK)
         }
@@ -238,13 +240,13 @@ fun DifficultyButtons(
 }
 
 @Composable
-fun DeckList(cards: List<Card>, decks: List<Deck>) {
+fun DeckList(viewModel: CardViewModel) {
+    val cards by viewModel.cards.observeAsState(emptyList())
+    val decks by viewModel.decks.observeAsState(emptyList())
     val context = LocalContext.current
     val onItemClick = { deck: Deck ->
         Toast.makeText(
-            context,
-            "${deck.name} selected",
-            Toast.LENGTH_SHORT
+            context, "${deck.name} selected", Toast.LENGTH_SHORT
         ).show()
     }
 
@@ -266,10 +268,7 @@ fun DeckList(cards: List<Card>, decks: List<Deck>) {
 
 @Composable
 fun DeckItem(
-    deck: Deck,
-    cards: List<Card>,
-    onItemClick: (Deck) -> Unit,
-    modifier: Modifier = Modifier
+    deck: Deck, cards: List<Card>, onItemClick: (Deck) -> Unit, modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     Row(
@@ -291,9 +290,7 @@ fun DeckItem(
                 .weight(1f)
         ) {
             Text(
-                deck.name,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge
+                deck.name, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge
             )
             Text(deck.description, modifier, style = MaterialTheme.typography.bodyMedium)
 
@@ -301,8 +298,7 @@ fun DeckItem(
         Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
             val numberOfCardsInDeck = cards.filter { it.deckId == deck.deckId }.size
             Text(
-                "$numberOfCardsInDeck cards",
-                style = MaterialTheme.typography.bodyMedium
+                "$numberOfCardsInDeck cards", style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -310,7 +306,52 @@ fun DeckItem(
 
 }
 
+@Composable
+fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+    ) {
+        var name by remember { mutableStateOf(deck.name) }
+        var description by remember {
+            mutableStateOf(deck.description)
+        }
+        val onNameChanged = { value: String -> name = value }
+        val onDescriptionChanged = { value: String -> description = value }
 
+        OutlinedTextField(value = name,
+            onValueChange = onNameChanged,
+            label = { Text(text = "Deck name") })
+
+        OutlinedTextField(value = description,
+            onValueChange = onDescriptionChanged,
+            label = { Text("Deck description") })
+
+        Row() {
+
+
+            Button(
+                onClick = { },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = RED)
+            ) {
+                Text(text = "Cancel")
+            }
+
+            Button(
+                onClick = {
+                    deck.name = name
+                    deck.description = description
+                    viewModel.updateDeck(deck)
+                },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+            ) {
+                Text(text = "Accept")
+            }
+        }
+
+    }
+}
 
 
 @Preview(showBackground = true)
@@ -318,11 +359,9 @@ fun DeckItem(
 fun Screen() {
     CardsTheme {
         val decks = mutableListOf<Deck>()
-        val english =
-            Deck(
-                name = "English",
-                description = "English phrasal verbs"
-            )
+        val english = Deck(
+            name = "English", description = "English phrasal verbs"
+        )
         val cards = mutableListOf<Card>()
         cards += Card("To wake up", "Despertarse", deckId = english.deckId)
         cards += Card("To slow down", "Ralentizar", deckId = english.deckId)
@@ -330,8 +369,7 @@ fun Screen() {
         cards += Card("To come up", "Acercarse", deckId = english.deckId)
 
         val french = Deck(
-            name = "French",
-            description = "French verbs"
+            name = "French", description = "French verbs"
         )
         cards += Card("Se réveiller", "Despertarse", deckId = french.deckId)
         cards += Card("Ralentir", "Ralentizar", deckId = french.deckId)
@@ -340,6 +378,6 @@ fun Screen() {
 
         decks += english
         decks += french
-        DeckList(cards, decks)
+        //DeckList(cards, decks)
     }
 }

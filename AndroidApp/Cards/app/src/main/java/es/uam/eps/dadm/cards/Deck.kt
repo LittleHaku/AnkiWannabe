@@ -9,6 +9,6 @@ import androidx.room.PrimaryKey
 open class Deck(
     @PrimaryKey
     val deckId: String = UUID.randomUUID().toString(),
-    val name: String,
-    val description: String = ""
+    var name: String,
+    var description: String = ""
 )

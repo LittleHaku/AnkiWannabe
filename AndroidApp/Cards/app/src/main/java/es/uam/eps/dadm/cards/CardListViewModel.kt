@@ -63,8 +63,14 @@ class CardViewModel(application: Application) : ViewModel() {
 
     fun getCard(cardId: String) = cardDao.getCard(cardId)
 
+    fun getDeckByName(deckName: String) = cardDao.getDeckByName(deckName)
+
     fun updateCard(card: Card) = viewModelScope.launch {
         cardDao.updateCard(card)
+    }
+
+    fun updateDeck(deck: Deck) = viewModelScope.launch {
+        cardDao.updateDeck(deck)
     }
 
     fun update(card: Card, quality: Int) {
@@ -80,6 +86,9 @@ class CardViewModel(application: Application) : ViewModel() {
     }
 
     fun getCardsByDeckName(deckName: String) = cardDao.getCardsByDeckName(deckName)
+
+    fun getCardsAndDecks() = cardDao.getCardsAndDecks()
+
 }
 
 class CardViewModelFactory(val application: Application) : ViewModelProvider.Factory {

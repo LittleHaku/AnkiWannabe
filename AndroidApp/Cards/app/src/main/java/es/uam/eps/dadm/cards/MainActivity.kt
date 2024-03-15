@@ -31,8 +31,12 @@ class MainActivity : ComponentActivity() {
                             CardViewModelFactory(LocalContext.current.applicationContext as Application)
                         )
 
-                        CardList(viewModel)
+                        //CardList(viewModel)
                         //Study(viewModel)
+                        //DeckList(viewModel)
+                        var deck = Deck(name = "English", description = "Se enseña mal")
+                        viewModel.addDeck(deck = deck)
+                        DeckEditor(viewModel = viewModel, deck = deck)
                     }
                 }
             }
