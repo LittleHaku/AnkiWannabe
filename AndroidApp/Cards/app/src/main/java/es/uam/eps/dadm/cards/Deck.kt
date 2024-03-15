@@ -1,9 +1,15 @@
 package es.uam.eps.dadm.cards
 
+import androidx.room.ColumnInfo
 import java.util.UUID
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class Deck(
+@Entity(tableName= "decks_table")
+open class Deck(
+    @PrimaryKey
     val deckId: String = UUID.randomUUID().toString(),
+    @ColumnInfo(name = "deck_name")
     val name: String,
-    val description: String
+    val description: String = ""
 )

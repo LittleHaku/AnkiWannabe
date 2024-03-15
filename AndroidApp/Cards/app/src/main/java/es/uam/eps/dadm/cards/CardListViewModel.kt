@@ -13,6 +13,7 @@ import java.time.LocalDateTime.now
 
 class CardViewModel(application: Application) : ViewModel() {
     val cards: LiveData<List<Card>>
+    val decks: LiveData<List<Deck>>
     val dueCard: LiveData<Card?>
     val nDueCards: LiveData<Int>
     private val cardDao: CardDao
@@ -20,12 +21,26 @@ class CardViewModel(application: Application) : ViewModel() {
     init {
         cardDao = CardDatabase.getInstance(application.applicationContext).cardDao
         cards = cardDao.getCards()
+        decks = cardDao.getDecks()
 
         deleteCards()
-        addCard(Card("To wake up", "Despertarse"))
-        addCard(Card("To slow down", "Ralentizar"))
-        addCard(Card("To give up", "Rendirse"))
-        addCard(Card("To come up", "Acercarse"))
+        deleteDecks()
+
+        val english = Deck(name = "English")
+        addDeck(english)
+        val french = Deck(name = "French")
+        addDeck(french)
+
+
+        addCard(Card("To wake up", "Despertarse", deckId = english.deckId))
+        addCard(Card("To slow down", "Ralentizar", deckId = english.deckId))
+        addCard(Card("To give up", "Rendirse", deckId = english.deckId))
+        addCard(Card("To come up", "Acercarse", deckId = english.deckId))
+
+        addCard(Card("Bonjour", "Buenos dias", deckId = french.deckId))
+        addCard(Card("Chat", "Gato", deckId = french.deckId))
+        addCard(Card("Chien", "Perro", deckId = french.deckId))
+
 
         dueCard = cards.map {
             it.filter { card -> card.isDue(now()) }.run {
@@ -54,10 +69,14 @@ class CardViewModel(application: Application) : ViewModel() {
 
     fun update(card: Card, quality: Int) {
         val updateCard = cardDao.getCard(card.id)
-        //updateCard.quality = quality
-        //updateCard.update(now())
+    }
 
-        //cardDao.updateCard(updateCard)
+    fun addDeck(deck: Deck) = viewModelScope.launch {
+        cardDao.addDeck(deck)
+    }
+
+    fun deleteDecks() = viewModelScope.launch {
+        cardDao.deleteDecks()
     }
 
 }
