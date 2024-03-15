@@ -79,6 +79,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.deleteDecks()
     }
 
+    fun getCardsByDeckName(deckName: String) = cardDao.getCardsByDeckName(deckName)
 }
 
 class CardViewModelFactory(val application: Application) : ViewModelProvider.Factory {

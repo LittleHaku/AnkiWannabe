@@ -99,7 +99,7 @@ fun CardData(card: Card, answered: Boolean, onAnswered: (Boolean) -> Unit, viewM
 
 @Composable
 fun CardList(viewModel: CardViewModel) {
-    val cards by viewModel.cards.observeAsState()
+    val cards by viewModel.getCardsByDeckName("English").observeAsState(listOf())
 
     val context = LocalContext.current
     val onItemClick = { card: Card ->
