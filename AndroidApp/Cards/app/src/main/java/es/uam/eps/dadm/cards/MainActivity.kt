@@ -32,11 +32,14 @@ class MainActivity : ComponentActivity() {
                         )
 
                         //CardList(viewModel)
-                        //Study(viewModel)
+                        Study(viewModel)
                         //DeckList(viewModel)
-                        var deck = Deck(name = "English", description = "Se enseña mal")
+
+                        /*var deck = Deck(name = "English", description = "Se enseña mal")
                         viewModel.addDeck(deck = deck)
-                        DeckEditor(viewModel = viewModel, deck = deck)
+                        DeckEditor(viewModel = viewModel, deck = deck)*/
+
+                        //DeckCreator(viewModel = viewModel)
                     }
                 }
             }

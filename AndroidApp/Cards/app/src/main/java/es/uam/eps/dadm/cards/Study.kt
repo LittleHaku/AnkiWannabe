@@ -318,6 +318,8 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
         val onNameChanged = { value: String -> name = value }
         val onDescriptionChanged = { value: String -> description = value }
 
+        val context = LocalContext.current
+
         OutlinedTextField(value = name,
             onValueChange = onNameChanged,
             label = { Text(text = "Deck name") })
@@ -339,9 +341,67 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
 
             Button(
                 onClick = {
-                    deck.name = name
-                    deck.description = description
-                    viewModel.updateDeck(deck)
+                    if (name.isNotEmpty() && description.isNotEmpty()) {
+                        deck.name = name
+                        deck.description = description
+                        viewModel.updateDeck(deck)
+                        Toast.makeText(context, "Edited successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Introduce some values", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+            ) {
+                Text(text = "Accept")
+            }
+        }
+
+    }
+}
+
+@Composable
+fun DeckCreator(viewModel: CardViewModel) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+    ) {
+        var name by remember { mutableStateOf("") }
+        var description by remember { mutableStateOf("") }
+        val onNameChanged = { value: String -> name = value }
+        val onDescriptionChanged = { value: String -> description = value }
+
+        val context = LocalContext.current
+
+        OutlinedTextField(value = name,
+            onValueChange = onNameChanged,
+            label = { Text(text = "Deck name") })
+
+        OutlinedTextField(value = description,
+            onValueChange = onDescriptionChanged,
+            label = { Text("Deck description") })
+
+        Row() {
+
+
+            Button(
+                onClick = { },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = RED)
+            ) {
+                Text(text = "Cancel")
+            }
+
+            Button(
+                onClick = {
+                    if (name.isNotEmpty() && description.isNotEmpty()) {
+                        val deck = Deck(name = name, description = description)
+                        viewModel.addDeck(deck)
+                        Toast.makeText(context, "Deck added successfully", Toast.LENGTH_SHORT)
+                            .show()
+
+                    } else {
+                        Toast.makeText(context, "Introduce some values", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = GREEN)
