@@ -2,9 +2,12 @@ package es.uam.eps.dadm.cards
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -35,6 +38,69 @@ val YELLOW = Color(0xfff7e848)
 val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
+
+
+@Composable
+fun NavComposable(viewModel: CardViewModel) {
+    var showStudy by remember { mutableStateOf(false) }
+    var showDeckList by remember { mutableStateOf(false) }
+    var showCardList by remember { mutableStateOf(false) }
+    var showDeckCreator by remember { mutableStateOf(false) }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Row(modifier = Modifier.horizontalScroll(rememberScrollState())
+        ) {
+            Button(onClick = {
+                showStudy = true
+                showDeckList = false
+                showCardList = false
+                showDeckCreator = false
+            }) {
+                Text("Study")
+            }
+            Button(onClick = {
+                showStudy = false
+                showDeckList = true
+                showCardList = false
+                showDeckCreator = false
+            }) {
+                Text("Deck List")
+            }
+            Button(onClick = {
+                showStudy = false
+                showDeckList = false
+                showCardList = true
+                showDeckCreator = false
+            }) {
+                Text("Card List")
+            }
+            Button(onClick = {
+                showStudy = false
+                showDeckList = false
+                showCardList = false
+                showDeckCreator = true
+            }) {
+                Text("Create Deck")
+            }
+            Button(onClick = { viewModel.populateDB() }) {
+                Text("Reset DB")
+            }
+        }
+
+        if (showStudy) {
+            Study(viewModel)
+        } else if (showDeckList) {
+            DeckList(viewModel)
+        } else if (showCardList) {
+            CardList(viewModel)
+        } else if (showDeckCreator) {
+            DeckCreator(viewModel)
+        }
+    }
+}
 
 
 @Composable

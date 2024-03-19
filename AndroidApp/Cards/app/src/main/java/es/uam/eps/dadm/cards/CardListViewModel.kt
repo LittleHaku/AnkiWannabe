@@ -25,22 +25,7 @@ class CardViewModel(application: Application) : ViewModel() {
 
         cards.observeForever { cardList ->
             if (cardList.isNullOrEmpty()) {
-                deleteCards()
-                deleteDecks()
-
-                val english = Deck(name = "English")
-                addDeck(english)
-                val french = Deck(name = "French")
-                addDeck(french)
-
-                addCard(Card("To wake up", "Despertarse", deckId = english.deckId))
-                addCard(Card("To slow down", "Ralentizar", deckId = english.deckId))
-                addCard(Card("To give up", "Rendirse", deckId = english.deckId))
-                addCard(Card("To come up", "Acercarse", deckId = english.deckId))
-
-                addCard(Card("Bonjour", "Buenos dias", deckId = french.deckId))
-                addCard(Card("Chat", "Gato", deckId = french.deckId))
-                addCard(Card("Chien", "Perro", deckId = french.deckId))
+                populateDB()
             }
         }
 
@@ -53,6 +38,25 @@ class CardViewModel(application: Application) : ViewModel() {
         nDueCards = cards.map {
             it.filter { card -> card.isDue(now()) }.size
         }
+    }
+
+    fun populateDB() {
+        deleteCards()
+        deleteDecks()
+
+        val english = Deck(name = "English")
+        addDeck(english)
+        val french = Deck(name = "French")
+        addDeck(french)
+
+        addCard(Card("To wake up", "Despertarse", deckId = english.deckId))
+        addCard(Card("To slow down", "Ralentizar", deckId = english.deckId))
+        addCard(Card("To give up", "Rendirse", deckId = english.deckId))
+        addCard(Card("To come up", "Acercarse", deckId = english.deckId))
+
+        addCard(Card("Bonjour", "Buenos dias", deckId = french.deckId))
+        addCard(Card("Chat", "Gato", deckId = french.deckId))
+        addCard(Card("Chien", "Perro", deckId = french.deckId))
     }
 
     fun addCard(card: Card) = viewModelScope.launch {

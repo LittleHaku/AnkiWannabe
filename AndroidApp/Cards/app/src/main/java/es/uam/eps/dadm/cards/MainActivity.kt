@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                         )
 
                         //CardList(viewModel)
-                        Study(viewModel)
+                        //Study(viewModel)
                         //DeckList(viewModel)
 
                         /*var deck = Deck(name = "English", description = "Se enseña mal")
@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
                         DeckEditor(viewModel = viewModel, deck = deck)*/
 
                         //DeckCreator(viewModel = viewModel)
+                        NavComposable(viewModel)
                     }
                 }
             }
