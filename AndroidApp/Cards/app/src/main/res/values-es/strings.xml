@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Tarjetas</string>
+    <string name="study_menu">Estudiar</string>
+    <string name="deck_list_menu">Lista de Mazos</string>
+    <string name="card_list_menu">Lista de Tarjetas</string>
+    <string name="create_deck_menu">Crear Mazo</string>
+    <string name="reset_db_menu">Restablecer BD</string>
+    <string name="remaining_cards">Tarjetas Restantes</string>
+    <string name="view_answer">Ver Respuesta</string>
+    <string name="list_of_decks">Lista de Mazos</string>
+    <string name="decks_cards">Tarjetas del Mazo</string>
+    <string name="deck_name">Nombre del Mazo</string>
+    <string name="deck_description">Descripción del Mazo</string>
+    <string name="cancel">Cancelar</string>
+    <string name="accept">Aceptar</string>
+    <string name="cards">Tarjetas</string>
+    <string name="selected">Seleccionado</string>
+    <string name="quality">Calidad</string>
+    <string name="easiness">Facilidad</string>
+    <string name="repetitions">Repeticiones</string>
+    <string name="easy">Fácil</string>
+    <string name="doubt">Dudo</string>
+    <string name="hard">Difícil</string>
+    <string name="no_more_cards">No quedan tarjetas restantes</string>
+    <string name="edited_succ">Editado Correctamente</string>
+    <string name="introduce_some_values">Introduce algún valor</string>
+    <string name="created_succ">Creado correctamente</string>
 </resources>

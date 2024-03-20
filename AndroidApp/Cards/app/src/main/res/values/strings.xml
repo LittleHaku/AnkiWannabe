@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Cards</string>
+    <string name="study_menu">Study</string>
+    <string name="deck_list_menu">Deck List</string>
+    <string name="card_list_menu">Card List</string>
+    <string name="create_deck_menu">Create Deck</string>
+    <string name="reset_db_menu">Reset DB</string>
+    <string name="remaining_cards">Remaining Cards</string>
+    <string name="view_answer">View Answer</string>
+    <string name="list_of_decks">List of Decks</string>
+    <string name="decks_cards">Cards from Deck</string>
+    <string name="deck_name">Deck Name</string>
+    <string name="deck_description">Deck Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
+    <string name="cards">Cards</string>
+    <string name="selected">Selected</string>
+    <string name="quality">Quality</string>
+    <string name="easiness">Easiness</string>
+    <string name="repetitions">Repetitions</string>
+    <string name="easy">Easy</string>
+    <string name="doubt">Doubt</string>
+    <string name="hard">Hard</string>
+    <string name="no_more_cards">No more cards left</string>
+    <string name="edited_succ">Edited successfully</string>
+    <string name="introduce_some_values">Introduce some values</string>
+    <string name="created_succ">Created Successfully</string>
 </resources>

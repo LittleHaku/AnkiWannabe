@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,8 +62,7 @@ fun NavComposable(viewModel: CardViewModel) {
 
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
     ) {
         Row(
             modifier = Modifier
@@ -75,11 +75,9 @@ fun NavComposable(viewModel: CardViewModel) {
                     showDeckList = false
                     showCardList = false
                     showDeckCreator = false
-                },
-                modifier = buttonModifier,
-                colors = buttonColors
+                }, modifier = buttonModifier, colors = buttonColors
             ) {
-                Text("Study")
+                Text(stringResource(id = R.string.study_menu))
             }
             Button(
                 onClick = {
@@ -87,11 +85,9 @@ fun NavComposable(viewModel: CardViewModel) {
                     showDeckList = true
                     showCardList = false
                     showDeckCreator = false
-                },
-                modifier = buttonModifier,
-                colors = buttonColors
+                }, modifier = buttonModifier, colors = buttonColors
             ) {
-                Text("Deck List")
+                Text(stringResource(id = R.string.deck_list_menu))
             }
             Button(
                 onClick = {
@@ -99,11 +95,9 @@ fun NavComposable(viewModel: CardViewModel) {
                     showDeckList = false
                     showCardList = true
                     showDeckCreator = false
-                },
-                modifier = buttonModifier,
-                colors = buttonColors
+                }, modifier = buttonModifier, colors = buttonColors
             ) {
-                Text("Card List")
+                Text(stringResource(id = R.string.card_list_menu))
             }
             Button(
                 onClick = {
@@ -111,18 +105,16 @@ fun NavComposable(viewModel: CardViewModel) {
                     showDeckList = false
                     showCardList = false
                     showDeckCreator = true
-                },
-                modifier = buttonModifier,
-                colors = buttonColors
+                }, modifier = buttonModifier, colors = buttonColors
             ) {
-                Text("Create Deck")
+                Text(stringResource(id = R.string.create_deck_menu))
             }
             Button(
                 onClick = { viewModel.populateDB() },
                 modifier = buttonModifier,
                 colors = buttonColors
             ) {
-                Text("Reset DB")
+                Text(stringResource(id = R.string.reset_db_menu))
             }
         }
 
@@ -145,7 +137,9 @@ fun Study(viewModel: CardViewModel) {
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
     card?.let {
         CardView(viewModel = viewModel, it, nCards)
-    } ?: Toast.makeText(LocalContext.current, "No more cards left", Toast.LENGTH_SHORT).show()
+    } ?: Toast.makeText(
+        LocalContext.current, stringResource(id = R.string.no_more_cards), Toast.LENGTH_SHORT
+    ).show()
 
 }
 
@@ -163,7 +157,7 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            "Remaining cards: $nCards",
+            stringResource(id = R.string.remaining_cards) + ": $nCards",
             modifier = Modifier.padding(top = 50.dp),
             style = MaterialTheme.typography.bodyLarge
         )
@@ -189,7 +183,7 @@ fun CardData(
         card.update(now())
         viewModel.updateCard(card)
         // Done again because lambda can't finish with the viewModel and it must be done after
-        card.quality= value
+        card.quality = value
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -209,7 +203,8 @@ fun CardData(
 
 @Composable
 fun CardList(viewModel: CardViewModel) {
-    val cards by viewModel.getCardsByDeckName("English").observeAsState(listOf())
+    var selectedDeck = "English"
+    val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
 
     val all by viewModel.getCardsAndDecks().observeAsState()
 
@@ -230,7 +225,7 @@ fun CardList(viewModel: CardViewModel) {
     LazyColumn() {
         item {
             Text(
-                "LIST OF CARDS",
+                stringResource(id = R.string.decks_cards) + ": $selectedDeck",
                 Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displayLarge
@@ -278,7 +273,9 @@ fun CardItem(
             Text(card.answer, modifier, style = MaterialTheme.typography.bodyMedium)
             if (switchState) {
                 Text(
-                    "Quality = ${card.quality}\nEasiness = ${card.easiness}" + "\nRepetitions = ${card.repetitions}",
+                    stringResource(id = R.string.quality) + " = ${card.quality}\n" + stringResource(
+                        id = R.string.easiness
+                    ) + " = ${card.easiness}\n" + stringResource(id = R.string.repetitions) + " = ${card.repetitions}",
                     modifier,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -307,7 +304,7 @@ fun ViewAnswerButton(onAnswered: (Boolean) -> Unit) {
     Button(
         onClick = { onAnswered(true) }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
     ) {
-        Text(text = "View Answer", color = BLACK)
+        Text(text = stringResource(id = R.string.view_answer), color = BLACK)
     }
 }
 
@@ -322,7 +319,7 @@ fun DifficultyButtons(
                 onAnswered(false)
             }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
         ) {
-            Text("Easy", color = BLACK)
+            Text(stringResource(id = R.string.easy), color = BLACK)
         }
         Button(
             onClick = {
@@ -330,7 +327,7 @@ fun DifficultyButtons(
                 onAnswered(false)
             }, colors = ButtonDefaults.buttonColors(containerColor = YELLOW)
         ) {
-            Text("Doubt", color = BLACK)
+            Text(stringResource(id = R.string.doubt), color = BLACK)
         }
         Button(
             onClick = {
@@ -338,7 +335,7 @@ fun DifficultyButtons(
                 onAnswered(false)
             }, colors = ButtonDefaults.buttonColors(containerColor = RED)
         ) {
-            Text("Hard", color = BLACK)
+            Text(stringResource(id = R.string.hard), color = BLACK)
         }
     }
 }
@@ -348,16 +345,18 @@ fun DeckList(viewModel: CardViewModel) {
     val cards by viewModel.cards.observeAsState(emptyList())
     val decks by viewModel.decks.observeAsState(emptyList())
     val context = LocalContext.current
+    // done this way because it doesn't work inside Toast
+    val selectedString = stringResource(id = R.string.selected)
     val onItemClick = { deck: Deck ->
         Toast.makeText(
-            context, "${deck.name} selected", Toast.LENGTH_SHORT
+            context, "${deck.name} + $selectedString", Toast.LENGTH_SHORT
         ).show()
     }
 
     LazyColumn() {
         item {
             Text(
-                "LIST OF DECKS",
+                stringResource(id = R.string.list_of_decks),
                 Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.displaySmall
@@ -402,7 +401,8 @@ fun DeckItem(
         Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
             val numberOfCardsInDeck = cards.filter { it.deckId == deck.deckId }.size
             Text(
-                "$numberOfCardsInDeck cards", style = MaterialTheme.typography.bodyMedium
+                "$numberOfCardsInDeck " + stringResource(id = R.string.cards),
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }
@@ -426,11 +426,11 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
 
         OutlinedTextField(value = name,
             onValueChange = onNameChanged,
-            label = { Text(text = "Deck name") })
+            label = { Text(text = stringResource(id = R.string.deck_name)) })
 
         OutlinedTextField(value = description,
             onValueChange = onDescriptionChanged,
-            label = { Text("Deck description") })
+            label = { Text(stringResource(id = R.string.deck_description)) })
 
         Row() {
 
@@ -440,24 +440,25 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RED)
             ) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.cancel))
             }
-
+            val editedString = stringResource(id = R.string.edited_succ)
+            val introduceString = stringResource(id = R.string.introduce_some_values)
             Button(
                 onClick = {
                     if (name.isNotEmpty() && description.isNotEmpty()) {
                         deck.name = name
                         deck.description = description
                         viewModel.updateDeck(deck)
-                        Toast.makeText(context, "Edited successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Introduce some values", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = GREEN)
             ) {
-                Text(text = "Accept")
+                Text(text = stringResource(id = R.string.accept))
             }
         }
 
@@ -478,11 +479,11 @@ fun DeckCreator(viewModel: CardViewModel) {
 
         OutlinedTextField(value = name,
             onValueChange = onNameChanged,
-            label = { Text(text = "Deck name") })
+            label = { Text(text = stringResource(id = R.string.deck_name)) })
 
         OutlinedTextField(value = description,
             onValueChange = onDescriptionChanged,
-            label = { Text("Deck description") })
+            label = { Text(stringResource(id = R.string.deck_description)) })
 
         Row() {
 
@@ -492,25 +493,26 @@ fun DeckCreator(viewModel: CardViewModel) {
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RED)
             ) {
-                Text(text = "Cancel")
+                Text(text = stringResource(id = R.string.cancel))
             }
-
+            val createdString = stringResource(id = R.string.created_succ)
+            val introduceString = stringResource(id = R.string.introduce_some_values)
             Button(
                 onClick = {
                     if (name.isNotEmpty() && description.isNotEmpty()) {
                         val deck = Deck(name = name, description = description)
                         viewModel.addDeck(deck)
-                        Toast.makeText(context, "Deck added successfully", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT)
                             .show()
 
                     } else {
-                        Toast.makeText(context, "Introduce some values", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = GREEN)
             ) {
-                Text(text = "Accept")
+                Text(text = stringResource(id = R.string.accept))
             }
         }
 
