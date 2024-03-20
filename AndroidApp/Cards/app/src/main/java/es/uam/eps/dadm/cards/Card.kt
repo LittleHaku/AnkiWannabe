@@ -3,7 +3,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
-import java.time.LocalDateTime.*
+import java.time.LocalDateTime.now
+import java.time.LocalDateTime.parse
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.math.roundToLong

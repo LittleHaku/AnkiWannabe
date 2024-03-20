@@ -3,7 +3,15 @@ package es.uam.eps.dadm.cards
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -220,7 +228,7 @@ fun CardList(viewModel: CardViewModel) {
         ).show()
     }
 
-    LazyColumn() {
+    LazyColumn {
         item {
             Text(
                 stringResource(id = R.string.decks_cards) + ": $selectedDeck",
@@ -229,7 +237,7 @@ fun CardList(viewModel: CardViewModel) {
                 style = MaterialTheme.typography.displayLarge
             )
         }
-        cards?.let {
+        cards.let {
             items(it) { card ->
                 CardItem(card, onItemClick)
             }
@@ -366,7 +374,7 @@ fun DeckList(viewModel: CardViewModel) {
         ).show()
     }
 
-    LazyColumn() {
+    LazyColumn {
         item {
             Text(
                 stringResource(id = R.string.list_of_decks),
@@ -445,7 +453,7 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
             onValueChange = onDescriptionChanged,
             label = { Text(stringResource(id = R.string.deck_description)) })
 
-        Row() {
+        Row {
 
 
             Button(
@@ -498,7 +506,7 @@ fun DeckCreator(viewModel: CardViewModel) {
             onValueChange = onDescriptionChanged,
             label = { Text(stringResource(id = R.string.deck_description)) })
 
-        Row() {
+        Row {
 
 
             Button(
