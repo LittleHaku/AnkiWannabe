@@ -25,4 +25,6 @@
     <string name="edited_succ">Editado Correctamente</string>
     <string name="introduce_some_values">Introduce algún valor</string>
     <string name="created_succ">Creado correctamente</string>
+    <string name="next_practice">Próxima Práctica</string>
+    <string name="days">día(s)</string>
 </resources>

@@ -59,6 +59,13 @@ open class Card(
     }
 
     fun update(currentDate: LocalDateTime) {
+        val interval = intervalComputation()
+
+        // date
+        nextPracticeDate = currentDate.plusDays(interval).toString()
+    }
+
+    private fun intervalComputation(): Long {
         // easiness
         val newEasiness = easiness + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)
         easiness = if (newEasiness < 1.3) 1.3 else newEasiness
@@ -73,10 +80,34 @@ open class Card(
             2 -> 6
             else -> (interval * easiness).roundToLong()
         }
-
-        // date
-        nextPracticeDate = currentDate.plusDays(interval).toString()
+        return interval
     }
+
+    // This is to calculate the intervals that are shown under the difficulty buttons
+    fun possibleNextPractice(currentDate: LocalDateTime): Map<Int, Long> {
+        val difficulties = listOf(5, 3, 0)
+        val intervals = mutableMapOf<Int, Long>()
+
+        for (diff in difficulties) {
+            // easiness
+            val newEasiness = easiness + 0.1 - (5 - diff) * (0.08 + (5 - diff) * 0.02)
+            val fakeEasiness = if (newEasiness < 1.3) 1.3 else newEasiness
+
+            // reps
+            val fakeRepetitions = if (diff < 3) 0 else repetitions + 1
+
+            // interval
+            val fakeInterval = when (fakeRepetitions) {
+                0, 1 -> 1
+                2 -> 6
+                else -> (interval * fakeEasiness).roundToLong()
+            }
+            intervals[diff] = fakeInterval
+        }
+
+        return intervals
+    }
+
 
     fun isDue(date: LocalDateTime) =
         LocalDateTime.parse(nextPracticeDate) <= date

@@ -25,4 +25,6 @@
     <string name="edited_succ">Edited successfully</string>
     <string name="introduce_some_values">Introduce some values</string>
     <string name="created_succ">Created Successfully</string>
+    <string name="next_practice">Next Practice</string>
+    <string name="days">day(s)</string>
 </resources>

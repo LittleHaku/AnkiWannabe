@@ -1,14 +1,12 @@
 package es.uam.eps.dadm.cards
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -16,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -194,7 +191,8 @@ fun CardData(
 
         if (answered) {
             Text(card.answer)
-            DifficultyButtons(onAnswered, onDifficultyChecked)
+            val intervals = card.possibleNextPractice(now())
+            DifficultyButtons(onAnswered, onDifficultyChecked, intervals)
         } else {
             ViewAnswerButton(onAnswered)
         }
@@ -275,7 +273,9 @@ fun CardItem(
                 Text(
                     stringResource(id = R.string.quality) + " = ${card.quality}\n" + stringResource(
                         id = R.string.easiness
-                    ) + " = ${card.easiness}\n" + stringResource(id = R.string.repetitions) + " = ${card.repetitions}",
+                    ) + " = ${card.easiness}\n" + stringResource(id = R.string.repetitions) + " = ${card.repetitions}\n" + stringResource(
+                        id = R.string.next_practice
+                    ) + " = ${card.nextPracticeDate.substring(0..9)}",
                     modifier,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -310,32 +310,45 @@ fun ViewAnswerButton(onAnswered: (Boolean) -> Unit) {
 
 @Composable
 fun DifficultyButtons(
-    onAnswered: (Boolean) -> Unit, onDifficultyChecked: (Int) -> Unit
+    onAnswered: (Boolean) -> Unit, onDifficultyChecked: (Int) -> Unit, intervals: Map<Int, Long>
 ) {
     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-        Button(
-            onClick = {
-                onDifficultyChecked(0)
-                onAnswered(false)
-            }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
-        ) {
-            Text(stringResource(id = R.string.easy), color = BLACK)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Button(
+                onClick = {
+                    onDifficultyChecked(0)
+                    onAnswered(false)
+                }, colors = ButtonDefaults.buttonColors(containerColor = RED)
+            ) {
+                Text(stringResource(id = R.string.hard), color = BLACK)
+            }
+            Text(text = intervals[0].toString() + " " + stringResource(id = R.string.days))
         }
-        Button(
-            onClick = {
-                onDifficultyChecked(3)
-                onAnswered(false)
-            }, colors = ButtonDefaults.buttonColors(containerColor = YELLOW)
-        ) {
-            Text(stringResource(id = R.string.doubt), color = BLACK)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Button(
+                onClick = {
+                    onDifficultyChecked(3)
+                    onAnswered(false)
+                }, colors = ButtonDefaults.buttonColors(containerColor = YELLOW)
+            ) {
+                Text(stringResource(id = R.string.doubt), color = BLACK)
+            }
+            Text(text = intervals[3].toString() + " " + stringResource(id = R.string.days))
+
         }
-        Button(
-            onClick = {
-                onDifficultyChecked(5)
-                onAnswered(false)
-            }, colors = ButtonDefaults.buttonColors(containerColor = RED)
-        ) {
-            Text(stringResource(id = R.string.hard), color = BLACK)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Button(
+                onClick = {
+                    onDifficultyChecked(5)
+                    onAnswered(false)
+                }, colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+            ) {
+                Text(stringResource(id = R.string.easy), color = BLACK)
+            }
+            Text(text = intervals[5].toString() + " " + stringResource(id = R.string.days))
+
         }
     }
 }
@@ -349,7 +362,7 @@ fun DeckList(viewModel: CardViewModel) {
     val selectedString = stringResource(id = R.string.selected)
     val onItemClick = { deck: Deck ->
         Toast.makeText(
-            context, "${deck.name} + $selectedString", Toast.LENGTH_SHORT
+            context, "${deck.name} $selectedString", Toast.LENGTH_SHORT
         ).show()
     }
 
