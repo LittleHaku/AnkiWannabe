@@ -25,7 +25,7 @@ open class Card(
 
 ) {
     companion object {
-        fun fromString(string: String): Card {
+        /*fun fromString(string: String): Card {
             val parts = string.split("|").map { it.trim() }
             val question = parts[1]
             val answer = parts[2]
@@ -39,7 +39,7 @@ open class Card(
             val easiness = parts[10].toDouble()
 
             return Card(question, answer, date, id, deckId,quality, repetitions, interval, nextPracticeDate, easiness)
-        }
+        }*/
     }
 
 
@@ -84,7 +84,7 @@ open class Card(
     }
 
     // This is to calculate the intervals that are shown under the difficulty buttons
-    fun possibleNextPractice(currentDate: LocalDateTime): Map<Int, Long> {
+    fun possibleNextPractice(): Map<Int, Long> {
         val difficulties = listOf(5, 3, 0)
         val intervals = mutableMapOf<Int, Long>()
 
@@ -110,7 +110,7 @@ open class Card(
 
 
     fun isDue(date: LocalDateTime) =
-        LocalDateTime.parse(nextPracticeDate) <= date
+        parse(nextPracticeDate) <= date
 
     fun details() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -121,7 +121,7 @@ open class Card(
         )
     }
 
-    fun simulate(period: Long) {
+    /*fun simulate(period: Long) {
         println("Simulation of the card $question:")
         var now = now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -135,7 +135,7 @@ open class Card(
             }
             now = now.plusDays(1)
         }
-    }
+    }*/
 
 
 

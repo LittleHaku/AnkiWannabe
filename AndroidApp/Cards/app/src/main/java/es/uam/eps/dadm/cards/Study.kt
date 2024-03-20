@@ -191,7 +191,7 @@ fun CardData(
 
         if (answered) {
             Text(card.answer)
-            val intervals = card.possibleNextPractice(now())
+            val intervals = card.possibleNextPractice()
             DifficultyButtons(onAnswered, onDifficultyChecked, intervals)
         } else {
             ViewAnswerButton(onAnswered)
