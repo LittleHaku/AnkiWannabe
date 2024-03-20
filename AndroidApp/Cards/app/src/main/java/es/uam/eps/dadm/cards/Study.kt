@@ -1,6 +1,7 @@
 package es.uam.eps.dadm.cards
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
@@ -47,45 +50,78 @@ fun NavComposable(viewModel: CardViewModel) {
     var showCardList by remember { mutableStateOf(false) }
     var showDeckCreator by remember { mutableStateOf(false) }
 
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = PASTEL_GREEN
+    )
+
+
+    val buttonModifier = Modifier.padding(8.dp)
+    val buttonColors = ButtonDefaults.buttonColors(PASTEL_GREEN)
+
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Row(modifier = Modifier.horizontalScroll(rememberScrollState())
+        Row(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(10.dp)
         ) {
-            Button(onClick = {
-                showStudy = true
-                showDeckList = false
-                showCardList = false
-                showDeckCreator = false
-            }) {
+            Button(
+                onClick = {
+                    showStudy = true
+                    showDeckList = false
+                    showCardList = false
+                    showDeckCreator = false
+                },
+                modifier = buttonModifier,
+                colors = buttonColors
+            ) {
                 Text("Study")
             }
-            Button(onClick = {
-                showStudy = false
-                showDeckList = true
-                showCardList = false
-                showDeckCreator = false
-            }) {
+            Button(
+                onClick = {
+                    showStudy = false
+                    showDeckList = true
+                    showCardList = false
+                    showDeckCreator = false
+                },
+                modifier = buttonModifier,
+                colors = buttonColors
+            ) {
                 Text("Deck List")
             }
-            Button(onClick = {
-                showStudy = false
-                showDeckList = false
-                showCardList = true
-                showDeckCreator = false
-            }) {
+            Button(
+                onClick = {
+                    showStudy = false
+                    showDeckList = false
+                    showCardList = true
+                    showDeckCreator = false
+                },
+                modifier = buttonModifier,
+                colors = buttonColors
+            ) {
                 Text("Card List")
             }
-            Button(onClick = {
-                showStudy = false
-                showDeckList = false
-                showCardList = false
-                showDeckCreator = true
-            }) {
+            Button(
+                onClick = {
+                    showStudy = false
+                    showDeckList = false
+                    showCardList = false
+                    showDeckCreator = true
+                },
+                modifier = buttonModifier,
+                colors = buttonColors
+            ) {
                 Text("Create Deck")
             }
-            Button(onClick = { viewModel.populateDB() }) {
+            Button(
+                onClick = { viewModel.populateDB() },
+                modifier = buttonModifier,
+                colors = buttonColors
+            ) {
                 Text("Reset DB")
             }
         }
@@ -150,8 +186,10 @@ fun CardData(
 ) {
     val onDifficultyChecked = { value: Int ->
         card.quality = value
-        viewModel.updateCard(card)
         card.update(now())
+        viewModel.updateCard(card)
+        // Done again because lambda can't finish with the viewModel and it must be done after
+        card.quality= value
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
                             "CardViewModel",
                             CardViewModelFactory(LocalContext.current.applicationContext as Application)
                         )
+
 
                         //CardList(viewModel)
                         //Study(viewModel)
