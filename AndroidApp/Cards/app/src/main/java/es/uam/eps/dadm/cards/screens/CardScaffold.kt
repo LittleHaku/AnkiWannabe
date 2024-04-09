@@ -1,4 +1,4 @@
-package es.uam.eps.dadm.cards
+package es.uam.eps.dadm.cards.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,10 +25,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import es.uam.eps.dadm.cards.Card
+import es.uam.eps.dadm.cards.CardList
+import es.uam.eps.dadm.cards.CardViewModel
+import es.uam.eps.dadm.cards.NavBarItems
+import es.uam.eps.dadm.cards.NavRoutes
+import es.uam.eps.dadm.cards.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardScaffold(viewModel: CardViewModel) {
+fun CardScaffold(navController: NavHostController, viewModel: CardViewModel) {
     Scaffold(
         content = { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
@@ -59,8 +66,7 @@ fun CardScaffold(viewModel: CardViewModel) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    val card = Card("did it create", "it did")
-                    viewModel.addCard(card)
+                    navController.navigate(NavRoutes.CardEditor.route)
                 },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {

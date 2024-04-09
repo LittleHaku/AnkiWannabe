@@ -1,8 +1,6 @@
 package es.uam.eps.dadm.cards
 
-import android.provider.Settings.Global.getString
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -17,22 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -42,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 import java.time.LocalDateTime
@@ -61,7 +48,6 @@ val YELLOW = Color(0xfff7e848)
 val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
-
 
 
 @Composable
@@ -225,7 +211,8 @@ fun CardData(
 @Composable
 fun CardList(viewModel: CardViewModel) {
     var selectedDeck = "English"
-    val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
+    //val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
+    val cards by viewModel.getAllCards().observeAsState(listOf())
 
     val all by viewModel.getCardsAndDecks().observeAsState()
 
@@ -446,46 +433,64 @@ fun DeckItem(
 
 @Composable
 fun CardEditor(
-    viewModel: CardViewModel,
-    card: Card
+    viewModel: CardViewModel, card: Card? = null, navController: NavHostController
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
     ) {
-        var question by remember { mutableStateOf(card.question) }
+        var question by remember { mutableStateOf(card?.question ?: "") }
+        var answer by remember { mutableStateOf(card?.answer ?: "") }
         val onQuestionChanged = { value: String -> question = value }
-        OutlinedTextField(
-            value = question,
+
+        OutlinedTextField(value = question,
             onValueChange = onQuestionChanged,
-            label = { Text("Card question") }
-        )
-        var answer by remember { mutableStateOf(card.answer)}
-        val onAnswerChanged = { value: String -> answer = value}
-        OutlinedTextField(value = answer, onValueChange = onAnswerChanged, label = { Text("Card Answer")})
+            label = { Text("Card question") })
+        val onAnswerChanged = { value: String -> answer = value }
+        OutlinedTextField(value = answer,
+            onValueChange = onAnswerChanged,
+            label = { Text("Card Answer") })
 
         val context = LocalContext.current
-        Row {
+        Row() {
 
 
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(NavRoutes.Cards.route) {
+                        popUpTo(NavRoutes.Home.route)
+                    }
+                },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RED)
             ) {
                 Text(text = stringResource(id = R.string.cancel))
             }
             val editedString = stringResource(id = R.string.edited_succ)
+            val createdString = stringResource(id = R.string.created_succ)
             val introduceString = stringResource(id = R.string.introduce_some_values)
             Button(
                 onClick = {
                     if (answer.isNotEmpty() && question.isNotEmpty()) {
-                        card.question = question
-                        card.answer = answer
-                        viewModel.updateCard(card)
-                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                        if (card != null) {
+                            card.question = question
+                            card.answer = answer
+                            viewModel.updateCard(card)
+                            Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            val newCard = Card(question, answer)
+                            viewModel.addCard(newCard)
+                            Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
+
+                        }
+                        navController.navigate(NavRoutes.Cards.route) {
+                            popUpTo(NavRoutes.Home.route)
+                        }
                     } else {
                         Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
+
                     }
+
                 },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = GREEN)
@@ -494,8 +499,6 @@ fun CardEditor(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -590,8 +593,7 @@ fun DeckCreator(viewModel: CardViewModel) {
                     if (name.isNotEmpty() && description.isNotEmpty()) {
                         val deck = Deck(name = name, description = description)
                         viewModel.addDeck(deck)
-                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
 
                     } else {
                         Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()

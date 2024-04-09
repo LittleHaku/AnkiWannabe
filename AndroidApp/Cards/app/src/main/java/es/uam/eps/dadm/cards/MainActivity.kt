@@ -7,10 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import es.uam.eps.dadm.cards.screens.CardEditorScaffold
+import es.uam.eps.dadm.cards.screens.CardScaffold
+import es.uam.eps.dadm.cards.screens.DeckScaffold
+import es.uam.eps.dadm.cards.screens.Home
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,20 +40,36 @@ class MainActivity : ComponentActivity() {
                         )
 
 
-                        //CardList(viewModel)
-                        //Study(viewModel)
-                        //DeckList(viewModel)
-
-                        /*var deck = Deck(name = "English", description = "Se enseña mal")
-                        viewModel.addDeck(deck = deck)
-                        DeckEditor(viewModel = viewModel, deck = deck)*/
-
-                        //DeckCreator(viewModel = viewModel)
                         //NavComposable(viewModel)
-                        CardScaffold(viewModel)
+                        //CardScaffold(navController, viewModel)
+                        MainScreen(viewModel)
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MainScreen(viewModel: CardViewModel) {
+
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = NavRoutes.Home.route
+    ) {
+        composable(NavRoutes.Home.route) {
+            Home(navController)
+        }
+        composable(NavRoutes.Cards.route) {
+            CardScaffold(navController, viewModel)
+        }
+        composable(NavRoutes.Decks.route) {
+            DeckScaffold(navController, viewModel)
+        }
+        composable(NavRoutes.CardEditor.route) {
+            CardEditorScaffold(navController, viewModel)
         }
     }
 }
