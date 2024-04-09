@@ -41,7 +41,8 @@ class MainActivity : ComponentActivity() {
                         DeckEditor(viewModel = viewModel, deck = deck)*/
 
                         //DeckCreator(viewModel = viewModel)
-                        NavComposable(viewModel)
+                        //NavComposable(viewModel)
+                        CardScaffold(viewModel)
                     }
                 }
             }

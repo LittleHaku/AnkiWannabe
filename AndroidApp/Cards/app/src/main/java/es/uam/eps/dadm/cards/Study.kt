@@ -1,6 +1,8 @@
 package es.uam.eps.dadm.cards
 
+import android.provider.Settings.Global.getString
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -15,12 +17,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 import java.time.LocalDateTime
@@ -47,6 +61,7 @@ val YELLOW = Color(0xfff7e848)
 val GREEN = Color(0xff40de68)
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
+
 
 
 @Composable
@@ -425,6 +440,58 @@ fun DeckItem(
                 "$numberOfCardsInDeck " + stringResource(id = R.string.cards),
                 style = MaterialTheme.typography.bodyMedium
             )
+        }
+    }
+}
+
+@Composable
+fun CardEditor(
+    viewModel: CardViewModel,
+    card: Card
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+    ) {
+        var question by remember { mutableStateOf(card.question) }
+        val onQuestionChanged = { value: String -> question = value }
+        OutlinedTextField(
+            value = question,
+            onValueChange = onQuestionChanged,
+            label = { Text("Card question") }
+        )
+        var answer by remember { mutableStateOf(card.answer)}
+        val onAnswerChanged = { value: String -> answer = value}
+        OutlinedTextField(value = answer, onValueChange = onAnswerChanged, label = { Text("Card Answer")})
+
+        val context = LocalContext.current
+        Row {
+
+
+            Button(
+                onClick = { },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = RED)
+            ) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+            val editedString = stringResource(id = R.string.edited_succ)
+            val introduceString = stringResource(id = R.string.introduce_some_values)
+            Button(
+                onClick = {
+                    if (answer.isNotEmpty() && question.isNotEmpty()) {
+                        card.question = question
+                        card.answer = answer
+                        viewModel.updateCard(card)
+                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.padding(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+            ) {
+                Text(text = stringResource(id = R.string.accept))
+            }
         }
     }
 
