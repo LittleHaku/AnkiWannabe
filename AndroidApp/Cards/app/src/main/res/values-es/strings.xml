@@ -27,4 +27,6 @@
     <string name="created_succ">Creado correctamente</string>
     <string name="next_practice">Próxima Práctica</string>
     <string name="days">día(s)</string>
+    <string name="card_question">Pregunta</string>
+    <string name="card_answer">Respuesta</string>
 </resources>

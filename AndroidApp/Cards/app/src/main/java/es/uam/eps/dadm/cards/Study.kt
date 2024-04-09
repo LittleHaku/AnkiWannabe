@@ -444,11 +444,11 @@ fun CardEditor(
 
         OutlinedTextField(value = question,
             onValueChange = onQuestionChanged,
-            label = { Text("Card question") })
+            label = { Text(stringResource(id = R.string.card_question)) })
         val onAnswerChanged = { value: String -> answer = value }
         OutlinedTextField(value = answer,
             onValueChange = onAnswerChanged,
-            label = { Text("Card Answer") })
+            label = { Text(stringResource(id = R.string.card_answer)) })
 
         val context = LocalContext.current
         Row() {
