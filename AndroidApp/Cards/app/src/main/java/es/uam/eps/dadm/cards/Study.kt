@@ -132,7 +132,7 @@ fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId:
 
     val context = LocalContext.current
     val onItemClick = { card: Card ->
-        navController.navigate(NavRoutes.CardEditor.route+"/${card.id}")
+        navController.navigate(NavRoutes.CardEditor.route+"/${card.id}" + "/${card.deckId}")
     }
 
     LazyColumn {
@@ -349,16 +349,16 @@ fun DeckItem(
 
 @Composable
 fun CardEditor(
-    viewModel: CardViewModel, cardId: String, navController: NavHostController
+    viewModel: CardViewModel, cardId: String, navController: NavHostController, deckId: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
     ) {
-        if (cardId == "adding card") {
+        if (cardId == "adding_card") {
             InnerCardEditor(
                 navController = navController,
                 viewModel = viewModel,
-                card = Card("", "",id = "adding card")
+                card = Card("", "", id = "adding_card", deckId = deckId)
             )
         }
         else {
@@ -390,10 +390,9 @@ fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, 
     val context = LocalContext.current
     Row() {
 
-
         Button(
             onClick = {
-                navController.navigate(NavRoutes.Cards.route) {
+                navController.navigate(NavRoutes.Cards.route + "/${card.deckId}") {
                     popUpTo(NavRoutes.Home.route)
                 }
             },
@@ -408,8 +407,8 @@ fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, 
         Button(
             onClick = {
                 if (answer.isNotEmpty() && question.isNotEmpty()) {
-                    if (card.id == "adding card") {
-                        val newCard = Card(question, answer)
+                    if (card.id == "adding_card") {
+                        val newCard = Card(question, answer, deckId = card.deckId)
                         viewModel.addCard(newCard)
                         Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
 
@@ -419,7 +418,7 @@ fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, 
                         viewModel.updateCard(card)
                         Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
                     }
-                    navController.navigate(NavRoutes.Cards.route) {
+                    navController.navigate(NavRoutes.Cards.route + "/${card.deckId}") {
                         popUpTo(NavRoutes.Home.route)
                     }
                 } else {

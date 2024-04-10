@@ -18,7 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import es.uam.eps.dadm.cards.screens.CardEditorScaffold
 import es.uam.eps.dadm.cards.screens.CardScaffold
 import es.uam.eps.dadm.cards.screens.DeckEditorScaffold
-import es.uam.eps.dadm.cards.screens.DeckListScreen
 import es.uam.eps.dadm.cards.screens.DeckScaffold
 import es.uam.eps.dadm.cards.screens.Home
 import es.uam.eps.dadm.cards.screens.StudyScaffold
@@ -75,10 +74,13 @@ fun MainScreen(viewModel: CardViewModel) {
             DeckScaffold(navController, viewModel)
             //DeckListScreen(viewModel, navController)
         }
-        composable(NavRoutes.CardEditor.route + "/{cardId}") { backEntry ->
-            val id = backEntry.arguments?.getString("cardId")
-            id?.let {
-                CardEditorScaffold(navController, viewModel, cardId = id)
+        composable(NavRoutes.CardEditor.route + "/{cardId}" + "/{deckId}") { backEntry ->
+            val cardId = backEntry.arguments?.getString("cardId")
+            val deckId = backEntry.arguments?.getString("deckId")
+            cardId?.let {
+                deckId?.let {
+                    CardEditorScaffold(navController, viewModel, cardId = cardId, deckId = deckId)
+                }
             }
         }
         composable(NavRoutes.DeckEditor.route) {

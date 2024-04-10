@@ -59,7 +59,7 @@ fun CardScaffold(navController: NavHostController, viewModel: CardViewModel, dec
             ), actions = {
                 Image(
                     painter = painterResource(R.drawable.baseline_cloud_upload_24),
-                    contentDescription = "Que no me des errores pesao",
+                    contentDescription = "Upload to cloud",
                     modifier = Modifier
                         .clickable {}
                         .padding(8.dp),
@@ -70,8 +70,8 @@ fun CardScaffold(navController: NavHostController, viewModel: CardViewModel, dec
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(NavRoutes.CardEditor.route+"/adding card")
-                          },
+                    navController.navigate(NavRoutes.CardEditor.route + "/adding_card" + "/$deckId")
+                },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
