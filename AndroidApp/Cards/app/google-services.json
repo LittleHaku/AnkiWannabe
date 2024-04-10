@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "24672166998",
+    "firebase_url": "https://ivansotillodelhornocards-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ivansotillodelhornocards",
+    "storage_bucket": "ivansotillodelhornocards.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24672166998:android:bb5df4f4670c69b60b07f7",
+        "android_client_info": {
+          "package_name": "es.uam.eps.dadm.cards"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa9jaE1BxoWekKaiMGFgGjayvWOZfcum4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

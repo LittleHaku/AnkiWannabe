@@ -2,6 +2,7 @@ package es.uam.eps.dadm.cards
 
 import android.app.Application
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.screens.CardScaffold
 import es.uam.eps.dadm.cards.screens.Home
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
@@ -22,6 +27,24 @@ import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+        val reference = database.getReference("message")
+        reference.setValue("Hello from Cards")
+
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                Toast.makeText(
+                    applicationContext,
+                    snapshot.value.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
+
+
         setContent {
             CardsTheme {
                 Surface(
@@ -36,7 +59,7 @@ class MainActivity : ComponentActivity() {
                             CardViewModelFactory(LocalContext.current.applicationContext as Application)
                         )
 
-                        MainScreen(viewModel)
+                        MainScreen(viewModel = viewModel)
                     }
                 }
             }
