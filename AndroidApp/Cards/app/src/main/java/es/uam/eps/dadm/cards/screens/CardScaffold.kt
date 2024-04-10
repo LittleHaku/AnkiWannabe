@@ -31,19 +31,54 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import es.uam.eps.dadm.cards.CardEditor
 import es.uam.eps.dadm.cards.CardList
 import es.uam.eps.dadm.cards.CardViewModel
+import es.uam.eps.dadm.cards.DeckEditor
 import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
+import es.uam.eps.dadm.cards.Study
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardScaffold(navController: NavHostController, viewModel: CardViewModel, deckId: String) {
+fun CardScaffold(
+    navController: NavHostController,
+    viewModel: CardViewModel,
+    deckId: String = "",
+    cardId: String = "",
+    contentRoute: String
+) {
     Scaffold(
         content = { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
-                CardList(viewModel = viewModel, navController, deckId = deckId)
+                when (contentRoute) {
+                    NavRoutes.Cards.route -> CardList(
+                        viewModel = viewModel,
+                        navController,
+                        deckId = deckId
+                    )
+
+                    NavRoutes.CardEditor.route -> CardEditor(
+                        viewModel,
+                        navController = navController,
+                        cardId = cardId,
+                        deckId = deckId
+                    )
+
+                    NavRoutes.Decks.route -> DeckListScreen(
+                        viewModel = viewModel,
+                        navController = navController
+                    )
+
+                    NavRoutes.DeckEditor.route -> DeckEditor(
+                        viewModel = viewModel,
+                        navController = navController
+                    )
+
+                    NavRoutes.Study.route -> Study(viewModel = viewModel)
+
+                }
             }
         },
         topBar = {

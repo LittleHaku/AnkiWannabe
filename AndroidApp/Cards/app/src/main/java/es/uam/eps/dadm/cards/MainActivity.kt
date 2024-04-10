@@ -15,12 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import es.uam.eps.dadm.cards.screens.CardEditorScaffold
 import es.uam.eps.dadm.cards.screens.CardScaffold
-import es.uam.eps.dadm.cards.screens.DeckEditorScaffold
-import es.uam.eps.dadm.cards.screens.DeckScaffold
 import es.uam.eps.dadm.cards.screens.Home
-import es.uam.eps.dadm.cards.screens.StudyScaffold
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -65,29 +61,46 @@ fun MainScreen(viewModel: CardViewModel) {
             Home(navController)
         }
         composable(NavRoutes.Cards.route + "/{deckId}") {backEntry ->
-            val id = backEntry.arguments?.getString("deckId")
-            id?.let {
-                CardScaffold(navController, viewModel, deckId = id)
+            val deckId = backEntry.arguments?.getString("deckId")
+            deckId?.let {
+                CardScaffold(navController, viewModel, deckId = deckId, contentRoute = NavRoutes.Cards.route)
             }
         }
         composable(NavRoutes.Decks.route) {
-            DeckScaffold(navController, viewModel)
-            //DeckListScreen(viewModel, navController)
+            //DeckScaffold(navController, viewModel)
+            CardScaffold(navController = navController, viewModel = viewModel, contentRoute = NavRoutes.Decks.route)
         }
         composable(NavRoutes.CardEditor.route + "/{cardId}" + "/{deckId}") { backEntry ->
             val cardId = backEntry.arguments?.getString("cardId")
             val deckId = backEntry.arguments?.getString("deckId")
             cardId?.let {
                 deckId?.let {
-                    CardEditorScaffold(navController, viewModel, cardId = cardId, deckId = deckId)
+                    //CardEditorScaffold(navController, viewModel, cardId = cardId, deckId = deckId)
+                    CardScaffold(
+                        navController = navController,
+                        viewModel = viewModel,
+                        contentRoute = NavRoutes.CardEditor.route,
+                        deckId = deckId,
+                        cardId = cardId
+                    )
                 }
             }
         }
         composable(NavRoutes.DeckEditor.route) {
-            DeckEditorScaffold(navController, viewModel)
+            //DeckEditorScaffold(navController, viewModel)
+            CardScaffold(
+                navController = navController,
+                viewModel = viewModel,
+                contentRoute = NavRoutes.DeckEditor.route
+            )
         }
         composable(NavRoutes.Study.route) {
-            StudyScaffold(navController, viewModel)
+            //StudyScaffold(navController, viewModel)
+            CardScaffold(
+                navController = navController,
+                viewModel = viewModel,
+                contentRoute = NavRoutes.Study.route
+            )
         }
     }
 }
