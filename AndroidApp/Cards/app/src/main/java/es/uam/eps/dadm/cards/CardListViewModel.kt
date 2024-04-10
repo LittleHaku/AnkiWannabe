@@ -87,6 +87,7 @@ class CardViewModel(application: Application) : ViewModel() {
 
     fun getCardsByDeckId(deckId: String) = cardDao.getCardsByDeckId(deckId)
 
+    @Suppress("unused")
     fun getAllCards() = cardDao.getCards()
     @Suppress("unused")
     fun getCardsAndDecks() = cardDao.getCardsAndDecks()
