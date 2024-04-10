@@ -1,13 +1,9 @@
 package es.uam.eps.dadm.cards.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -16,8 +12,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,23 +21,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import es.uam.eps.dadm.cards.Card
-import es.uam.eps.dadm.cards.CardList
 import es.uam.eps.dadm.cards.CardViewModel
-import es.uam.eps.dadm.cards.Deck
-import es.uam.eps.dadm.cards.DeckItem
 import es.uam.eps.dadm.cards.DeckList
-import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
 
@@ -102,5 +88,5 @@ fun DeckListScreen(
 ) {
     val cards by viewModel.cards.observeAsState(emptyList())
     val decks by viewModel.decks.observeAsState(emptyList())
-    DeckList(cards = cards, decks = decks)
+    DeckList(cards = cards, decks = decks, navController = navController)
 }

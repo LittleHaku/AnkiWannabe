@@ -39,11 +39,11 @@ import es.uam.eps.dadm.cards.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardScaffold(navController: NavHostController, viewModel: CardViewModel) {
+fun CardScaffold(navController: NavHostController, viewModel: CardViewModel, deckId: String) {
     Scaffold(
         content = { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
-                CardList(viewModel = viewModel, navController)
+                CardList(viewModel = viewModel, navController, deckId = deckId)
             }
         },
         topBar = {

@@ -31,7 +31,7 @@ fun Home(navController: NavController) {
     ) {
         Button(
             onClick = {
-                navController.navigate(NavRoutes.Cards.route)
+                navController.navigate(NavRoutes.Decks.route)
             }
         ) {
             Text(stringResource(id = R.string.cards))

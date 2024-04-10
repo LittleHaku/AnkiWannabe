@@ -12,11 +12,6 @@ object NavBarItems {
             route = "decks"
         ),
         BarItem(
-            title = "Cards",
-            image = Icons.Filled.List,
-            route = "cards"
-        ),
-        BarItem(
             title = "Study",
             image = Icons.Filled.PlayArrow,
             route = "study"

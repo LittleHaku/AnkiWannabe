@@ -65,8 +65,11 @@ fun MainScreen(viewModel: CardViewModel) {
         composable(NavRoutes.Home.route) {
             Home(navController)
         }
-        composable(NavRoutes.Cards.route) {
-            CardScaffold(navController, viewModel)
+        composable(NavRoutes.Cards.route + "/{deckId}") {backEntry ->
+            val id = backEntry.arguments?.getString("deckId")
+            id?.let {
+                CardScaffold(navController, viewModel, deckId = id)
+            }
         }
         composable(NavRoutes.Decks.route) {
             DeckScaffold(navController, viewModel)

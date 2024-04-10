@@ -1,8 +1,8 @@
 package es.uam.eps.dadm.cards
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,8 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
@@ -122,19 +122,13 @@ fun CardData(
 }
 
 @Composable
-fun CardList(viewModel: CardViewModel, navController: NavHostController) {
-    var selectedDeck = "English"
+fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId: String = "") {
+    // var selectedDeck = "English"
     //val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
-    val cards by viewModel.getAllCards().observeAsState(listOf())
+    val cards by viewModel.getCardsByDeckId(deckId).observeAsState(listOf())
+    val deck by viewModel.getDeckById(deckId).observeAsState()
+    val selectedDeck = deck?.name
 
-    val all by viewModel.getCardsAndDecks().observeAsState()
-
-    all?.let {
-        it.forEach { deck, cards ->
-            println(deck.name)
-            cards.forEach { println(it.question) }
-        }
-    }
 
     val context = LocalContext.current
     val onItemClick = { card: Card ->
@@ -275,7 +269,7 @@ fun DifficultyButtons(
 }
 
 @Composable
-fun DeckList(cards: List<Card>, decks: List<Deck>) {
+fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController) {
     val context = LocalContext.current
     // done this way because it doesn't work inside Toast
     val selectedString = stringResource(id = R.string.selected)
@@ -295,7 +289,7 @@ fun DeckList(cards: List<Card>, decks: List<Deck>) {
             )
         }
         items(decks) { deck ->
-            DeckItem(deck, cards, onItemClick)
+            DeckItem(deck, cards, onItemClick, navController)
 
         }
     }
@@ -303,7 +297,11 @@ fun DeckList(cards: List<Card>, decks: List<Deck>) {
 
 @Composable
 fun DeckItem(
-    deck: Deck, cards: List<Card>, onItemClick: (Deck) -> Unit, modifier: Modifier = Modifier
+    deck: Deck,
+    cards: List<Card>,
+    onItemClick: (Deck) -> Unit,
+    navController: NavController,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Row(
@@ -335,6 +333,15 @@ fun DeckItem(
             Text(
                 "$numberOfCardsInDeck " + stringResource(id = R.string.cards),
                 style = MaterialTheme.typography.bodyMedium
+            )
+            Image(
+                painter = painterResource(R.drawable.baseline_library_books_24),
+                contentDescription = "Access this Deck's Cards",
+                modifier = Modifier
+                    .clickable { navController.navigate(NavRoutes.Cards.route + "/${deck.deckId}") }
+                    //navigate(NavRoutes.CardEditor.route+"/${card.id}")
+                    .padding(8.dp),
+                colorFilter = ColorFilter.tint(Color.Black)
             )
         }
     }
