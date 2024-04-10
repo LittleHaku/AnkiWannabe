@@ -69,18 +69,12 @@ class CardViewModel(application: Application) : ViewModel() {
 
     fun getCard(cardId: String): LiveData<Card> = cardDao.getCard(cardId)
 
-    fun getDeckByName(deckName: String) = cardDao.getDeckByName(deckName)
-
     fun updateCard(card: Card) = viewModelScope.launch {
         cardDao.updateCard(card)
     }
 
     fun updateDeck(deck: Deck) = viewModelScope.launch {
         cardDao.updateDeck(deck)
-    }
-
-    fun update(card: Card, quality: Int) {
-        val updateCard = cardDao.getCard(card.id)
     }
 
     fun addDeck(deck: Deck) = viewModelScope.launch {
@@ -91,11 +85,10 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.deleteDecks()
     }
 
-    fun getCardsByDeckName(deckName: String) = cardDao.getCardsByDeckName(deckName)
-
     fun getCardsByDeckId(deckId: String) = cardDao.getCardsByDeckId(deckId)
 
     fun getAllCards() = cardDao.getCards()
+    @Suppress("unused")
     fun getCardsAndDecks() = cardDao.getCardsAndDecks()
     fun getDeckById(deckId: String) = cardDao.getDeckById(deckId)
 

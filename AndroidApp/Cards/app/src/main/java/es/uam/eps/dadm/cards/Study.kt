@@ -37,7 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
 val RED = Color(0xfffc496d)
@@ -83,11 +82,6 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
 
 }
-
-@Composable
-private fun getCard(cards: List<Card>) = cards.filter {
-    LocalDateTime.parse(it.nextPracticeDate) <= now()
-}.getOrNull(0)
 
 @Composable
 fun CardData(
@@ -187,7 +181,7 @@ fun CardItem(
         }
 
         Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
-            Text(card.date.toString().substring(0..9))
+            Text(card.date.substring(0..9))
         }
     }
 }
@@ -498,56 +492,5 @@ fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck
 }
 
 
-@Composable
-fun DeckCreator(viewModel: CardViewModel) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
-    ) {
-        var name by remember { mutableStateOf("") }
-        var description by remember { mutableStateOf("") }
-        val onNameChanged = { value: String -> name = value }
-        val onDescriptionChanged = { value: String -> description = value }
 
-        val context = LocalContext.current
-
-        OutlinedTextField(value = name,
-            onValueChange = onNameChanged,
-            label = { Text(text = stringResource(id = R.string.deck_name)) })
-
-        OutlinedTextField(value = description,
-            onValueChange = onDescriptionChanged,
-            label = { Text(stringResource(id = R.string.deck_description)) })
-
-        Row {
-
-
-            Button(
-                onClick = { },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = RED)
-            ) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-            val createdString = stringResource(id = R.string.created_succ)
-            val introduceString = stringResource(id = R.string.introduce_some_values)
-            Button(
-                onClick = {
-                    if (name.isNotEmpty() && description.isNotEmpty()) {
-                        val deck = Deck(name = name, description = description)
-                        viewModel.addDeck(deck)
-                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
-
-                    } else {
-                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
-                    }
-                },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
-            ) {
-                Text(text = stringResource(id = R.string.accept))
-            }
-        }
-
-    }
-}
 
