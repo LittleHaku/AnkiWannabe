@@ -132,7 +132,7 @@ fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId:
 
     val context = LocalContext.current
     val onItemClick = { card: Card ->
-        navController.navigate(NavRoutes.CardEditor.route+"/${card.id}" + "/${card.deckId}")
+        navController.navigate(NavRoutes.CardEditor.route + "/${card.id}" + "/${card.deckId}")
     }
 
     LazyColumn {
@@ -274,9 +274,10 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController)
     // done this way because it doesn't work inside Toast
     val selectedString = stringResource(id = R.string.selected)
     val onItemClick = { deck: Deck ->
-        Toast.makeText(
+        /*Toast.makeText(
             context, "${deck.name} $selectedString", Toast.LENGTH_SHORT
-        ).show()
+        ).show()*/
+        navController.navigate(NavRoutes.DeckEditor.route)
     }
 
     LazyColumn {
@@ -349,7 +350,10 @@ fun DeckItem(
 
 @Composable
 fun CardEditor(
-    viewModel: CardViewModel, cardId: String, navController: NavHostController, deckId: String
+    viewModel: CardViewModel,
+    cardId: String,
+    navController: NavHostController,
+    deckId: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
@@ -360,14 +364,14 @@ fun CardEditor(
                 viewModel = viewModel,
                 card = Card("", "", id = "adding_card", deckId = deckId)
             )
-        }
-        else {
+        } else {
             val card by viewModel.getCard(cardId).observeAsState(null)
             card?.let {
                 InnerCardEditor(
                     navController = navController,
                     viewModel = viewModel,
-                    card = it)
+                    card = it
+                )
             }
         }
     }
@@ -436,75 +440,96 @@ fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, 
 }
 
 @Composable
-fun DeckEditor(viewModel: CardViewModel, deck: Deck? = null, navController: NavHostController) {
+fun DeckEditor(viewModel: CardViewModel, navController: NavHostController, deckId: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
-        var name by remember { mutableStateOf(deck?.name ?: "") }
-        var description by remember { mutableStateOf(deck?.description ?: "") }
+        if (deckId == "adding_deck") {
+            InnerDeckEditor(
+                navController = navController,
+                viewModel = viewModel,
+                deck = Deck("adding_deck", "", "")
+            )
+        } else {
+            val deck by viewModel.getDeckById(deckId).observeAsState(null)
+            deck?.let {
+                InnerDeckEditor(
+                    navController = navController,
+                    viewModel = viewModel,
+                    deck = it
+                )
+            }
+        }
+    }
 
-        val onNameChanged = { value: String -> name = value }
-        val onDescriptionChanged = { value: String -> description = value }
+}
 
-        val context = LocalContext.current
+@Composable
+fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck: Deck) {
+    var name by remember { mutableStateOf(deck.name) }
+    var description by remember { mutableStateOf(deck.description) }
 
-        OutlinedTextField(value = name,
-            onValueChange = onNameChanged,
-            label = { Text(text = stringResource(id = R.string.deck_name)) })
+    val onNameChanged = { value: String -> name = value }
+    val onDescriptionChanged = { value: String -> description = value }
 
-        OutlinedTextField(value = description,
-            onValueChange = onDescriptionChanged,
-            label = { Text(stringResource(id = R.string.deck_description)) })
+    val context = LocalContext.current
 
-        Row {
-            Button(
-                onClick = {
+    OutlinedTextField(value = name,
+        onValueChange = onNameChanged,
+        label = { Text(text = stringResource(id = R.string.deck_name)) })
+
+    OutlinedTextField(value = description,
+        onValueChange = onDescriptionChanged,
+        label = { Text(stringResource(id = R.string.deck_description)) })
+
+    Row {
+        Button(
+            onClick = {
+                navController.navigate(NavRoutes.Decks.route) {
+                    popUpTo(NavRoutes.Home.route)
+                }
+            },
+            modifier = Modifier.padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = RED)
+        ) {
+            Text(text = stringResource(id = R.string.cancel))
+        }
+        val editedString = stringResource(id = R.string.edited_succ)
+        val introduceString = stringResource(id = R.string.introduce_some_values)
+        val createdString = stringResource(id = R.string.created_succ)
+
+        Button(
+            onClick = {
+                if (name.isNotEmpty() && description.isNotEmpty()) {
+                    if (deck.deckId == "adding_deck") {
+                        val newDeck = Deck(name = name, description = description)
+                        viewModel.addDeck(newDeck)
+                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        deck.name = name
+                        deck.description = description
+                        viewModel.updateDeck(deck)
+                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+
+                    }
                     navController.navigate(NavRoutes.Decks.route) {
                         popUpTo(NavRoutes.Home.route)
                     }
-                },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = RED)
-            ) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-            val editedString = stringResource(id = R.string.edited_succ)
-            val introduceString = stringResource(id = R.string.introduce_some_values)
-            val createdString = stringResource(id = R.string.created_succ)
+                } else {
+                    Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
 
-            Button(
-                onClick = {
-                    if (name.isNotEmpty() && description.isNotEmpty()) {
-                        if (deck != null) {
-                            deck.name = name
-                            deck.description = description
-                            viewModel.updateDeck(deck)
-                            Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                }
 
-                        } else {
-                            val newDeck = Deck(name = name, description = description)
-                            viewModel.addDeck(newDeck)
-                            Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
-
-                        }
-                        navController.navigate(NavRoutes.Decks.route) {
-                            popUpTo(NavRoutes.Home.route)
-                        }
-                    } else {
-                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
-
-                    }
-
-                },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
-            ) {
-                Text(text = stringResource(id = R.string.accept))
-            }
+            },
+            modifier = Modifier.padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+        ) {
+            Text(text = stringResource(id = R.string.accept))
         }
-
     }
 }
+
 
 @Composable
 fun DeckCreator(viewModel: CardViewModel) {

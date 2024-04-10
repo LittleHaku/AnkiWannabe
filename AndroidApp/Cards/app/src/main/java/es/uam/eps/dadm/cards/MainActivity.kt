@@ -60,15 +60,24 @@ fun MainScreen(viewModel: CardViewModel) {
         composable(NavRoutes.Home.route) {
             Home(navController)
         }
-        composable(NavRoutes.Cards.route + "/{deckId}") {backEntry ->
+        composable(NavRoutes.Cards.route + "/{deckId}") { backEntry ->
             val deckId = backEntry.arguments?.getString("deckId")
             deckId?.let {
-                CardScaffold(navController, viewModel, deckId = deckId, contentRoute = NavRoutes.Cards.route)
+                CardScaffold(
+                    navController,
+                    viewModel,
+                    deckId = deckId,
+                    contentRoute = NavRoutes.Cards.route
+                )
             }
         }
         composable(NavRoutes.Decks.route) {
             //DeckScaffold(navController, viewModel)
-            CardScaffold(navController = navController, viewModel = viewModel, contentRoute = NavRoutes.Decks.route)
+            CardScaffold(
+                navController = navController,
+                viewModel = viewModel,
+                contentRoute = NavRoutes.Decks.route
+            )
         }
         composable(NavRoutes.CardEditor.route + "/{cardId}" + "/{deckId}") { backEntry ->
             val cardId = backEntry.arguments?.getString("cardId")
@@ -86,13 +95,17 @@ fun MainScreen(viewModel: CardViewModel) {
                 }
             }
         }
-        composable(NavRoutes.DeckEditor.route) {
+        composable(NavRoutes.DeckEditor.route + "/{deckId}") { backEntry ->
             //DeckEditorScaffold(navController, viewModel)
-            CardScaffold(
-                navController = navController,
-                viewModel = viewModel,
-                contentRoute = NavRoutes.DeckEditor.route
-            )
+            val deckId = backEntry.arguments?.getString("deckId")
+            deckId?.let {
+                CardScaffold(
+                    navController = navController,
+                    viewModel = viewModel,
+                    contentRoute = NavRoutes.DeckEditor.route,
+                    deckId = deckId
+                )
+            }
         }
         composable(NavRoutes.Study.route) {
             //StudyScaffold(navController, viewModel)

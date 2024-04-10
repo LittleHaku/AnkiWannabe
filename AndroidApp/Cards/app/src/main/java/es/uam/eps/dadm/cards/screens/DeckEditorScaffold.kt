@@ -46,7 +46,7 @@ fun DeckEditorScaffold(navController: NavHostController, viewModel: CardViewMode
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DeckEditor(viewModel = viewModel, navController = navController)
+                DeckEditor(viewModel = viewModel, navController = navController, "")
             }
         },
         topBar = {

@@ -2,7 +2,9 @@ package es.uam.eps.dadm.cards.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -49,42 +52,55 @@ fun CardScaffold(
     cardId: String = "",
     contentRoute: String
 ) {
-    Scaffold(
-        content = { paddingValues ->
-            Column(Modifier.padding(paddingValues)) {
-                when (contentRoute) {
-                    NavRoutes.Cards.route -> CardList(
-                        viewModel = viewModel,
-                        navController,
-                        deckId = deckId
-                    )
+    Scaffold(content = { paddingValues ->
+        Column(
+            Modifier.padding(paddingValues),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            when (contentRoute) {
+                NavRoutes.Cards.route -> CardList(
+                    viewModel = viewModel, navController, deckId = deckId
+                )
 
-                    NavRoutes.CardEditor.route -> CardEditor(
+                // This way or if not they get in the top left corner
+                NavRoutes.CardEditor.route -> Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CardEditor(
                         viewModel,
                         navController = navController,
                         cardId = cardId,
                         deckId = deckId
                     )
-
-                    NavRoutes.Decks.route -> DeckListScreen(
-                        viewModel = viewModel,
-                        navController = navController
-                    )
-
-                    NavRoutes.DeckEditor.route -> DeckEditor(
-                        viewModel = viewModel,
-                        navController = navController
-                    )
-
-                    NavRoutes.Study.route -> Study(viewModel = viewModel)
-
                 }
+
+
+                NavRoutes.Decks.route -> DeckListScreen(
+                    viewModel = viewModel, navController = navController
+                )
+
+                NavRoutes.DeckEditor.route -> Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DeckEditor(
+                        viewModel = viewModel, navController = navController, deckId = deckId
+                    )
+                }
+
+                NavRoutes.Study.route -> Study(viewModel = viewModel)
+
             }
-        },
+        }
+    },
         topBar = {
             CenterAlignedTopAppBar(title = {
                 Text(
-                    text = stringResource(id = R.string.cards),
+                    text = stringResource(id = R.string.app_name),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -92,32 +108,45 @@ fun CardScaffold(
             }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ), actions = {
-                Image(
-                    painter = painterResource(R.drawable.baseline_cloud_upload_24),
+                Image(painter = painterResource(R.drawable.baseline_cloud_upload_24),
                     contentDescription = "Upload to cloud",
                     modifier = Modifier
                         .clickable {}
                         .padding(8.dp),
-                    colorFilter = ColorFilter.tint(Color.White)
-                )
+                    colorFilter = ColorFilter.tint(Color.White))
             })
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(NavRoutes.CardEditor.route + "/adding_card" + "/$deckId")
-                },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Add card"
-                )
+            when (contentRoute) {
+                NavRoutes.Cards.route -> {
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate(NavRoutes.CardEditor.route + "/adding_card" + "/$deckId")
+                        }, containerColor = MaterialTheme.colorScheme.primary
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add, contentDescription = "Add card"
+                        )
+                    }
+                }
+
+                NavRoutes.Decks.route -> {
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate(NavRoutes.DeckEditor.route + "/adding_deck")
+                        }, containerColor = MaterialTheme.colorScheme.primary
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add, contentDescription = "Add Deck"
+                        )
+                    }
+                }
+
             }
         },
+
         floatingActionButtonPosition = FabPosition.End,
-        bottomBar = { CardBottomNavigationBar(navController) }
-    )
+        bottomBar = { CardBottomNavigationBar(navController) })
 }
 
 @Composable
@@ -127,25 +156,19 @@ fun CardBottomNavigationBar(navController: NavController) {
 
     NavigationBar {
         NavBarItems.BarItems.forEach { navItem ->
-            NavigationBarItem(
-                selected = currentRoute == navItem.route,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
+            NavigationBarItem(selected = currentRoute == navItem.route, onClick = {
+                navController.navigate(navItem.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
                     }
-                },
-                icon = {
-                    Icon(
-                        imageVector = navItem.image,
-                        contentDescription = navItem.title
-                    )
-                },
-                label = { Text(text = navItem.title) }
-            )
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, icon = {
+                Icon(
+                    imageVector = navItem.image, contentDescription = navItem.title
+                )
+            }, label = { Text(text = navItem.title) })
         }
     }
 }
