@@ -43,7 +43,7 @@ fun CardScaffold(navController: NavHostController, viewModel: CardViewModel) {
     Scaffold(
         content = { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
-                CardList(viewModel = viewModel)
+                CardList(viewModel = viewModel, navController)
             }
         },
         topBar = {
@@ -70,8 +70,8 @@ fun CardScaffold(navController: NavHostController, viewModel: CardViewModel) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(NavRoutes.CardEditor.route)
-                },
+                    navController.navigate(NavRoutes.CardEditor.route+"/adding card")
+                          },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(

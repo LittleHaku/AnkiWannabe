@@ -67,7 +67,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.deleteCards()
     }
 
-    fun getCard(cardId: String) = cardDao.getCard(cardId)
+    fun getCard(cardId: String): LiveData<Card> = cardDao.getCard(cardId)
 
     fun getDeckByName(deckName: String) = cardDao.getDeckByName(deckName)
 

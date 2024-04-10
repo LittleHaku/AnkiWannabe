@@ -35,7 +35,7 @@ import es.uam.eps.dadm.cards.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardEditorScaffold(navController: NavHostController, viewModel: CardViewModel) {
+fun CardEditorScaffold(navController: NavHostController, viewModel: CardViewModel, cardId: String = "") {
     Scaffold(
         content = { paddingValues ->
             Column(
@@ -45,7 +45,8 @@ fun CardEditorScaffold(navController: NavHostController, viewModel: CardViewMode
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CardEditor(viewModel, navController = navController)
+
+                CardEditor(viewModel, navController = navController, cardId = cardId)
             }
         },
         topBar = {

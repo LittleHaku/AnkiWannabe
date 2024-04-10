@@ -50,93 +50,6 @@ val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
 
 
-/*@Composable
-fun NavComposable(viewModel: CardViewModel) {
-    var showStudy by remember { mutableStateOf(false) }
-    var showDeckList by remember { mutableStateOf(false) }
-    var showCardList by remember { mutableStateOf(false) }
-    var showDeckCreator by remember { mutableStateOf(false) }
-
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(
-        color = PASTEL_GREEN
-    )
-
-
-    val buttonModifier = Modifier.padding(8.dp)
-    val buttonColors = ButtonDefaults.buttonColors(PASTEL_GREEN)
-
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
-    ) {
-        Row(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .padding(10.dp)
-        ) {
-            Button(
-                onClick = {
-                    showStudy = true
-                    showDeckList = false
-                    showCardList = false
-                    showDeckCreator = false
-                }, modifier = buttonModifier, colors = buttonColors
-            ) {
-                Text(stringResource(id = R.string.study_menu))
-            }
-            Button(
-                onClick = {
-                    showStudy = false
-                    showDeckList = true
-                    showCardList = false
-                    showDeckCreator = false
-                }, modifier = buttonModifier, colors = buttonColors
-            ) {
-                Text(stringResource(id = R.string.deck_list_menu))
-            }
-            Button(
-                onClick = {
-                    showStudy = false
-                    showDeckList = false
-                    showCardList = true
-                    showDeckCreator = false
-                }, modifier = buttonModifier, colors = buttonColors
-            ) {
-                Text(stringResource(id = R.string.card_list_menu))
-            }
-            Button(
-                onClick = {
-                    showStudy = false
-                    showDeckList = false
-                    showCardList = false
-                    showDeckCreator = true
-                }, modifier = buttonModifier, colors = buttonColors
-            ) {
-                Text(stringResource(id = R.string.create_deck_menu))
-            }
-            Button(
-                onClick = { viewModel.populateDB() },
-                modifier = buttonModifier,
-                colors = buttonColors
-            ) {
-                Text(stringResource(id = R.string.reset_db_menu))
-            }
-        }
-
-        if (showStudy) {
-            Study(viewModel)
-        } else if (showDeckList) {
-            DeckList(viewModel)
-        } else if (showCardList) {
-            CardList(viewModel)
-        } else if (showDeckCreator) {
-            DeckCreator(viewModel)
-        }
-    }
-}*/
-
-
 @Composable
 fun Study(viewModel: CardViewModel) {
     val card by viewModel.dueCard.observeAsState()
@@ -209,7 +122,7 @@ fun CardData(
 }
 
 @Composable
-fun CardList(viewModel: CardViewModel) {
+fun CardList(viewModel: CardViewModel, navController: NavHostController) {
     var selectedDeck = "English"
     //val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
     val cards by viewModel.getAllCards().observeAsState(listOf())
@@ -225,9 +138,7 @@ fun CardList(viewModel: CardViewModel) {
 
     val context = LocalContext.current
     val onItemClick = { card: Card ->
-        Toast.makeText(
-            context, card.question, Toast.LENGTH_SHORT
-        ).show()
+        navController.navigate(NavRoutes.CardEditor.route+"/${card.id}")
     }
 
     LazyColumn {
@@ -431,70 +342,89 @@ fun DeckItem(
 
 @Composable
 fun CardEditor(
-    viewModel: CardViewModel, card: Card? = null, navController: NavHostController
+    viewModel: CardViewModel, cardId: String, navController: NavHostController
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
     ) {
-        var question by remember { mutableStateOf(card?.question ?: "") }
-        var answer by remember { mutableStateOf(card?.answer ?: "") }
-        val onQuestionChanged = { value: String -> question = value }
+        if (cardId == "adding card") {
+            InnerCardEditor(
+                navController = navController,
+                viewModel = viewModel,
+                card = Card("", "",id = "adding card")
+            )
+        }
+        else {
+            val card by viewModel.getCard(cardId).observeAsState(null)
+            card?.let {
+                InnerCardEditor(
+                    navController = navController,
+                    viewModel = viewModel,
+                    card = it)
+            }
+        }
+    }
+}
 
-        OutlinedTextField(value = question,
-            onValueChange = onQuestionChanged,
-            label = { Text(stringResource(id = R.string.card_question)) })
-        val onAnswerChanged = { value: String -> answer = value }
-        OutlinedTextField(value = answer,
-            onValueChange = onAnswerChanged,
-            label = { Text(stringResource(id = R.string.card_answer)) })
+@Composable
+fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, card: Card) {
+    var question by remember { mutableStateOf(card.question) }
+    var answer by remember { mutableStateOf(card.answer) }
+    val onQuestionChanged = { value: String -> question = value }
 
-        val context = LocalContext.current
-        Row() {
+    OutlinedTextField(value = question,
+        onValueChange = onQuestionChanged,
+        label = { Text(stringResource(id = R.string.card_question)) })
+    val onAnswerChanged = { value: String -> answer = value }
+    OutlinedTextField(value = answer,
+        onValueChange = onAnswerChanged,
+        label = { Text(stringResource(id = R.string.card_answer)) })
+
+    val context = LocalContext.current
+    Row() {
 
 
-            Button(
-                onClick = {
+        Button(
+            onClick = {
+                navController.navigate(NavRoutes.Cards.route) {
+                    popUpTo(NavRoutes.Home.route)
+                }
+            },
+            modifier = Modifier.padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = RED)
+        ) {
+            Text(text = stringResource(id = R.string.cancel))
+        }
+        val editedString = stringResource(id = R.string.edited_succ)
+        val createdString = stringResource(id = R.string.created_succ)
+        val introduceString = stringResource(id = R.string.introduce_some_values)
+        Button(
+            onClick = {
+                if (answer.isNotEmpty() && question.isNotEmpty()) {
+                    if (card.id == "adding card") {
+                        val newCard = Card(question, answer)
+                        viewModel.addCard(newCard)
+                        Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        card.question = question
+                        card.answer = answer
+                        viewModel.updateCard(card)
+                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                    }
                     navController.navigate(NavRoutes.Cards.route) {
                         popUpTo(NavRoutes.Home.route)
                     }
-                },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = RED)
-            ) {
-                Text(text = stringResource(id = R.string.cancel))
-            }
-            val editedString = stringResource(id = R.string.edited_succ)
-            val createdString = stringResource(id = R.string.created_succ)
-            val introduceString = stringResource(id = R.string.introduce_some_values)
-            Button(
-                onClick = {
-                    if (answer.isNotEmpty() && question.isNotEmpty()) {
-                        if (card != null) {
-                            card.question = question
-                            card.answer = answer
-                            viewModel.updateCard(card)
-                            Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
 
-                        } else {
-                            val newCard = Card(question, answer)
-                            viewModel.addCard(newCard)
-                            Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
+                }
 
-                        }
-                        navController.navigate(NavRoutes.Cards.route) {
-                            popUpTo(NavRoutes.Home.route)
-                        }
-                    } else {
-                        Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
-
-                    }
-
-                },
-                modifier = Modifier.padding(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = GREEN)
-            ) {
-                Text(text = stringResource(id = R.string.accept))
-            }
+            },
+            modifier = Modifier.padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = GREEN)
+        ) {
+            Text(text = stringResource(id = R.string.accept))
         }
     }
 }
