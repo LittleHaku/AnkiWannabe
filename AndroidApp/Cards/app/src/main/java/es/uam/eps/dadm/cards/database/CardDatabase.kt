@@ -20,12 +20,8 @@ abstract class CardDatabase : RoomDatabase() {
 
             if (instance == null) {
                 instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    CardDatabase::class.java,
-                    "cards_database"
-                )
-                    .fallbackToDestructiveMigration()
-                    .build()
+                    context.applicationContext, CardDatabase::class.java, "cards_database"
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
             }
             return instance

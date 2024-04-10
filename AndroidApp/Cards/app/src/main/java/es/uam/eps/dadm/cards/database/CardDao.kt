@@ -39,21 +39,17 @@ interface CardDao {
     fun getDecks(): LiveData<List<Deck>>
 
     @Query(
-        "SELECT * FROM cards_table " +
-                "INNER JOIN decks_table ON decks_table.deckId = cards_table.deckId " +
-                "WHERE decks_table.name LIKE :deckName"
+        "SELECT * FROM cards_table " + "INNER JOIN decks_table ON decks_table.deckId = cards_table.deckId " + "WHERE decks_table.name LIKE :deckName"
     )
     fun getCardsByDeckName(deckName: String): LiveData<List<Card>>
 
     @Query(
-        "SELECT * FROM cards_table " +
-                "INNER JOIN decks_table ON decks_table.deckId = cards_table.deckId " +
-                "WHERE decks_table.deckId LIKE :deckId"
+        "SELECT * FROM cards_table " + "INNER JOIN decks_table ON decks_table.deckId = cards_table.deckId " + "WHERE decks_table.deckId LIKE :deckId"
     )
     fun getCardsByDeckId(deckId: String): LiveData<List<Card>>
+
     @Query(
-        "SELECT * FROM cards_table " +
-                "JOIN decks_table ON cards_table.deckId = decks_table.deckId"
+        "SELECT * FROM cards_table " + "JOIN decks_table ON cards_table.deckId = decks_table.deckId"
     )
     fun getCardsAndDecks(): LiveData<Map<Deck, List<Card>>>
 

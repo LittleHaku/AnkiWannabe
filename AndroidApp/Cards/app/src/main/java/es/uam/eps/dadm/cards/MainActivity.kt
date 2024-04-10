@@ -25,8 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CardsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     val owner = LocalViewModelStoreOwner.current
 
@@ -37,9 +36,6 @@ class MainActivity : ComponentActivity() {
                             CardViewModelFactory(LocalContext.current.applicationContext as Application)
                         )
 
-
-                        //NavComposable(viewModel)
-                        //CardScaffold(navController, viewModel)
                         MainScreen(viewModel)
                     }
                 }
@@ -54,8 +50,7 @@ fun MainScreen(viewModel: CardViewModel) {
     val navController = rememberNavController()
 
     NavHost(
-        navController = navController,
-        startDestination = NavRoutes.Home.route
+        navController = navController, startDestination = NavRoutes.Home.route
     ) {
         composable(NavRoutes.Home.route) {
             Home(navController)
@@ -64,15 +59,11 @@ fun MainScreen(viewModel: CardViewModel) {
             val deckId = backEntry.arguments?.getString("deckId")
             deckId?.let {
                 CardScaffold(
-                    navController,
-                    viewModel,
-                    deckId = deckId,
-                    contentRoute = NavRoutes.Cards.route
+                    navController, viewModel, deckId = deckId, contentRoute = NavRoutes.Cards.route
                 )
             }
         }
         composable(NavRoutes.Decks.route) {
-            //DeckScaffold(navController, viewModel)
             CardScaffold(
                 navController = navController,
                 viewModel = viewModel,
@@ -84,7 +75,6 @@ fun MainScreen(viewModel: CardViewModel) {
             val deckId = backEntry.arguments?.getString("deckId")
             cardId?.let {
                 deckId?.let {
-                    //CardEditorScaffold(navController, viewModel, cardId = cardId, deckId = deckId)
                     CardScaffold(
                         navController = navController,
                         viewModel = viewModel,
@@ -96,7 +86,6 @@ fun MainScreen(viewModel: CardViewModel) {
             }
         }
         composable(NavRoutes.DeckEditor.route + "/{deckId}") { backEntry ->
-            //DeckEditorScaffold(navController, viewModel)
             val deckId = backEntry.arguments?.getString("deckId")
             deckId?.let {
                 CardScaffold(
@@ -108,7 +97,6 @@ fun MainScreen(viewModel: CardViewModel) {
             }
         }
         composable(NavRoutes.Study.route) {
-            //StudyScaffold(navController, viewModel)
             CardScaffold(
                 navController = navController,
                 viewModel = viewModel,

@@ -7,14 +7,9 @@ import androidx.compose.material.icons.filled.PlayArrow
 object NavBarItems {
     val BarItems = listOf(
         BarItem(
-            title = "Decks",
-            image = Icons.Filled.List,
-            route = "decks"
-        ),
-        BarItem(
-            title = "Study",
-            image = Icons.Filled.PlayArrow,
-            route = "study"
+            title = "Decks", image = Icons.Filled.List, route = "decks"
+        ), BarItem(
+            title = "Study", image = Icons.Filled.PlayArrow, route = "study"
         )
     )
 }

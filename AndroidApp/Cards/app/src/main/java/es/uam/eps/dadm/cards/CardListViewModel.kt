@@ -40,7 +40,7 @@ class CardViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun populateDB() {
+    private fun populateDB() {
         deleteCards()
         deleteDecks()
 
@@ -63,7 +63,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.addCard(card)
     }
 
-    fun deleteCards() = viewModelScope.launch {
+    private fun deleteCards() = viewModelScope.launch {
         cardDao.deleteCards()
     }
 
@@ -87,7 +87,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.addDeck(deck)
     }
 
-    fun deleteDecks() = viewModelScope.launch {
+    private fun deleteDecks() = viewModelScope.launch {
         cardDao.deleteDecks()
     }
 
@@ -102,7 +102,8 @@ class CardViewModel(application: Application) : ViewModel() {
 
 }
 
-class CardViewModelFactory(val application: Application) : ViewModelProvider.Factory {
+@Suppress("UNCHECKED_CAST")
+class CardViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CardViewModel(application) as T
     }

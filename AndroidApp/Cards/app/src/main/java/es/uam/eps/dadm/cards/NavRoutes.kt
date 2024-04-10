@@ -1,11 +1,11 @@
 package es.uam.eps.dadm.cards
 
 sealed class NavRoutes(val route: String) {
-    object Home : NavRoutes("home")
-    object Cards : NavRoutes("cards")
-    object Decks : NavRoutes("decks")
+    data object Home : NavRoutes("home")
+    data object Cards : NavRoutes("cards")
+    data object Decks : NavRoutes("decks")
 
-    object CardEditor : NavRoutes("cardEditor")
-    object DeckEditor : NavRoutes("deckEditor")
-    object Study : NavRoutes("study")
+    data object CardEditor : NavRoutes("cardEditor")
+    data object DeckEditor : NavRoutes("deckEditor")
+    data object Study : NavRoutes("study")
 }

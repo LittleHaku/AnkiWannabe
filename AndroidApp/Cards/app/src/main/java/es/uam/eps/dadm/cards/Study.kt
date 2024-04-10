@@ -35,11 +35,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
@@ -68,7 +65,6 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
     var answered by remember { mutableStateOf(false) }
 
-    //val card = getCard(cards)
 
     val onAnswered = { value: Boolean ->
         answered = value
@@ -122,15 +118,11 @@ fun CardData(
 }
 
 @Composable
-fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId: String = "") {
-    // var selectedDeck = "English"
-    //val cards by viewModel.getCardsByDeckName(selectedDeck).observeAsState(listOf())
+fun CardList(viewModel: CardViewModel, navController: NavController, deckId: String = "") {
     val cards by viewModel.getCardsByDeckId(deckId).observeAsState(listOf())
     val deck by viewModel.getDeckById(deckId).observeAsState()
     val selectedDeck = deck?.name
 
-
-    val context = LocalContext.current
     val onItemClick = { card: Card ->
         navController.navigate(NavRoutes.CardEditor.route + "/${card.id}" + "/${card.deckId}")
     }
@@ -144,10 +136,8 @@ fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId:
                 style = MaterialTheme.typography.displayLarge
             )
         }
-        cards.let {
-            items(it) { card ->
-                CardItem(card, onItemClick)
-            }
+        items(cards) { card ->
+            CardItem(card, onItemClick)
         }
     }
 }
@@ -156,7 +146,6 @@ fun CardList(viewModel: CardViewModel, navController: NavHostController, deckId:
 fun CardItem(
     card: Card, onItemClick: (Card) -> Unit, modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     Row(
         modifier
             .fillMaxWidth()
@@ -270,13 +259,7 @@ fun DifficultyButtons(
 
 @Composable
 fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController) {
-    val context = LocalContext.current
-    // done this way because it doesn't work inside Toast
-    val selectedString = stringResource(id = R.string.selected)
     val onItemClick = { deck: Deck ->
-        /*Toast.makeText(
-            context, "${deck.name} $selectedString", Toast.LENGTH_SHORT
-        ).show()*/
         navController.navigate(NavRoutes.DeckEditor.route + "/${deck.deckId}")
     }
 
@@ -304,7 +287,6 @@ fun DeckItem(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     Row(
         modifier
             .fillMaxWidth()
@@ -313,11 +295,6 @@ fun DeckItem(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
     ) {
-        var switchState: Boolean by remember { mutableStateOf(false) }
-        val onSwitchState = { value: Boolean ->
-            switchState = value
-        }
-
         Column(
             modifier = Modifier
                 .padding(start = 16.dp)
@@ -335,25 +312,19 @@ fun DeckItem(
                 "$numberOfCardsInDeck " + stringResource(id = R.string.cards),
                 style = MaterialTheme.typography.bodyMedium
             )
-            Image(
-                painter = painterResource(R.drawable.baseline_library_books_24),
+            Image(painter = painterResource(R.drawable.baseline_library_books_24),
                 contentDescription = "Access this Deck's Cards",
                 modifier = Modifier
                     .clickable { navController.navigate(NavRoutes.Cards.route + "/${deck.deckId}") }
-                    //navigate(NavRoutes.CardEditor.route+"/${card.id}")
                     .padding(8.dp),
-                colorFilter = ColorFilter.tint(Color.Black)
-            )
+                colorFilter = ColorFilter.tint(Color.Black))
         }
     }
 }
 
 @Composable
 fun CardEditor(
-    viewModel: CardViewModel,
-    cardId: String,
-    navController: NavHostController,
-    deckId: String
+    viewModel: CardViewModel, cardId: String, navController: NavController, deckId: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top
@@ -368,9 +339,7 @@ fun CardEditor(
             val card by viewModel.getCard(cardId).observeAsState(null)
             card?.let {
                 InnerCardEditor(
-                    navController = navController,
-                    viewModel = viewModel,
-                    card = it
+                    navController = navController, viewModel = viewModel, card = it
                 )
             }
         }
@@ -378,7 +347,7 @@ fun CardEditor(
 }
 
 @Composable
-fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, card: Card) {
+fun InnerCardEditor(navController: NavController, viewModel: CardViewModel, card: Card) {
     var question by remember { mutableStateOf(card.question) }
     var answer by remember { mutableStateOf(card.answer) }
     val onQuestionChanged = { value: String -> question = value }
@@ -440,7 +409,7 @@ fun InnerCardEditor(navController: NavHostController, viewModel: CardViewModel, 
 }
 
 @Composable
-fun DeckEditor(viewModel: CardViewModel, navController: NavHostController, deckId: String) {
+fun DeckEditor(viewModel: CardViewModel, navController: NavController, deckId: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
@@ -454,9 +423,7 @@ fun DeckEditor(viewModel: CardViewModel, navController: NavHostController, deckI
             val deck by viewModel.getDeckById(deckId).observeAsState(null)
             deck?.let {
                 InnerDeckEditor(
-                    navController = navController,
-                    viewModel = viewModel,
-                    deck = it
+                    navController = navController, viewModel = viewModel, deck = it
                 )
             }
         }

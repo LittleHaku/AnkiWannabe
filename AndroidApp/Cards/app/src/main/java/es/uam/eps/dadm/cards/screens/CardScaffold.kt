@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,14 +33,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import es.uam.eps.dadm.cards.CardEditor
-import es.uam.eps.dadm.cards.CardList
 import es.uam.eps.dadm.cards.CardViewModel
-import es.uam.eps.dadm.cards.DeckEditor
 import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
-import es.uam.eps.dadm.cards.Study
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,40 +54,25 @@ fun CardScaffold(
             horizontalAlignment = Alignment.Start
         ) {
             when (contentRoute) {
-                NavRoutes.Cards.route -> CardList(
+                NavRoutes.Cards.route -> CardListScreen(
                     viewModel = viewModel, navController, deckId = deckId
                 )
 
-                // This way or if not they get in the top left corner
-                NavRoutes.CardEditor.route -> Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CardEditor(
-                        viewModel,
-                        navController = navController,
-                        cardId = cardId,
-                        deckId = deckId
-                    )
-                }
+                NavRoutes.CardEditor.route -> CardEditorScreen(
+                    viewModel, navController = navController, cardId = cardId, deckId = deckId
+                )
 
 
                 NavRoutes.Decks.route -> DeckListScreen(
                     viewModel = viewModel, navController = navController
                 )
 
-                NavRoutes.DeckEditor.route -> Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    DeckEditor(
-                        viewModel = viewModel, navController = navController, deckId = deckId
-                    )
-                }
+                NavRoutes.DeckEditor.route -> DeckEditorScreen(
+                    viewModel = viewModel, navController = navController, deckId = deckId
+                )
 
-                NavRoutes.Study.route -> Study(viewModel = viewModel)
+
+                NavRoutes.Study.route -> StudyScreen(viewModel = viewModel)
 
             }
         }
