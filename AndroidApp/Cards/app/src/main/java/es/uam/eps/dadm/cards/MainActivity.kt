@@ -17,8 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import es.uam.eps.dadm.cards.screens.CardEditorScaffold
 import es.uam.eps.dadm.cards.screens.CardScaffold
+import es.uam.eps.dadm.cards.screens.DeckEditorScaffold
+import es.uam.eps.dadm.cards.screens.DeckListScreen
 import es.uam.eps.dadm.cards.screens.DeckScaffold
 import es.uam.eps.dadm.cards.screens.Home
+import es.uam.eps.dadm.cards.screens.StudyScaffold
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 
 class MainActivity : ComponentActivity() {
@@ -67,9 +70,16 @@ fun MainScreen(viewModel: CardViewModel) {
         }
         composable(NavRoutes.Decks.route) {
             DeckScaffold(navController, viewModel)
+            //DeckListScreen(viewModel, navController)
         }
         composable(NavRoutes.CardEditor.route) {
             CardEditorScaffold(navController, viewModel)
+        }
+        composable(NavRoutes.DeckEditor.route) {
+            DeckEditorScaffold(navController, viewModel)
+        }
+        composable(NavRoutes.Study.route) {
+            StudyScaffold(navController, viewModel)
         }
     }
 }

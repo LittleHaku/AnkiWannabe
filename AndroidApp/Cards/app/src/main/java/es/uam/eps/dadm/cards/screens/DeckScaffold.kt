@@ -34,6 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import es.uam.eps.dadm.cards.Card
 import es.uam.eps.dadm.cards.CardList
@@ -42,6 +44,7 @@ import es.uam.eps.dadm.cards.Deck
 import es.uam.eps.dadm.cards.DeckItem
 import es.uam.eps.dadm.cards.DeckList
 import es.uam.eps.dadm.cards.NavBarItems
+import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,13 +53,13 @@ fun DeckScaffold(navController: NavHostController, viewModel: CardViewModel) {
     Scaffold(
         content = { paddingValues ->
             Column(Modifier.padding(paddingValues)) {
-                DeckList(viewModel = viewModel)
+                DeckListScreen(viewModel = viewModel, navController = navController)
             }
         },
         topBar = {
             CenterAlignedTopAppBar(title = {
                 Text(
-                    text = "Decks",
+                    text = stringResource(id = R.string.list_of_decks),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -77,8 +80,7 @@ fun DeckScaffold(navController: NavHostController, viewModel: CardViewModel) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    val deck = Deck(name = "hola", description = "qtal")
-                    viewModel.addDeck(deck)
+                    navController.navigate(NavRoutes.DeckEditor.route)
                 },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
@@ -89,25 +91,16 @@ fun DeckScaffold(navController: NavHostController, viewModel: CardViewModel) {
             }
         },
         floatingActionButtonPosition = FabPosition.End,
-        bottomBar = { DeckBottomNavigationBar() }
+        bottomBar = { CardBottomNavigationBar(navController) }
     )
 }
 
 @Composable
-fun DeckBottomNavigationBar() {
-    NavigationBar {
-        NavBarItems.BarItems.forEach { navItem ->
-            NavigationBarItem(
-                selected = true,
-                onClick = { /*TODO*/ },
-                icon = {
-                    Icon(
-                        imageVector = navItem.image,
-                        contentDescription = navItem.title
-                    )
-                },
-                label = { Text(text = navItem.title) }
-            )
-        }
-    }
+fun DeckListScreen(
+    viewModel: CardViewModel,
+    navController: NavController
+) {
+    val cards by viewModel.cards.observeAsState(emptyList())
+    val decks by viewModel.decks.observeAsState(emptyList())
+    DeckList(cards = cards, decks = decks)
 }

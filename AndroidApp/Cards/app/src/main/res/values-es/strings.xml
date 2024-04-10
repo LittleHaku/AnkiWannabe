@@ -29,4 +29,5 @@
     <string name="days">día(s)</string>
     <string name="card_question">Pregunta</string>
     <string name="card_answer">Respuesta</string>
+    <string name="decks">Mazos</string>
 </resources>

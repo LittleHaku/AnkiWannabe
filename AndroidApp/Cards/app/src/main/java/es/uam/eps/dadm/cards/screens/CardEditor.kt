@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,7 +51,7 @@ fun CardEditorScaffold(navController: NavHostController, viewModel: CardViewMode
         topBar = {
             CenterAlignedTopAppBar(title = {
                 Text(
-                    text = "Cards",
+                    text = stringResource(id = R.string.cards),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -68,21 +69,7 @@ fun CardEditorScaffold(navController: NavHostController, viewModel: CardViewMode
                 )
             })
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(NavRoutes.CardEditor.route)
-                },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Add card"
-                )
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        bottomBar = { CardBottomNavigationBar() }
+        //bottomBar = { CardBottomNavigationBar(navController) }
     )
 }
 

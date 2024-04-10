@@ -50,7 +50,7 @@ val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
 
 
-@Composable
+/*@Composable
 fun NavComposable(viewModel: CardViewModel) {
     var showStudy by remember { mutableStateOf(false) }
     var showDeckList by remember { mutableStateOf(false) }
@@ -134,7 +134,7 @@ fun NavComposable(viewModel: CardViewModel) {
             DeckCreator(viewModel)
         }
     }
-}
+}*/
 
 
 @Composable
@@ -364,9 +364,7 @@ fun DifficultyButtons(
 }
 
 @Composable
-fun DeckList(viewModel: CardViewModel) {
-    val cards by viewModel.cards.observeAsState(emptyList())
-    val decks by viewModel.decks.observeAsState(emptyList())
+fun DeckList(cards: List<Card>, decks: List<Deck>) {
     val context = LocalContext.current
     // done this way because it doesn't work inside Toast
     val selectedString = stringResource(id = R.string.selected)
@@ -502,14 +500,13 @@ fun CardEditor(
 }
 
 @Composable
-fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
+fun DeckEditor(viewModel: CardViewModel, deck: Deck? = null, navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
-        var name by remember { mutableStateOf(deck.name) }
-        var description by remember {
-            mutableStateOf(deck.description)
-        }
+        var name by remember { mutableStateOf(deck?.name ?: "") }
+        var description by remember { mutableStateOf(deck?.description ?: "") }
+
         val onNameChanged = { value: String -> name = value }
         val onDescriptionChanged = { value: String -> description = value }
 
@@ -524,10 +521,12 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
             label = { Text(stringResource(id = R.string.deck_description)) })
 
         Row {
-
-
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(NavRoutes.Decks.route) {
+                        popUpTo(NavRoutes.Home.route)
+                    }
+                },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = RED)
             ) {
@@ -535,16 +534,31 @@ fun DeckEditor(viewModel: CardViewModel, deck: Deck) {
             }
             val editedString = stringResource(id = R.string.edited_succ)
             val introduceString = stringResource(id = R.string.introduce_some_values)
+            val createdString = stringResource(id = R.string.created_succ)
+
             Button(
                 onClick = {
                     if (name.isNotEmpty() && description.isNotEmpty()) {
-                        deck.name = name
-                        deck.description = description
-                        viewModel.updateDeck(deck)
-                        Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+                        if (deck != null) {
+                            deck.name = name
+                            deck.description = description
+                            viewModel.updateDeck(deck)
+                            Toast.makeText(context, editedString, Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            val newDeck = Deck(name = name, description = description)
+                            viewModel.addDeck(newDeck)
+                            Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
+
+                        }
+                        navController.navigate(NavRoutes.Decks.route) {
+                            popUpTo(NavRoutes.Home.route)
+                        }
                     } else {
                         Toast.makeText(context, introduceString, Toast.LENGTH_SHORT).show()
+
                     }
+
                 },
                 modifier = Modifier.padding(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = GREEN)
