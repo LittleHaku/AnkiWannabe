@@ -277,7 +277,7 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController)
         /*Toast.makeText(
             context, "${deck.name} $selectedString", Toast.LENGTH_SHORT
         ).show()*/
-        navController.navigate(NavRoutes.DeckEditor.route)
+        navController.navigate(NavRoutes.DeckEditor.route + "/${deck.deckId}")
     }
 
     LazyColumn {
@@ -584,31 +584,3 @@ fun DeckCreator(viewModel: CardViewModel) {
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun Screen() {
-    CardsTheme {
-        val decks = mutableListOf<Deck>()
-        val english = Deck(
-            name = "English", description = "English phrasal verbs"
-        )
-        val cards = mutableListOf<Card>()
-        cards += Card("To wake up", "Despertarse", deckId = english.deckId)
-        cards += Card("To slow down", "Ralentizar", deckId = english.deckId)
-        cards += Card("To give up", "Rendirse", deckId = english.deckId)
-        cards += Card("To come up", "Acercarse", deckId = english.deckId)
-
-        val french = Deck(
-            name = "French", description = "French verbs"
-        )
-        cards += Card("Se réveiller", "Despertarse", deckId = french.deckId)
-        cards += Card("Ralentir", "Ralentizar", deckId = french.deckId)
-        cards += Card("Abandonner", "Rendirse", deckId = french.deckId)
-        cards += Card("Approcher", "Acercarse", deckId = french.deckId)
-
-        decks += english
-        decks += french
-        //DeckList(cards, decks)
-    }
-}
