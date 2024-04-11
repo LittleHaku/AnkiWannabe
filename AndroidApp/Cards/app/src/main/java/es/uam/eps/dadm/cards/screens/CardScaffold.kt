@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,8 +35,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import es.uam.eps.dadm.cards.CardViewModel
-import es.uam.eps.dadm.cards.EmailPassword
 import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
@@ -82,12 +84,18 @@ fun CardScaffold(
     },
         topBar = {
             CenterAlignedTopAppBar(title = {
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                )
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                    )
+                    Firebase.auth.currentUser?.email?.let { Text(it, color = Color.White) }
+
+                }
+
             }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primary
             ), actions = {
@@ -111,16 +119,20 @@ fun CardScaffold(
                         .clickable { viewModel.downloadFromFirebase() }
                         .padding(8.dp),
                     colorFilter = ColorFilter.tint(Color.White))
-                Image(painter = painterResource(R.drawable.baseline_logout_24),
-                    contentDescription = "Log Out",
-                    modifier = Modifier
-                        .clickable {
-                            viewModel.auth.signOut()
-                            navController.navigate(NavRoutes.Login.route)
+            }, navigationIcon = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(painter = painterResource(R.drawable.baseline_logout_24),
+                        contentDescription = "Log Out",
+                        modifier = Modifier
+                            .clickable {
+                                Firebase.auth.signOut()
+                                viewModel.userId = "unknown user"
+                                navController.navigate(NavRoutes.Login.route)
 
-                        }
-                        .padding(8.dp),
-                    colorFilter = ColorFilter.tint(Color.White))
+                            }
+                            .padding(8.dp),
+                        colorFilter = ColorFilter.tint(Color.White))
+                }
             })
         },
         floatingActionButton = {
