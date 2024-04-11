@@ -24,8 +24,7 @@ class CardViewModel(application: Application) : ViewModel() {
     val nDueCards: LiveData<Int>
     private val cardDao: CardDao
     var auth = Firebase.auth
-    var userId = Firebase.auth.currentUser?.uid
-        ?: "unknown user"
+    var userId = Firebase.auth.currentUser?.uid ?: "unknown user"
 
 
     init {
@@ -35,25 +34,30 @@ class CardViewModel(application: Application) : ViewModel() {
 
 
         dueCard = cards.map {
-            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid))}.run {
-                if (any()) random() else null
-            }
+            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }
+                .run {
+                    if (any()) random() else null
+                }
         }
 
         nDueCards = cards.map {
-            it.filter { card ->  (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
+            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
         }
     }
 
     fun getUserDueCard(userId: String): LiveData<Card?> {
         return cardDao.getCardsFromUser(userId).map {
-            it.filter { card -> (card.isDue(now()))}.run {
-                if (any()) random() else null
+            it.filter { card -> (card.isDue(now())) }.run {
+                if (any()) first() else null
             }
         }
     }
 
-
+    fun getUserNumDueCards(userId: String): LiveData<Int> {
+        return cardDao.getCardsFromUser(userId).map {
+            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
+        }
+    }
 
     fun addCard(card: Card) = viewModelScope.launch {
         cardDao.addCard(card)
