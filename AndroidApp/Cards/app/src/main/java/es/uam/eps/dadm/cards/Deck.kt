@@ -8,8 +8,9 @@ import java.util.UUID
 open class Deck(
     @PrimaryKey val deckId: String = UUID.randomUUID().toString(),
     var name: String,
-    var description: String = ""
+    var description: String = "",
+    var userId: String
 
 ) {
-    constructor() : this(name = "", description = "")
+    constructor() : this(name = "", description = "", userId = "")
 }

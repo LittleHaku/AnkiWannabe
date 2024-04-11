@@ -16,6 +16,7 @@ open class Card(
     var date: String = now().toString(),
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
     var deckId: String = UUID.randomUUID().toString(),
+    var userId: String
 ) {
     var quality: Int = 0
     var repetitions: Int = 0
@@ -23,7 +24,7 @@ open class Card(
     var nextPracticeDate: String = date
     var easiness: Double = 2.5
 
-    constructor() : this("","")
+    constructor() : this("","", userId = "")
 
 
     override fun toString(): String {

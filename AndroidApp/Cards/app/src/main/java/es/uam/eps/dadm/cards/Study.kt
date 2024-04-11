@@ -505,7 +505,7 @@ fun CardEditor(
             InnerCardEditor(
                 navController = navController,
                 viewModel = viewModel,
-                card = Card("", "", id = "adding_card", deckId = deckId)
+                card = Card("", "", id = "adding_card", deckId = deckId, userId = viewModel.userId)
             )
         } else {
             val card by viewModel.getCard(cardId).observeAsState(null)
@@ -553,7 +553,7 @@ fun InnerCardEditor(navController: NavController, viewModel: CardViewModel, card
             onClick = {
                 if (answer.isNotEmpty() && question.isNotEmpty()) {
                     if (card.id == "adding_card") {
-                        val newCard = Card(question, answer, deckId = card.deckId)
+                        val newCard = Card(question, answer, deckId = card.deckId, userId = viewModel.userId)
                         viewModel.addCard(newCard)
                         Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
 
@@ -589,7 +589,7 @@ fun DeckEditor(viewModel: CardViewModel, navController: NavController, deckId: S
             InnerDeckEditor(
                 navController = navController,
                 viewModel = viewModel,
-                deck = Deck("adding_deck", "", "")
+                deck = Deck("adding_deck", "", "", userId = viewModel.userId)
             )
         } else {
             val deck by viewModel.getDeckById(deckId).observeAsState(null)
@@ -641,7 +641,8 @@ fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck
             onClick = {
                 if (name.isNotEmpty() && description.isNotEmpty()) {
                     if (deck.deckId == "adding_deck") {
-                        val newDeck = Deck(name = name, description = description)
+                        val newDeck =
+                            Deck(name = name, description = description, userId = viewModel.userId)
                         viewModel.addDeck(newDeck)
                         Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
 
