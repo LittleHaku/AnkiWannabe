@@ -8,4 +8,6 @@ sealed class NavRoutes(val route: String) {
     data object CardEditor : NavRoutes("cardEditor")
     data object DeckEditor : NavRoutes("deckEditor")
     data object Study : NavRoutes("study")
+
+    data object Login : NavRoutes("login")
 }

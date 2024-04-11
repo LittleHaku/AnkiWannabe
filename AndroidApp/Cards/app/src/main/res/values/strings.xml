@@ -31,4 +31,9 @@
     <string name="card_question">Card Question</string>
     <string name="card_answer">Card Answer</string>
     <string name="deleted">Deleted</string>
+    <string name="email_field">Enter your email address</string>
+    <string name="password_field">Enter your password</string>
+    <string name="sign_up">Create User</string>
+    <string name="log_in">Log in</string>
+    <string name="failed_auth">Authentication Failed.</string>
 </resources>

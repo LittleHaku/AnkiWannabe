@@ -35,6 +35,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import es.uam.eps.dadm.cards.CardViewModel
+import es.uam.eps.dadm.cards.EmailPassword
 import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
@@ -75,9 +76,11 @@ fun CardScaffold(
                     viewModel = viewModel, navController = navController, deckId = deckId
                 )
 
-
                 NavRoutes.Study.route -> StudyScreen(viewModel = viewModel)
-
+                NavRoutes.Login.route -> EmailPasswordScreen(
+                    navController = navController,
+                    viewModel = viewModel
+                )
             }
         }
     },
@@ -99,8 +102,7 @@ fun CardScaffold(
                             decks?.let { decks ->
                                 cards?.let { cards ->
                                     viewModel.uploadToFirebase(
-                                        cards,
-                                        decks
+                                        cards, decks
                                     )
                                 }
                             }

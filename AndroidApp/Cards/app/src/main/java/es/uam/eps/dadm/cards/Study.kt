@@ -1,5 +1,6 @@
 package es.uam.eps.dadm.cards
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -668,6 +669,91 @@ fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck
     }
 }
 
+@Composable
+fun EmailPassword(
+    navController: NavController,
+    viewModel: CardViewModel
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
+    val onEmailChanged = { value: String -> email = value }
+    val onPasswordChanged = { value: String -> password = value }
+    val baseContext = LocalContext.current
+
+    val failedAuth = stringResource(id = R.string.failed_auth)
+    val onSignedIn: () -> Unit = {
+        viewModel.auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(baseContext as Activity) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success,
+                    // Update UI with the signed-in user's
+                    // information
+                    // val user = viewModel.auth.currentUser
+                    // Navigate to deck list
+                    navController.navigate(NavRoutes.Decks.route)
+                } else {
+                    // If sign in fails,
+                    // display a message to the user
+                    Toast.makeText(
+                        baseContext,
+                        failedAuth,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    val onSignedUp: () -> Unit = {
+        viewModel.auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(baseContext as Activity) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success,
+                    // update UI with the signed-in
+                    // user's information
+                    val user = viewModel.auth.currentUser
+                    // Navigate to list of decks
+                    navController.navigate(NavRoutes.Decks.route)
+                } else {
+                    // If sign in fails,
+                    // display a message to the user.
+                    Toast.makeText(
+                        baseContext,
+                        failedAuth,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    OutlinedTextField(value = email,
+        onValueChange = onEmailChanged,
+        label = { Text(text = stringResource(id = R.string.email_field)) })
+
+    OutlinedTextField(value = password,
+        onValueChange = onPasswordChanged,
+        label = { Text(stringResource(id = R.string.password_field)) })
+
+    Row {
+        Button(
+            onClick = {
+                onSignedUp()
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.sign_up))
+        }
+
+        Button(
+            onClick = {
+                onSignedIn()
+            },
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+    }
+
+}
 
 

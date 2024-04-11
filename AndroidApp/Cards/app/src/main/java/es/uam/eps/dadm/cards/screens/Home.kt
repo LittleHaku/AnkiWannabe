@@ -9,18 +9,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
 
 @Composable
-fun Home(navController: NavController) {
+fun Home(navController: NavController, viewModel: CardViewModel) {
     Box(
-        Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Button(onClick = {
-            navController.navigate(NavRoutes.Decks.route)
-        }) {
-            Text(stringResource(id = R.string.cards))
+        Button(
+            onClick = {
+                if (viewModel.auth.currentUser != null) {
+                    navController.navigate(NavRoutes.Decks.route)
+                } else
+                    navController.navigate(NavRoutes.Login.route)
+
+            }
+        ) {
+            Text(stringResource(id = R.string.app_name))
         }
     }
 }

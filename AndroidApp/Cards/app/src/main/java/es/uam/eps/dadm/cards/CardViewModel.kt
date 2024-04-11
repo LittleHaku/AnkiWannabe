@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,6 +23,8 @@ class CardViewModel(application: Application) : ViewModel() {
     val dueCard: LiveData<Card?>
     val nDueCards: LiveData<Int>
     private val cardDao: CardDao
+    var auth = Firebase.auth
+
 
     init {
         cardDao = CardDatabase.getInstance(application.applicationContext).cardDao
@@ -101,6 +105,13 @@ class CardViewModel(application: Application) : ViewModel() {
     fun deleteCardById(cardId: String) = viewModelScope.launch {
         cardDao.deleteCardById(cardId)
     }
+
+    fun getCardsFromUser(userId: String) = cardDao.getCardsFromUser(userId)
+
+    fun getDecksFromUser(userId: String) = cardDao.getDecksFromUser(userId)
+
+    fun getCardsFromDeckAndUser(userId: String, deckId: String) =
+        cardDao.getCardsFromDeckAndUser(userId, deckId)
 
     fun uploadToFirebase(cards: List<Card>, decks: List<Deck>) {
         val decksReference = FirebaseDatabase.getInstance().getReference("decks")
