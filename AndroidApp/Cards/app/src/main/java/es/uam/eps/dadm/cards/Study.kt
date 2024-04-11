@@ -147,7 +147,7 @@ fun CardList(viewModel: CardViewModel, navController: NavController, deckId: Str
             )
         }
         items(cards) { card ->
-            SwipeToDeleteCard(viewModel, card, onItemClick)
+            SwipeToDeleteCard(viewModel, card, onItemClick, navController)
         }
     }
 }
@@ -157,7 +157,8 @@ fun CardList(viewModel: CardViewModel, navController: NavController, deckId: Str
 private fun SwipeToDeleteCard(
     viewModel: CardViewModel,
     card: Card,
-    onItemClick: (Card) -> Unit
+    onItemClick: (Card) -> Unit,
+    navController: NavController
 ) {
     var removed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
@@ -179,6 +180,9 @@ private fun SwipeToDeleteCard(
         if (removed) {
             delay(100L) // delay in milliseconds
             viewModel.deleteCardById(card.id)
+            // IMPORTANT
+            // Solves the problem of deleting, then syncing and the thing getting deleted again
+            navController.navigate(NavRoutes.Cards.route + "/${card.deckId}")
         }
     }
     SwipeToDismissBox(state = dismissState,
@@ -396,6 +400,9 @@ private fun SwipeToDeleteDeck(
         if (removed) {
             delay(100L) // delay in milliseconds
             viewModel.deleteDeckById(deck.deckId)
+            // IMPORTANT
+            // Solves the problem of deleting, then syncing and the thing getting deleted again
+            navController.navigate(NavRoutes.Decks.route)
         }
     }
     SwipeToDismissBox(state = dismissState,
