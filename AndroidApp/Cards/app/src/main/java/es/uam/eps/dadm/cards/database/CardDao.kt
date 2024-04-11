@@ -61,4 +61,7 @@ interface CardDao {
 
     @Query("SELECT * FROM decks_table WHERE deckId == :deckId")
     fun getDeckById(deckId: String): LiveData<Deck>
+
+    @Query("DELETE FROM decks_table WHERE deckId == :deckId")
+    suspend fun deleteDeckId(deckId: String)
 }

@@ -15,5 +15,5 @@ fun DeckListScreen(
 ) {
     val cards by viewModel.cards.observeAsState(emptyList())
     val decks by viewModel.decks.observeAsState(emptyList())
-    DeckList(cards = cards, decks = decks, navController = navController)
+    DeckList(cards = cards, decks = decks, navController = navController, viewModel)
 }

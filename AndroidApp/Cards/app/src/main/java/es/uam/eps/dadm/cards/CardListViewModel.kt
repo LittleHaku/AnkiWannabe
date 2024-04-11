@@ -93,7 +93,9 @@ class CardViewModel(application: Application) : ViewModel() {
     fun getCardsAndDecks() = cardDao.getCardsAndDecks()
     fun getDeckById(deckId: String) = cardDao.getDeckById(deckId)
 
-
+    fun deleteDeckById(deckId: String) = viewModelScope.launch {
+        cardDao.deleteDeckId(deckId)
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
