@@ -730,7 +730,8 @@ fun EmailPassword(
                     // Sign in success,
                     // update UI with the signed-in
                     // user's information
-                    val user = viewModel.auth.currentUser
+                    viewModel.userId = Firebase.auth.currentUser?.uid
+                        ?: "unknown user"
                     // Navigate to list of decks
                     navController.navigate(NavRoutes.Decks.route)
                 } else {
