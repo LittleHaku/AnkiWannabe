@@ -27,11 +27,6 @@ class CardViewModel(application: Application) : ViewModel() {
         cards = cardDao.getCards()
         decks = cardDao.getDecks()
 
-        cards.observeForever { cardList ->
-            if (cardList.isNullOrEmpty()) {
-                populateDB()
-            }
-        }
 
         dueCard = cards.map {
             it.filter { card -> card.isDue(now()) }.run {
