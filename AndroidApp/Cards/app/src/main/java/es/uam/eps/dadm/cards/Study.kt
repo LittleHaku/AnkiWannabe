@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -270,10 +271,7 @@ fun DifficultyButtons(
 @Composable
 fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController, viewModel: CardViewModel) {
     val onItemClick = { deck: Deck ->
-        viewModel.deleteDeckById(deck.deckId)
-        navController.navigate(NavRoutes.DeckEditor.route + "/adding_deck")
-
-
+        navController.navigate(NavRoutes.DeckEditor.route + "/${deck.deckId}")
     }
     LazyColumn {
         item {
@@ -286,13 +284,19 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
         }
         items(decks) { deck ->
             var removed by rememberSaveable { mutableStateOf(false) }
-            val dismissState = rememberSwipeToDismissBoxState()
             val context = LocalContext.current
-            if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
-                viewModel.deleteDeckById(deck.deckId)
-            }
-
+            val dismissState = rememberSwipeToDismissBoxState(
+                confirmValueChange = {
+                    when(it) {
+                        SwipeToDismissBoxValue.EndToStart -> {
+                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                            viewModel.deleteDeckById(deck.deckId)
+                        }
+                        else -> Unit
+                    }
+                    false
+                }
+            )
             SwipeToDismissBox(state = dismissState,
                 enableDismissFromStartToEnd = false,
                 enableDismissFromEndToStart = true, // only this direction
@@ -326,6 +330,7 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
 
     }
 }
+
 
 @Composable
 fun DeckItem(
