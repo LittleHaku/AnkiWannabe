@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.database.CardDao
 import es.uam.eps.dadm.cards.database.CardDatabase
 import kotlinx.coroutines.launch
@@ -89,6 +93,7 @@ class CardViewModel(application: Application) : ViewModel() {
 
     @Suppress("unused")
     fun getAllCards() = cardDao.getCards()
+
     @Suppress("unused")
     fun getCardsAndDecks() = cardDao.getCardsAndDecks()
     fun getDeckById(deckId: String) = cardDao.getDeckById(deckId)
@@ -97,8 +102,65 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.deleteDeckId(deckId)
     }
 
-    fun  deleteCardById(cardId: String) = viewModelScope.launch {
+    fun deleteCardById(cardId: String) = viewModelScope.launch {
         cardDao.deleteCardById(cardId)
+    }
+
+    fun uploadToFirebase(cards: List<Card>, decks: List<Deck>) {
+        val decksReference = FirebaseDatabase.getInstance().getReference("decks")
+        decksReference.setValue(null)
+        decks.forEach { deck ->
+            decksReference.child(deck.deckId).setValue(deck)
+        }
+
+        val cardsReference = FirebaseDatabase.getInstance().getReference("cards")
+        cardsReference.setValue(null)
+        cards.forEach { card -> cardsReference.child(card.id).setValue(card) }
+    }
+
+    fun downloadFromFirebase() {
+        val decksReference = FirebaseDatabase.getInstance().getReference("decks")
+        decksReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val decks = mutableListOf<Deck>()
+                snapshot.children.forEach {
+                    it.getValue(Deck::class.java)?.let {
+                        decks.add(it)
+                    }
+                }
+
+                deleteDecks()
+                decks.forEach { deck -> addDeck(deck) }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+        val cardsReference = FirebaseDatabase.getInstance().getReference("cards")
+        cardsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val cards = mutableListOf<Card>()
+                snapshot.children.forEach {
+                    it.getValue(Card::class.java)?.let {
+                        cards.add(it)
+                    }
+                }
+
+                deleteCards()
+                cards.forEach { card ->
+                    addCard(card)
+                }
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }
 

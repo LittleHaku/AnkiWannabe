@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +48,9 @@ fun CardScaffold(
     cardId: String = "",
     contentRoute: String
 ) {
+    val cards by viewModel.cards.observeAsState()
+    val decks by viewModel.decks.observeAsState()
+
     Scaffold(content = { paddingValues ->
         Column(
             Modifier.padding(paddingValues),
@@ -91,7 +95,22 @@ fun CardScaffold(
                 Image(painter = painterResource(R.drawable.baseline_cloud_upload_24),
                     contentDescription = "Upload to cloud",
                     modifier = Modifier
-                        .clickable {}
+                        .clickable {
+                            decks?.let { decks ->
+                                cards?.let { cards ->
+                                    viewModel.uploadToFirebase(
+                                        cards,
+                                        decks
+                                    )
+                                }
+                            }
+                        }
+                        .padding(8.dp),
+                    colorFilter = ColorFilter.tint(Color.White))
+                Image(painter = painterResource(R.drawable.baseline_cloud_download_24),
+                    contentDescription = "Download from cloud",
+                    modifier = Modifier
+                        .clickable { viewModel.downloadFromFirebase() }
                         .padding(8.dp),
                     colorFilter = ColorFilter.tint(Color.White))
             })
