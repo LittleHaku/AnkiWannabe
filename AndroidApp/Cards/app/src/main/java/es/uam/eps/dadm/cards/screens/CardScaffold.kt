@@ -77,10 +77,6 @@ fun CardScaffold(
                 )
 
                 NavRoutes.Study.route -> StudyScreen(viewModel = viewModel)
-                NavRoutes.Login.route -> EmailPasswordScreen(
-                    navController = navController,
-                    viewModel = viewModel
-                )
             }
         }
     },
@@ -113,6 +109,16 @@ fun CardScaffold(
                     contentDescription = "Download from cloud",
                     modifier = Modifier
                         .clickable { viewModel.downloadFromFirebase() }
+                        .padding(8.dp),
+                    colorFilter = ColorFilter.tint(Color.White))
+                Image(painter = painterResource(R.drawable.baseline_logout_24),
+                    contentDescription = "Log Out",
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.auth.signOut()
+                            navController.navigate(NavRoutes.Login.route)
+
+                        }
                         .padding(8.dp),
                     colorFilter = ColorFilter.tint(Color.White))
             })

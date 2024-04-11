@@ -35,13 +35,21 @@ class CardViewModel(application: Application) : ViewModel() {
 
 
         dueCard = cards.map {
-            it.filter { card -> card.isDue(now()) }.run {
+            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid))}.run {
                 if (any()) random() else null
             }
         }
 
         nDueCards = cards.map {
             it.filter { card -> card.isDue(now()) }.size
+        }
+    }
+
+    fun getUserDueCard(userId: String):LiveData<Card?> {
+        return cards.map {
+            it.filter { card -> card.isDue(now()) }.run {
+                if (any()) random() else null
+            }
         }
     }
 

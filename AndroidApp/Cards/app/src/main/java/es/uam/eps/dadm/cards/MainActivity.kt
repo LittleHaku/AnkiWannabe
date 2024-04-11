@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.screens.CardScaffold
+import es.uam.eps.dadm.cards.screens.EmailPasswordScaffold
 import es.uam.eps.dadm.cards.screens.Home
 import es.uam.eps.dadm.cards.ui.theme.CardsTheme
 
@@ -132,11 +133,7 @@ fun MainScreen(viewModel: CardViewModel) {
             )
         }
         composable(NavRoutes.Login.route) {
-            CardScaffold(
-                navController = navController,
-                viewModel = viewModel,
-                contentRoute = NavRoutes.Login.route
-            )
+            EmailPasswordScaffold(navController, viewModel)
         }
     }
 }

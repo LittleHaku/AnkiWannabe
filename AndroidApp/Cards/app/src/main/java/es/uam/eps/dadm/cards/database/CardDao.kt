@@ -68,16 +68,16 @@ interface CardDao {
     @Query("DELETE FROM cards_table WHERE id == :cardId")
     suspend fun deleteCardById(cardId: String)
 
-    @Query("DELETE FROM cards_table WHERE deckId = :deckId")
+    @Query("DELETE FROM cards_table WHERE deckId == :deckId")
     suspend fun deleteCardsInDeck(deckId: String)
 
-    @Query("SELECT * FROM cards_table WHERE userId = :userId")
+    @Query("SELECT * FROM cards_table WHERE userId == :userId")
     fun getCardsFromUser(userId: String): LiveData<List<Card>>
 
-    @Query("SELECT * FROM decks_table WHERE userId = :userId")
+    @Query("SELECT * FROM decks_table WHERE userId == :userId")
     fun getDecksFromUser(userId: String): LiveData<List<Deck>>
 
-    @Query("SELECT * FROM cards_table WHERE userId = :userId AND deckId = :deckId")
+    @Query("SELECT * FROM cards_table WHERE userId == :userId AND deckId == :deckId")
     fun getCardsFromDeckAndUser(userId: String, deckId: String): LiveData<List<Card>>
 
 }

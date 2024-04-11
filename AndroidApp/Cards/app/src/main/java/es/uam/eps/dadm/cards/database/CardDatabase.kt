@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import es.uam.eps.dadm.cards.Card
 import es.uam.eps.dadm.cards.Deck
 
-@Database(entities = [Card::class, Deck::class], version = 5, exportSchema = false)
+@Database(entities = [Card::class, Deck::class], version = 6, exportSchema = false)
 abstract class CardDatabase : RoomDatabase() {
     abstract val cardDao: CardDao
 

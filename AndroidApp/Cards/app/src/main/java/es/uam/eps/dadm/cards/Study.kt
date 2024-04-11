@@ -50,6 +50,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime.now
 
@@ -66,11 +68,18 @@ val BLACK = Color(0xFF121212)
 fun Study(viewModel: CardViewModel) {
     val card by viewModel.dueCard.observeAsState()
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
-    card?.let {
-        CardView(viewModel = viewModel, it, nCards)
-    } ?: Toast.makeText(
-        LocalContext.current, stringResource(id = R.string.no_more_cards), Toast.LENGTH_SHORT
-    ).show()
+    val noMoreCards = stringResource(id = R.string.no_more_cards)
+    if (card?.userId == Firebase.auth.currentUser?.uid) {
+        card?.let { CardView(viewModel = viewModel, it, nCards) }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = noMoreCards, style = MaterialTheme.typography.titleLarge)
+        }
+    }
 
 }
 
@@ -80,9 +89,15 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
     var answered by remember { mutableStateOf(false) }
 
-
+    val context = LocalContext.current
+    val noMoreCardsString = stringResource(id = R.string.no_more_cards)
     val onAnswered = { value: Boolean ->
         answered = value
+        if (nCards == 0) {
+            Toast.makeText(
+                context, noMoreCardsString, Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -533,7 +548,7 @@ fun InnerCardEditor(navController: NavController, viewModel: CardViewModel, card
         label = { Text(stringResource(id = R.string.card_answer)) })
 
     val context = LocalContext.current
-    Row() {
+    Row {
 
         Button(
             onClick = {
@@ -553,7 +568,8 @@ fun InnerCardEditor(navController: NavController, viewModel: CardViewModel, card
             onClick = {
                 if (answer.isNotEmpty() && question.isNotEmpty()) {
                     if (card.id == "adding_card") {
-                        val newCard = Card(question, answer, deckId = card.deckId, userId = viewModel.userId)
+                        val newCard =
+                            Card(question, answer, deckId = card.deckId, userId = viewModel.userId)
                         viewModel.addCard(newCard)
                         Toast.makeText(context, createdString, Toast.LENGTH_SHORT).show()
 
@@ -692,6 +708,8 @@ fun EmailPassword(
                     // information
                     // val user = viewModel.auth.currentUser
                     // Navigate to deck list
+                    viewModel.userId = Firebase.auth.currentUser?.uid
+                        ?: "unknown user"
                     navController.navigate(NavRoutes.Decks.route)
                 } else {
                     // If sign in fails,
