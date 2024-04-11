@@ -30,4 +30,5 @@
     <string name="days">day(s)</string>
     <string name="card_question">Card Question</string>
     <string name="card_answer">Card Answer</string>
+    <string name="deleted">Deleted</string>
 </resources>

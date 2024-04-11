@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
@@ -129,6 +126,7 @@ fun CardData(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardList(viewModel: CardViewModel, navController: NavController, deckId: String = "") {
     val cards by viewModel.getCardsByDeckId(deckId).observeAsState(listOf())
@@ -149,7 +147,70 @@ fun CardList(viewModel: CardViewModel, navController: NavController, deckId: Str
             )
         }
         items(cards) { card ->
-            CardItem(card, onItemClick)
+            var removed by rememberSaveable { mutableStateOf(false) }
+            val context = LocalContext.current
+            val deletedString = stringResource(id = R.string.deleted)
+            val dismissState = rememberSwipeToDismissBoxState(
+                confirmValueChange = {
+                    when (it) {
+                        SwipeToDismissBoxValue.EndToStart -> {
+                            Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
+                            removed = true
+                        }
+
+                        else -> Unit
+                    }
+                    false
+                }
+            )
+            LaunchedEffect(removed) {
+                if (removed) {
+                    delay(100L) // delay in milliseconds
+                    viewModel.deleteCardById(card.id)
+                }
+            }
+            SwipeToDismissBox(state = dismissState,
+                enableDismissFromStartToEnd = false,
+                enableDismissFromEndToStart = true, // only this direction
+                backgroundContent = {
+                    val direction = dismissState.dismissDirection
+                    val scale by animateFloatAsState(
+                        if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.75f else 1f,
+                        label = ""
+                    )
+
+                    val alignment = when (direction) {
+                        SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
+                        SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+                        else -> Alignment.Center
+                    }
+                    val color by animateColorAsState(
+                        when (dismissState.targetValue) {
+                            SwipeToDismissBoxValue.Settled -> Color.LightGray
+                            SwipeToDismissBoxValue.EndToStart -> Color.Red
+                            else -> Color.LightGray
+                        }, label = ""
+                    )
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(color),
+                        contentAlignment = alignment
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.baseline_delete_24),
+                            contentDescription = "Delete the deck",
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .scale(scale),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                        )
+                    }
+                }) {
+                OutlinedCard(shape = RectangleShape) {
+                    CardItem(card, onItemClick)
+                }
+            }
         }
     }
 }
@@ -271,7 +332,12 @@ fun DifficultyButtons(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController, viewModel: CardViewModel) {
+fun DeckList(
+    cards: List<Card>,
+    decks: List<Deck>,
+    navController: NavController,
+    viewModel: CardViewModel
+) {
     val onItemClick = { deck: Deck ->
         navController.navigate(NavRoutes.DeckEditor.route + "/${deck.deckId}")
     }
@@ -287,13 +353,15 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
         items(decks) { deck ->
             var removed by rememberSaveable { mutableStateOf(false) }
             val context = LocalContext.current
+            val deletedString = stringResource(id = R.string.deleted)
             val dismissState = rememberSwipeToDismissBoxState(
                 confirmValueChange = {
-                    when(it) {
+                    when (it) {
                         SwipeToDismissBoxValue.EndToStart -> {
-                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
                             removed = true
                         }
+
                         else -> Unit
                     }
                     false
@@ -310,7 +378,10 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
                 enableDismissFromEndToStart = true, // only this direction
                 backgroundContent = {
                     val direction = dismissState.dismissDirection
-                    val scale by animateFloatAsState(if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.75f else 1f, label = "")
+                    val scale by animateFloatAsState(
+                        if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.75f else 1f,
+                        label = ""
+                    )
 
                     val alignment = when (direction) {
                         SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
@@ -330,12 +401,14 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
                             .background(color),
                         contentAlignment = alignment
                     ) {
-                        Image(painter = painterResource(R.drawable.baseline_delete_24),
+                        Image(
+                            painter = painterResource(R.drawable.baseline_delete_24),
                             contentDescription = "Delete the deck",
                             modifier = Modifier
                                 .padding(8.dp)
                                 .scale(scale),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface))
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                        )
                     }
                 }) {
                 OutlinedCard(shape = RectangleShape) {
@@ -346,7 +419,6 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
 
     }
 }
-
 
 
 @Composable

@@ -96,6 +96,10 @@ class CardViewModel(application: Application) : ViewModel() {
     fun deleteDeckById(deckId: String) = viewModelScope.launch {
         cardDao.deleteDeckId(deckId)
     }
+
+    fun  deleteCardById(cardId: String) = viewModelScope.launch {
+        cardDao.deleteCardById(cardId)
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
