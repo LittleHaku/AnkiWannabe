@@ -45,13 +45,15 @@ class CardViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun getUserDueCard(userId: String):LiveData<Card?> {
-        return cards.map {
-            it.filter { card -> card.isDue(now()) }.run {
+    fun getUserDueCard(userId: String): LiveData<Card?> {
+        return cardDao.getCardsFromUser(userId).map {
+            it.filter { card -> (card.isDue(now()))}.run {
                 if (any()) random() else null
             }
         }
     }
+
+
 
     fun addCard(card: Card) = viewModelScope.launch {
         cardDao.addCard(card)

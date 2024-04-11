@@ -75,7 +75,8 @@ val BLACK = Color(0xFF121212)
 
 @Composable
 fun Study(viewModel: CardViewModel) {
-    val card by viewModel.dueCard.observeAsState()
+    val uid = Firebase.auth.currentUser?.uid ?: ""
+    val card by viewModel.getUserDueCard(uid).observeAsState()
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
     val noMoreCards = stringResource(id = R.string.no_more_cards)
     if (card?.userId == Firebase.auth.currentUser?.uid) {
