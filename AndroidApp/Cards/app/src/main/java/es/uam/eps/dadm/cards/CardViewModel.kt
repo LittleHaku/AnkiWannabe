@@ -41,7 +41,7 @@ class CardViewModel(application: Application) : ViewModel() {
         }
 
         nDueCards = cards.map {
-            it.filter { card -> card.isDue(now()) }.size
+            it.filter { card ->  (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
         }
     }
 
