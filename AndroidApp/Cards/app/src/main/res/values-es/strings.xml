@@ -30,4 +30,5 @@
     <string name="card_question">Pregunta</string>
     <string name="card_answer">Respuesta</string>
     <string name="decks">Mazos</string>
+    <string name="deleted">Eliminado</string>
 </resources>
