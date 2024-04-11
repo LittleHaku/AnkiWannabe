@@ -57,7 +57,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.Visibility
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -138,12 +137,25 @@ fun CardData(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(card.question)
+        Text(stringResource(id = R.string.card_question)+":")
+        Text(
+            card.question,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(8.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         if (answered) {
-            Text(card.answer)
+            Text(stringResource(id = R.string.card_answer)+":")
+            Text(
+                card.answer,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(8.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(stringResource(id = R.string.select_difficulty)+":", modifier = Modifier.padding(8.dp))
+
             val intervals = card.possibleNextPractice()
             DifficultyButtons(onAnswered, onDifficultyChecked, intervals)
         } else {
@@ -181,27 +193,22 @@ fun CardList(viewModel: CardViewModel, navController: NavController, deckId: Str
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SwipeToDeleteCard(
-    viewModel: CardViewModel,
-    card: Card,
-    onItemClick: (Card) -> Unit,
-    navController: NavController
+    viewModel: CardViewModel, card: Card, onItemClick: (Card) -> Unit, navController: NavController
 ) {
     var removed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val deletedString = stringResource(id = R.string.deleted)
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {
-            when (it) {
-                SwipeToDismissBoxValue.EndToStart -> {
-                    Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
-                    removed = true
-                }
-
-                else -> Unit
+    val dismissState = rememberSwipeToDismissBoxState(confirmValueChange = {
+        when (it) {
+            SwipeToDismissBoxValue.EndToStart -> {
+                Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
+                removed = true
             }
-            false
+
+            else -> Unit
         }
-    )
+        false
+    })
     LaunchedEffect(removed) {
         if (removed) {
             delay(100L) // delay in milliseconds
@@ -236,8 +243,7 @@ private fun SwipeToDeleteCard(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(color),
-                contentAlignment = alignment
+                    .background(color), contentAlignment = alignment
             ) {
                 Image(
                     painter = painterResource(R.drawable.baseline_delete_24),
@@ -373,10 +379,7 @@ fun DifficultyButtons(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckList(
-    cards: List<Card>,
-    decks: List<Deck>,
-    navController: NavController,
-    viewModel: CardViewModel
+    cards: List<Card>, decks: List<Deck>, navController: NavController, viewModel: CardViewModel
 ) {
     val onItemClick = { deck: Deck ->
         navController.navigate(NavRoutes.DeckEditor.route + "/${deck.deckId}")
@@ -409,19 +412,17 @@ private fun SwipeToDeleteDeck(
     var removed by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     val deletedString = stringResource(id = R.string.deleted)
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {
-            when (it) {
-                SwipeToDismissBoxValue.EndToStart -> {
-                    Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
-                    removed = true
-                }
-
-                else -> Unit
+    val dismissState = rememberSwipeToDismissBoxState(confirmValueChange = {
+        when (it) {
+            SwipeToDismissBoxValue.EndToStart -> {
+                Toast.makeText(context, deletedString, Toast.LENGTH_SHORT).show()
+                removed = true
             }
-            false
+
+            else -> Unit
         }
-    )
+        false
+    })
     LaunchedEffect(removed) {
         if (removed) {
             delay(100L) // delay in milliseconds
@@ -456,8 +457,7 @@ private fun SwipeToDeleteDeck(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(color),
-                contentAlignment = alignment
+                    .background(color), contentAlignment = alignment
             ) {
                 Image(
                     painter = painterResource(R.drawable.baseline_delete_24),
@@ -698,8 +698,7 @@ fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck
 
 @Composable
 fun EmailPassword(
-    navController: NavController,
-    viewModel: CardViewModel
+    navController: NavController, viewModel: CardViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -718,8 +717,7 @@ fun EmailPassword(
                     // information
                     // val user = viewModel.auth.currentUser
                     // Navigate to deck list
-                    viewModel.userId = Firebase.auth.currentUser?.uid
-                        ?: "unknown user"
+                    viewModel.userId = Firebase.auth.currentUser?.uid ?: "unknown user"
                     navController.navigate(NavRoutes.Decks.route)
                 } else {
                     // If sign in fails,
@@ -740,8 +738,7 @@ fun EmailPassword(
                     // Sign in success,
                     // update UI with the signed-in
                     // user's information
-                    viewModel.userId = Firebase.auth.currentUser?.uid
-                        ?: "unknown user"
+                    viewModel.userId = Firebase.auth.currentUser?.uid ?: "unknown user"
                     // Navigate to list of decks
                     navController.navigate(NavRoutes.Decks.route)
                 } else {
@@ -767,25 +764,22 @@ fun EmailPassword(
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
-            val image = if (passwordVisible)
-                Icons.Filled.Visibility
+            val image = if (passwordVisible) Icons.Filled.Visibility
             else Icons.Filled.VisibilityOff
 
             // Please provide localized description for accessibility services
             val description = if (passwordVisible) "Hide password" else "Show password"
 
-            IconButton(onClick = {passwordVisible = !passwordVisible}){
-                Icon(imageVector  = image, description)
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Icon(imageVector = image, description)
             }
-        }
-        )
+        })
 
     Row {
         Button(
             onClick = {
                 onSignedUp()
-            },
-            modifier = Modifier.padding(16.dp)
+            }, modifier = Modifier.padding(16.dp)
         ) {
             Text(text = stringResource(id = R.string.sign_up))
         }
@@ -793,8 +787,7 @@ fun EmailPassword(
         Button(
             onClick = {
                 onSignedIn()
-            },
-            modifier = Modifier.padding(16.dp)
+            }, modifier = Modifier.padding(16.dp)
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }

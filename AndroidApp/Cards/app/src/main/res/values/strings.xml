@@ -36,4 +36,5 @@
     <string name="sign_up">Create User</string>
     <string name="log_in">Log in</string>
     <string name="failed_auth">Authentication Failed.</string>
+    <string name="select_difficulty">How difficult was it?</string>
 </resources>
