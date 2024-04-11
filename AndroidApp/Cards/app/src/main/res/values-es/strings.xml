@@ -31,4 +31,9 @@
     <string name="card_answer">Respuesta</string>
     <string name="decks">Mazos</string>
     <string name="deleted">Eliminado</string>
+    <string name="email_field">Introduce tu correo electrónico</string>
+    <string name="password_field">Introduce tu contraseña</string>
+    <string name="sign_up">Crear usuario</string>
+    <string name="log_in">Entrar</string>
+    <string name="failed_auth">Autenticación fallida</string>
 </resources>
