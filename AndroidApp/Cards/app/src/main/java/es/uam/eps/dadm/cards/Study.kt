@@ -2,6 +2,7 @@ package es.uam.eps.dadm.cards
 
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
@@ -290,18 +292,31 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
                     when(it) {
                         SwipeToDismissBoxValue.EndToStart -> {
                             Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show()
-                            viewModel.deleteDeckById(deck.deckId)
+                            removed = true
                         }
                         else -> Unit
                     }
                     false
                 }
             )
+            LaunchedEffect(removed) {
+                if (removed) {
+                    delay(100L) // delay in milliseconds
+                    viewModel.deleteDeckById(deck.deckId)
+                }
+            }
             SwipeToDismissBox(state = dismissState,
                 enableDismissFromStartToEnd = false,
                 enableDismissFromEndToStart = true, // only this direction
                 backgroundContent = {
+                    val direction = dismissState.dismissDirection
+                    val scale by animateFloatAsState(if (dismissState.targetValue == SwipeToDismissBoxValue.Settled) 0.75f else 1f, label = "")
 
+                    val alignment = when (direction) {
+                        SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
+                        SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+                        else -> Alignment.Center
+                    }
                     val color by animateColorAsState(
                         when (dismissState.targetValue) {
                             SwipeToDismissBoxValue.Settled -> Color.LightGray
@@ -313,13 +328,14 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
                         Modifier
                             .fillMaxSize()
                             .background(color),
-                        contentAlignment = Alignment.CenterEnd
+                        contentAlignment = alignment
                     ) {
                         Image(painter = painterResource(R.drawable.baseline_delete_24),
                             contentDescription = "Delete the deck",
                             modifier = Modifier
-                                .padding(8.dp),
-                            colorFilter = ColorFilter.tint(Color.White))
+                                .padding(8.dp)
+                                .scale(scale),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface))
                     }
                 }) {
                 OutlinedCard(shape = RectangleShape) {
@@ -330,6 +346,7 @@ fun DeckList(cards: List<Card>, decks: List<Deck>, navController: NavController,
 
     }
 }
+
 
 
 @Composable
@@ -370,7 +387,7 @@ fun DeckItem(
                 modifier = Modifier
                     .clickable { navController.navigate(NavRoutes.Cards.route + "/${deck.deckId}") }
                     .padding(8.dp),
-                colorFilter = ColorFilter.tint(Color.Black))
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface))
         }
     }
 }
