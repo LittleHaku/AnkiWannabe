@@ -13,5 +13,6 @@ data class Review (
     var deckId: String,
     var userId: String
 ) {
+    // dont delete, its needed for firebase
     constructor() : this("", "", "", "", "", "")
 }

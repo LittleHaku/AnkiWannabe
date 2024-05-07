@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime.now
 import java.time.LocalDateTime.parse
 
+@Suppress("unused")
 class CardViewModel(application: Application) : ViewModel() {
     val cards: LiveData<List<Card>>
     val decks: LiveData<List<Deck>>
