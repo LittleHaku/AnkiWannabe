@@ -14,9 +14,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
         if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.settings, SettingsFragment())
+            supportFragmentManager.beginTransaction().replace(R.id.settings, SettingsFragment())
                 .commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,14 +46,12 @@ class SettingsActivity : AppCompatActivity() {
         private const val LOGGED_IN_KEY = "logged_in_key"
 
         fun getMaximumNumberOfCards(context: Context): String? {
-            return PreferenceManager
-                .getDefaultSharedPreferences(context)
+            return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(MAX_NUMBER_CARDS_KEY, MAX_NUMBER_CARDS_DEFAULT)
         }
 
         fun setLoggedIn(context: Context, loggedin: Boolean) {
-            val sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context)
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val editor = sharedPreferences.edit()
             editor.putBoolean(LOGGED_IN_KEY, loggedin)
             editor.apply()

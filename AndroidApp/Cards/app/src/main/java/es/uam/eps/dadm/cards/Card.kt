@@ -25,7 +25,7 @@ open class Card(
     var nextPracticeDate: String = date
     var easiness: Double = 2.5
 
-    constructor() : this("","", userId = "")
+    constructor() : this("", "", userId = "")
 
 
     override fun toString(): String {

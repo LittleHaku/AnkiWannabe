@@ -16,18 +16,14 @@ import es.uam.eps.dadm.cards.R
 @Composable
 fun Home(navController: NavController, viewModel: CardViewModel) {
     Box(
-        Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
-        Button(
-            onClick = {
-                if (viewModel.auth.currentUser != null) {
-                    navController.navigate(NavRoutes.Decks.route)
-                } else
-                    navController.navigate(NavRoutes.Login.route)
+        Button(onClick = {
+            if (viewModel.auth.currentUser != null) {
+                navController.navigate(NavRoutes.Decks.route)
+            } else navController.navigate(NavRoutes.Login.route)
 
-            }
-        ) {
+        }) {
             Text(stringResource(id = R.string.app_name))
         }
     }

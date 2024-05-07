@@ -9,11 +9,9 @@ object NavBarItems {
     val BarItems = listOf(
         BarItem(
             title = "Decks", image = Icons.AutoMirrored.Filled.List, route = "decks"
-        ),
-        BarItem(
+        ), BarItem(
             title = "Study", image = Icons.Filled.PlayArrow, route = "study"
-        ),
-        BarItem(
+        ), BarItem(
             title = "Statistics", image = Icons.Filled.CalendarMonth, route = "statistics"
         )
     )

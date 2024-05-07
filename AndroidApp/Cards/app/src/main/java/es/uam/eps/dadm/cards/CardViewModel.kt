@@ -146,8 +146,8 @@ class CardViewModel(application: Application) : ViewModel() {
 
         val reviewsReference = FirebaseDatabase.getInstance().getReference("reviews")
         reviewsReference.setValue(null)
-        reviews.forEach {
-            review -> reviewsReference.child(review.id).setValue(review)
+        reviews.forEach { review ->
+            reviewsReference.child(review.id).setValue(review)
         }
     }
 

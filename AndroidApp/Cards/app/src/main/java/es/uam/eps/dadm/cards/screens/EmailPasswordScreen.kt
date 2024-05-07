@@ -43,24 +43,21 @@ import es.uam.eps.dadm.cards.SettingsActivity
 
 @Composable
 fun EmailPasswordScaffold(
-    navController: NavHostController,
-    viewModel: CardViewModel
+    navController: NavHostController, viewModel: CardViewModel
 ) {
 
-    Scaffold(
-        content = { paddingValues ->
-            Column(
-                Modifier.padding(paddingValues),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
-            ) {
-                EmailPasswordScreen(
-                    navController = navController,
-                    viewModel = viewModel
-                )
+    Scaffold(content = { paddingValues ->
+        Column(
+            Modifier.padding(paddingValues),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            EmailPasswordScreen(
+                navController = navController, viewModel = viewModel
+            )
 
-            }
-        })
+        }
+    })
 }
 
 @Composable

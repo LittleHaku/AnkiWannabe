@@ -60,8 +60,6 @@ fun Statistics(viewModel: CardViewModel) {
     //barData.add(point1)
 
 
-
-
     // TODO: cant be empty, if not fails
     BarchartWithSolidBars(barData)
 
@@ -95,39 +93,30 @@ private fun BarchartWithSolidBars(barData: List<BarData>) {
 //        else -> 200
 //    }
 
-    val xAxisData = AxisData.Builder()
-        .axisStepSize(30.dp)
-        .steps(barData.size - 1)
-        .bottomPadding(40.dp)
-        .axisLabelAngle(20f)
+    val xAxisData =
+        AxisData.Builder().axisStepSize(30.dp).steps(barData.size - 1).bottomPadding(40.dp)
+            .axisLabelAngle(20f).axisLabelColor(MaterialTheme.colorScheme.onBackground)
+            .axisLineColor(MaterialTheme.colorScheme.secondary).startDrawPadding(48.dp)
+            .labelData { index -> barData[index].label }.build()
+    val yAxisData = AxisData.Builder().steps(maxRange).labelAndAxisLinePadding(20.dp)
         .axisLabelColor(MaterialTheme.colorScheme.onBackground)
-        .axisLineColor(MaterialTheme.colorScheme.secondary)
-        .startDrawPadding(48.dp)
-        .labelData { index -> barData[index].label }
-        .build()
-    val yAxisData = AxisData.Builder()
-        .steps(maxRange)
-        .labelAndAxisLinePadding(20.dp)
-        .axisLabelColor(MaterialTheme.colorScheme.onBackground)
-        .axisLineColor(MaterialTheme.colorScheme.secondary)
-        .axisOffset(20.dp)
-        .labelData { index -> (index * (maxRange / maxRange)).toString() }
-        .build()
+        .axisLineColor(MaterialTheme.colorScheme.secondary).axisOffset(20.dp)
+        .labelData { index -> (index * (maxRange / maxRange)).toString() }.build()
     val barChartData = BarChartData(
         chartData = barData,
         xAxisData = xAxisData,
         yAxisData = yAxisData,
         barStyle = BarStyle(
-            paddingBetweenBars = 20.dp,
-            barWidth = 25.dp
+            paddingBetweenBars = 20.dp, barWidth = 25.dp
         ),
         showYAxis = true,
         showXAxis = true,
         horizontalExtraSpace = 10.dp,
         backgroundColor = Color.Transparent,
     )
-    BarChart(modifier = Modifier
-        .fillMaxHeight()
-        .fillMaxWidth(),
-        barChartData = barChartData)
+    BarChart(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(), barChartData = barChartData
+    )
 }

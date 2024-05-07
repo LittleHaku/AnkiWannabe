@@ -41,9 +41,7 @@ class MainActivity : ComponentActivity() {
         auth = Firebase.auth
 
         PreferenceManager.setDefaultValues(
-            this,
-            R.xml.root_preferences,
-            false
+            this, R.xml.root_preferences, false
         )
 
         reference.addValueEventListener(object : ValueEventListener {
@@ -141,13 +139,16 @@ fun MainScreen(viewModel: CardViewModel) {
         }
 
         composable(NavRoutes.Statistics.route) {
-            CardScaffold(navController = navController,
-                viewModel = viewModel, contentRoute = NavRoutes.Statistics.route)
+            CardScaffold(
+                navController = navController,
+                viewModel = viewModel,
+                contentRoute = NavRoutes.Statistics.route
+            )
         }
-        
+
         composable(NavRoutes.Login.route) {
             EmailPasswordScaffold(navController, viewModel)
         }
-        
+
     }
 }

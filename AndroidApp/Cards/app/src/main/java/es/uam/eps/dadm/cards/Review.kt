@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Suppress("unused")
 @Entity(tableName = "reviews_table")
-data class Review (
+data class Review(
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
     var reviewDate: String,
     var nextReviewDate: String,

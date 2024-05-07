@@ -87,7 +87,7 @@ fun CardScaffold(
                 )
 
                 NavRoutes.Study.route -> StudyScreen(viewModel = viewModel)
-                
+
                 NavRoutes.Statistics.route -> StatisticsScreen(viewModel = viewModel)
             }
         }
@@ -102,7 +102,12 @@ fun CardScaffold(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                     )
-                    Firebase.auth.currentUser?.email?.let { Text(it, color = MaterialTheme.colorScheme.onPrimary) }
+                    Firebase.auth.currentUser?.email?.let {
+                        Text(
+                            it,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
 
                 }
 
@@ -150,14 +155,22 @@ fun CardScaffold(
                         tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = "Settings",
 
-                        modifier = Modifier.clickable {
-                            // Start Preference activity here
-                            context.startActivity(Intent(context, SettingsActivity::class.java))
-                            val text = SettingsActivity.getMaximumNumberOfCards(context)
-                            Toast.makeText(
-                                context, text, Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        modifier = Modifier
+                            .clickable {
+                                // Start Preference activity here
+                                context.startActivity(
+                                    Intent(
+                                        context,
+                                        SettingsActivity::class.java
+                                    )
+                                )
+                                val text = SettingsActivity.getMaximumNumberOfCards(context)
+                                Toast
+                                    .makeText(
+                                        context, text, Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
                             .padding(8.dp)
                     )
                 }

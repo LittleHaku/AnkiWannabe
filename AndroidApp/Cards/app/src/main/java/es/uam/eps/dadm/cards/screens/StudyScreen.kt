@@ -38,12 +38,10 @@ import es.uam.eps.dadm.cards.YELLOW
 import java.time.LocalDateTime
 
 @Composable
-fun StudyScreen(viewModel: CardViewModel) {
-    /*val card by viewModel.dueCard.observeAsState()
+fun StudyScreen(viewModel: CardViewModel) {/*val card by viewModel.dueCard.observeAsState()
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)*/
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Study(viewModel = viewModel)
 
@@ -124,7 +122,7 @@ fun CardData(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(stringResource(id = R.string.card_question) +":")
+        Text(stringResource(id = R.string.card_question) + ":")
         Text(
             card.question,
             style = MaterialTheme.typography.titleLarge,
@@ -134,14 +132,17 @@ fun CardData(
         Spacer(modifier = Modifier.height(16.dp))
 
         if (answered) {
-            Text(stringResource(id = R.string.card_answer) +":")
+            Text(stringResource(id = R.string.card_answer) + ":")
             Text(
                 card.answer,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(8.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(stringResource(id = R.string.select_difficulty) +":", modifier = Modifier.padding(8.dp))
+            Text(
+                stringResource(id = R.string.select_difficulty) + ":",
+                modifier = Modifier.padding(8.dp)
+            )
 
             val intervals = card.possibleNextPractice()
             DifficultyButtons(onAnswered, onDifficultyChecked, intervals)
