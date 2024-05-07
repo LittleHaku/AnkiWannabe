@@ -1,10 +1,12 @@
 package es.uam.eps.dadm.cards
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -38,5 +40,25 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val MAX_NUMBER_CARDS_KEY = "max_number_cards"
+        const val MAX_NUMBER_CARDS_DEFAULT = "20"
+        const val LOGGED_IN_KEY = "logged_in_key"
+
+        fun getMaximumNumberOfCards(context: Context): String? {
+            return PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getString(MAX_NUMBER_CARDS_KEY, MAX_NUMBER_CARDS_DEFAULT)
+        }
+
+        fun setLoggedIn(context: Context, loggedin: Boolean) {
+            val sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean(LOGGED_IN_KEY, loggedin)
+            editor.apply()
+        }
     }
 }

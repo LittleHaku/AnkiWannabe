@@ -40,6 +40,7 @@ import com.google.firebase.auth.auth
 import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
+import es.uam.eps.dadm.cards.SettingsActivity
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,6 +103,7 @@ fun EmailPassword(
                     // val user = viewModel.auth.currentUser
                     // Navigate to deck list
                     viewModel.userId = Firebase.auth.currentUser?.uid ?: "unknown user"
+                    SettingsActivity.setLoggedIn(baseContext, true)
                     navController.navigate(NavRoutes.Decks.route)
                 } else {
                     // If sign in fails,

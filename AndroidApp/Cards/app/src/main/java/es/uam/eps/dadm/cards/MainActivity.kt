@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.preference.PreferenceManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -38,6 +39,12 @@ class MainActivity : ComponentActivity() {
         val reference = database.getReference("message")
         reference.setValue("Hello from Cards")
         auth = Firebase.auth
+
+        PreferenceManager.setDefaultValues(
+            this,
+            R.xml.root_preferences,
+            false
+        )
 
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

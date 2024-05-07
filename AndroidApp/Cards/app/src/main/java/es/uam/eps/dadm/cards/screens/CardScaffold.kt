@@ -46,6 +46,7 @@ import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
 import android.content.Context
+import android.widget.Toast
 import es.uam.eps.dadm.cards.SettingsActivity
 
 //import kotlin.coroutines.jvm.internal.CompletedContinuation.context
@@ -141,6 +142,7 @@ fun CardScaffold(
                             .clickable {
                                 Firebase.auth.signOut()
                                 viewModel.userId = "unknown user"
+                                SettingsActivity.setLoggedIn(context, false)
                                 navController.navigate(NavRoutes.Login.route)
 
                             }
@@ -154,6 +156,10 @@ fun CardScaffold(
                         modifier = Modifier.clickable {
                             // Start Preference activity here
                             context.startActivity(Intent(context, SettingsActivity::class.java))
+                            val text = SettingsActivity.getMaximumNumberOfCards(context)
+                            Toast.makeText(
+                                context, text, Toast.LENGTH_SHORT
+                            ).show()
                         }
                             .padding(8.dp)
                     )

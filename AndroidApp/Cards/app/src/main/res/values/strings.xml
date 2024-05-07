@@ -58,4 +58,5 @@
     <string name="board_summary_off">Board unavailable</string>
     <string name="board_summary_on">Board available</string>
     <string name="board_title">Show board</string>
+    <string name="click_to_change">Tap to change the value (default is 20)</string>
 </resources>

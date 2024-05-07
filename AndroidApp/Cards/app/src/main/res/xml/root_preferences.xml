@@ -3,7 +3,7 @@
         <EditTextPreference
             app:key="max_number_cards"
             app:title="@string/max_number_cards"
-            app:summary=""
+            app:summary="@string/click_to_change"
             app:defaultValue="20" />
         <SwitchPreferenceCompat
             app:key="board"
