@@ -72,7 +72,6 @@ fun DeckListScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckList(
     cards: List<Card>, decks: List<Deck>, navController: NavController, viewModel: CardViewModel

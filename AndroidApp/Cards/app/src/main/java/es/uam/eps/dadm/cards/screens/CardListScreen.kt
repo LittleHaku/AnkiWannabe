@@ -60,7 +60,6 @@ fun CardListScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardList(viewModel: CardViewModel, navController: NavController, deckId: String = "") {
     val cards by viewModel.getCardsByDeckId(deckId).observeAsState(listOf())

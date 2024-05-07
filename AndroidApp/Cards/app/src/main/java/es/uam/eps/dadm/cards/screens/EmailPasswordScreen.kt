@@ -43,7 +43,6 @@ import es.uam.eps.dadm.cards.R
 import es.uam.eps.dadm.cards.SettingsActivity
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailPasswordScaffold(
     navController: NavHostController,
