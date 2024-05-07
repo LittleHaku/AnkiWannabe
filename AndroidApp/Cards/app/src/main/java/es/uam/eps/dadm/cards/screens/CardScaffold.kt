@@ -1,5 +1,6 @@
 package es.uam.eps.dadm.cards.screens
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -26,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -41,6 +45,10 @@ import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.NavBarItems
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
+import android.content.Context
+import es.uam.eps.dadm.cards.SettingsActivity
+
+//import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +62,7 @@ fun CardScaffold(
     val cards by viewModel.cards.observeAsState()
     val decks by viewModel.decks.observeAsState()
     val reviews by viewModel.reviews.observeAsState()
+    val context = LocalContext.current
 
     Scaffold(content = { paddingValues ->
         Column(
@@ -91,11 +100,11 @@ fun CardScaffold(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = stringResource(id = R.string.app_name),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                     )
-                    Firebase.auth.currentUser?.email?.let { Text(it, color = Color.White) }
+                    Firebase.auth.currentUser?.email?.let { Text(it, color = MaterialTheme.colorScheme.onPrimary) }
 
                 }
 
@@ -117,13 +126,13 @@ fun CardScaffold(
                             }
                         }
                         .padding(8.dp),
-                    colorFilter = ColorFilter.tint(Color.White))
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary))
                 Image(painter = painterResource(R.drawable.baseline_cloud_download_24),
                     contentDescription = "Download from cloud",
                     modifier = Modifier
                         .clickable { viewModel.downloadFromFirebase() }
                         .padding(8.dp),
-                    colorFilter = ColorFilter.tint(Color.White))
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary))
             }, navigationIcon = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(painter = painterResource(R.drawable.baseline_logout_24),
@@ -136,7 +145,18 @@ fun CardScaffold(
 
                             }
                             .padding(8.dp),
-                        colorFilter = ColorFilter.tint(Color.White))
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary))
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        contentDescription = "Settings",
+
+                        modifier = Modifier.clickable {
+                            // Start Preference activity here
+                            context.startActivity(Intent(context, SettingsActivity::class.java))
+                        }
+                            .padding(8.dp)
+                    )
                 }
             })
         },

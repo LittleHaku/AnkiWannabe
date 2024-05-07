@@ -37,4 +37,18 @@
     <string name="log_in">Entrar</string>
     <string name="failed_auth">Autenticación fallida</string>
     <string name="select_difficulty">¿Cómo de difícil fue?</string>
+    <string name="title_activity_settings">Ajustes</string>
+    <string name="messages_header">Mensajes</string>
+    <string name="sync_header">Sincronizar</string>
+    <string name="signature_title">Tu firma</string>
+    <string name="reply_title">Acción por defecto para contestar</string>
+    <string name="sync_title">Sincronizar correo periódicamente</string>
+    <string name="attachment_title">Descargar archivos adjuntos</string>
+    <string name="attachment_summary_on">Descargar archivos adjuntos automáticamente en correos entrantes</string>
+    <string name="attachment_summary_off">Solo descargar archivos adjuntos cuando se solicite manualmente</string>
+    <string name="decks_header">Mazos</string>
+    <string name="max_number_cards">Número máximo de tarjetas a estudiar cada día</string>
+    <string name="board_summary_off">Sin pizarra</string>
+    <string name="board_summary_on">Con pizarra</string>
+    <string name="board_title">Mostrar pizarra</string>
 </resources>

@@ -12,4 +12,6 @@ data class Review (
     var cardId: String,
     var deckId: String,
     var userId: String
-)
+) {
+    constructor() : this("", "", "", "", "", "")
+}
