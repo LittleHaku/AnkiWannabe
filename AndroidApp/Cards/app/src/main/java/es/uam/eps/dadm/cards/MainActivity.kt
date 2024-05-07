@@ -132,8 +132,15 @@ fun MainScreen(viewModel: CardViewModel) {
                 contentRoute = NavRoutes.Study.route
             )
         }
+
+        composable(NavRoutes.Statistics.route) {
+            CardScaffold(navController = navController,
+                viewModel = viewModel, contentRoute = NavRoutes.Statistics.route)
+        }
+        
         composable(NavRoutes.Login.route) {
             EmailPasswordScaffold(navController, viewModel)
         }
+        
     }
 }

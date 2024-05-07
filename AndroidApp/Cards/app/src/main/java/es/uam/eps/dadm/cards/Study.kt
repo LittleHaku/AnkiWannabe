@@ -803,4 +803,6 @@ fun EmailPassword(
 
 }
 
+@Composable
+fun Statistics(viewModel: CardViewModel) { }
 

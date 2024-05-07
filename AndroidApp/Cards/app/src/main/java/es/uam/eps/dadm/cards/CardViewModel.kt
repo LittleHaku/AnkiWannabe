@@ -20,6 +20,7 @@ import java.time.LocalDateTime.now
 class CardViewModel(application: Application) : ViewModel() {
     val cards: LiveData<List<Card>>
     val decks: LiveData<List<Deck>>
+    val reviews: LiveData<List<Review>>
     val dueCard: LiveData<Card?>
     val nDueCards: LiveData<Int>
     private val cardDao: CardDao
@@ -31,6 +32,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao = CardDatabase.getInstance(application.applicationContext).cardDao
         cards = cardDao.getCards()
         decks = cardDao.getDecks()
+        reviews = cardDao.getReviews()
 
 
         dueCard = cards.map {
@@ -69,6 +71,10 @@ class CardViewModel(application: Application) : ViewModel() {
 
     private fun deleteCards() = viewModelScope.launch {
         cardDao.deleteCards()
+    }
+
+    private fun deleteReviews() = viewModelScope.launch {
+        cardDao.deleteReviews()
     }
 
     fun getCard(cardId: String): LiveData<Card> = cardDao.getCard(cardId)
@@ -115,7 +121,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardDao.getCardsFromDeckAndUser(userId, deckId)
 
 
-    fun uploadToFirebase(cards: List<Card>, decks: List<Deck>) {
+    fun uploadToFirebase(cards: List<Card>, decks: List<Deck>, reviews: List<Review>) {
         val decksReference = FirebaseDatabase.getInstance().getReference("decks")
         decksReference.setValue(null)
         decks.forEach { deck ->
@@ -125,6 +131,12 @@ class CardViewModel(application: Application) : ViewModel() {
         val cardsReference = FirebaseDatabase.getInstance().getReference("cards")
         cardsReference.setValue(null)
         cards.forEach { card -> cardsReference.child(card.id).setValue(card) }
+
+        val reviewsReference = FirebaseDatabase.getInstance().getReference("reviews")
+        reviewsReference.setValue(null)
+        reviews.forEach {
+            review -> reviewsReference.child(review.id).setValue(review)
+        }
     }
 
     fun downloadFromFirebase() {
@@ -161,6 +173,29 @@ class CardViewModel(application: Application) : ViewModel() {
                 deleteCards()
                 cards.forEach { card ->
                     addCard(card)
+                }
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
+        val reviewsReference = FirebaseDatabase.getInstance().getReference("reviews")
+        reviewsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val reviews = mutableListOf<Review>()
+                snapshot.children.forEach {
+                    it.getValue(Review::class.java)?.let {
+                        reviews.add(it)
+                    }
+                }
+
+                deleteReviews()
+                reviews.forEach { review ->
+                    addReview(review)
                 }
 
 

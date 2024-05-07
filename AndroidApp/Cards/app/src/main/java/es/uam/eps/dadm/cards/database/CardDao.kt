@@ -24,6 +24,9 @@ interface CardDao {
     @Query("DELETE FROM cards_table")
     suspend fun deleteCards()
 
+    @Query("DELETE FROM reviews_table")
+    suspend fun deleteReviews()
+
     @Update
     suspend fun updateCard(card: Card)
 
@@ -41,6 +44,9 @@ interface CardDao {
 
     @Query("SELECT * FROM decks_table")
     fun getDecks(): LiveData<List<Deck>>
+
+    @Query("SELECT * FROM reviews_table")
+    fun getReviews(): LiveData<List<Review>>
 
     @Query(
         "SELECT * FROM cards_table " + "INNER JOIN decks_table ON decks_table.deckId = cards_table.deckId " + "WHERE decks_table.name LIKE :deckName"

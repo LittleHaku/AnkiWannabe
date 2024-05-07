@@ -53,6 +53,7 @@ fun CardScaffold(
 ) {
     val cards by viewModel.cards.observeAsState()
     val decks by viewModel.decks.observeAsState()
+    val reviews by viewModel.reviews.observeAsState()
 
     Scaffold(content = { paddingValues ->
         Column(
@@ -105,9 +106,11 @@ fun CardScaffold(
                         .clickable {
                             decks?.let { decks ->
                                 cards?.let { cards ->
-                                    viewModel.uploadToFirebase(
-                                        cards, decks
-                                    )
+                                    reviews?.let { reviews ->
+                                        viewModel.uploadToFirebase(
+                                            cards, decks, reviews
+                                        )
+                                    }
                                 }
                             }
                         }
