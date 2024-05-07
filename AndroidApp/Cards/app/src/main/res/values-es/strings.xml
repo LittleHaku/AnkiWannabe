@@ -51,4 +51,5 @@
     <string name="board_summary_off">Sin pizarra</string>
     <string name="board_summary_on">Con pizarra</string>
     <string name="board_title">Mostrar pizarra</string>
+    <string name="click_to_change">Toca para cambiar (por defecto 20)</string>
 </resources>
