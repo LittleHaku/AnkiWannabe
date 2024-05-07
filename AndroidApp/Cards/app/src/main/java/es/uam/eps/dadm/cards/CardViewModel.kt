@@ -15,8 +15,6 @@ import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.database.CardDao
 import es.uam.eps.dadm.cards.database.CardDatabase
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.LocalDateTime.parse
 
