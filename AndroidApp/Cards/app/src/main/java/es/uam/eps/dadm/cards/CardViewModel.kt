@@ -86,12 +86,12 @@ class CardViewModel(application: Application) : ViewModel() {
     ): Map<String, Int> {
         val map = mutableMapOf<String, Int>()
 
-        reviews.forEach() { review ->
+        reviews.forEach { review ->
             // get the previous number of reviews and add 1
 
             // parse it because if not it takes the date and TIME and we don't need time
             // because if not the mapping doesn't group them
-            val date = LocalDateTime.parse(review.reviewDate).toLocalDate().toString()
+            val date = parse(review.reviewDate).toLocalDate().toString()
             //val date = review.reviewDate
             map[date] = map.getOrDefault(date, 0) + 1
         }
