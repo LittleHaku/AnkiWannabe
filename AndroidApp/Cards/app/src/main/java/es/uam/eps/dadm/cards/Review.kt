@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
+@Suppress("unused")
 @Entity(tableName = "reviews_table")
 data class Review (
     @PrimaryKey var id: String = UUID.randomUUID().toString(),
@@ -13,6 +14,6 @@ data class Review (
     var deckId: String,
     var userId: String
 ) {
-    // dont delete, its needed for firebase
+    // don't delete, its needed for firebase
     constructor() : this("", "", "", "", "", "")
 }
