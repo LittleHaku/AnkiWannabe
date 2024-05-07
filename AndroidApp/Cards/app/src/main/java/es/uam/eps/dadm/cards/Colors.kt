@@ -9,5 +9,3 @@ val GREEN = Color(0xff40de68)
 @Suppress("unused")
 val PASTEL_GREEN = Color(0xFF9BDEAC)
 val BLACK = Color(0xFF121212)
-
-
