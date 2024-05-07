@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import es.uam.eps.dadm.cards.Card
 import es.uam.eps.dadm.cards.Deck
+import es.uam.eps.dadm.cards.Review
 
 
 @Dao
@@ -28,6 +29,9 @@ interface CardDao {
 
     @Query("SELECT * FROM cards_table WHERE deckId = :id")
     fun getCardsOfDeck(id: String): LiveData<List<Card>>
+
+    @Insert
+    suspend fun addReview(review: Review)
 
     @Insert
     suspend fun addDeck(deck: Deck)

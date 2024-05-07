@@ -131,6 +131,14 @@ fun CardData(
         card.quality = value
         card.update(now())
         viewModel.updateCard(card)
+        val review = Review(
+            reviewDate = now().toString(),
+            nextReviewDate = card.nextPracticeDate,
+            cardId = card.id,
+            deckId = card.deckId,
+            userId = card.userId
+        )
+        viewModel.addReview(review)
         // Done again because lambda can't finish with the viewModel and it must be done after
         card.quality = value
     }

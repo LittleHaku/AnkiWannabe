@@ -59,6 +59,10 @@ class CardViewModel(application: Application) : ViewModel() {
         }
     }
 
+    fun addReview(review: Review) = viewModelScope.launch {
+        cardDao.addReview(review)
+    }
+
     fun addCard(card: Card) = viewModelScope.launch {
         cardDao.addCard(card)
     }
@@ -109,6 +113,7 @@ class CardViewModel(application: Application) : ViewModel() {
 
     fun getCardsFromDeckAndUser(userId: String, deckId: String) =
         cardDao.getCardsFromDeckAndUser(userId, deckId)
+
 
     fun uploadToFirebase(cards: List<Card>, decks: List<Deck>) {
         val decksReference = FirebaseDatabase.getInstance().getReference("decks")
