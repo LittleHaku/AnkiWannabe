@@ -95,8 +95,6 @@ private fun BarchartWithSolidBars(barData: List<BarData>) {
 //        else -> 200
 //    }
 
-    val yStepSize = maxRange
-
     val xAxisData = AxisData.Builder()
         .axisStepSize(30.dp)
         .steps(barData.size - 1)
@@ -108,12 +106,12 @@ private fun BarchartWithSolidBars(barData: List<BarData>) {
         .labelData { index -> barData[index].label }
         .build()
     val yAxisData = AxisData.Builder()
-        .steps(yStepSize)
+        .steps(maxRange)
         .labelAndAxisLinePadding(20.dp)
         .axisLabelColor(MaterialTheme.colorScheme.onBackground)
         .axisLineColor(MaterialTheme.colorScheme.secondary)
         .axisOffset(20.dp)
-        .labelData { index -> (index * (maxRange / yStepSize)).toString() }
+        .labelData { index -> (index * (maxRange / maxRange)).toString() }
         .build()
     val barChartData = BarChartData(
         chartData = barData,
