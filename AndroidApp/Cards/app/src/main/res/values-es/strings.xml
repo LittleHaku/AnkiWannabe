@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">Tarjetas</string>
-    <string name="study_menu">Estudiar</string>
-    <string name="deck_list_menu">Lista de Mazos</string>
-    <string name="card_list_menu">Lista de Tarjetas</string>
-    <string name="create_deck_menu">Crear Mazo</string>
-    <string name="reset_db_menu">Restablecer BD</string>
     <string name="remaining_cards">Tarjetas Restantes</string>
     <string name="view_answer">Ver Respuesta</string>
     <string name="list_of_decks">Lista de Mazos</string>
@@ -29,7 +24,6 @@
     <string name="days">día(s)</string>
     <string name="card_question">Pregunta</string>
     <string name="card_answer">Respuesta</string>
-    <string name="decks">Mazos</string>
     <string name="deleted">Eliminado</string>
     <string name="email_field">Introduce tu correo electrónico</string>
     <string name="password_field">Introduce tu contraseña</string>
@@ -38,14 +32,6 @@
     <string name="failed_auth">Autenticación fallida</string>
     <string name="select_difficulty">¿Cómo de difícil fue?</string>
     <string name="title_activity_settings">Ajustes</string>
-    <string name="messages_header">Mensajes</string>
-    <string name="sync_header">Sincronizar</string>
-    <string name="signature_title">Tu firma</string>
-    <string name="reply_title">Acción por defecto para contestar</string>
-    <string name="sync_title">Sincronizar correo periódicamente</string>
-    <string name="attachment_title">Descargar archivos adjuntos</string>
-    <string name="attachment_summary_on">Descargar archivos adjuntos automáticamente en correos entrantes</string>
-    <string name="attachment_summary_off">Solo descargar archivos adjuntos cuando se solicite manualmente</string>
     <string name="decks_header">Mazos</string>
     <string name="max_number_cards">Número máximo de tarjetas a estudiar cada día</string>
     <string name="board_summary_off">Sin pizarra</string>

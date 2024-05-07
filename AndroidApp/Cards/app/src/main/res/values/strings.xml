@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">Cards</string>
-    <string name="study_menu">Study</string>
-    <string name="deck_list_menu">Deck List</string>
-    <string name="card_list_menu">Card List</string>
-    <string name="create_deck_menu">Create Deck</string>
-    <string name="reset_db_menu">Reset DB</string>
     <string name="remaining_cards">Remaining Cards</string>
     <string name="view_answer">View Answer</string>
     <string name="list_of_decks">List of Decks</string>
@@ -14,7 +9,6 @@
     <string name="cancel">Cancel</string>
     <string name="accept">Accept</string>
     <string name="cards">Cards</string>
-    <string name="decks">Decks</string>
     <string name="selected">Selected</string>
     <string name="quality">Quality</string>
     <string name="easiness">Easiness</string>
@@ -40,19 +34,10 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="decks_header">Decks</string>
     <string name="max_number_cards">Maximum number of cards to study per day</string>
     <string name="board_summary_off">Board unavailable</string>
