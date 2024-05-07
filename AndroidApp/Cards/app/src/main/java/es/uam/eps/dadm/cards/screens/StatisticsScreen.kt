@@ -1,10 +1,22 @@
 package es.uam.eps.dadm.cards.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.Statistics
 
 @Composable
 fun StatisticsScreen(viewModel: CardViewModel) {
-    Statistics(viewModel = viewModel)
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Statistics(viewModel = viewModel)
+    }
+
 }

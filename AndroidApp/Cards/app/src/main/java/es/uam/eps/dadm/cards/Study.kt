@@ -826,7 +826,8 @@ fun Statistics(viewModel: CardViewModel) {
             // Create a BarData point with x as the index and y as the number of reviews
             val point = BarData(
                 point = Point(x = index.toFloat(), y = numberOfReviews.toFloat()),
-                label = date
+                label = date,
+                color = MaterialTheme.colorScheme.primary
             )
 
             barData.add(point)
@@ -834,7 +835,11 @@ fun Statistics(viewModel: CardViewModel) {
     }
     //val point1 = BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")
     //barData.add(point1)
-    // TODO: cant be empty, if not fails
+
+
+
+
+        // TODO: cant be empty, if not fails
     BarchartWithSolidBars(barData)
 
 }
@@ -842,21 +847,49 @@ fun Statistics(viewModel: CardViewModel) {
 @Composable
 private fun BarchartWithSolidBars(barData: List<BarData>) {
 
-    val maxRange = 50
+    // Get the highest value
+    val maxValue = (barData.maxBy { p -> p.point.y }.point.y).toInt()
+    //val maxRange = 20
+    val maxRange = when {
+        maxValue <= 10 -> 10
+        maxValue <= 25 -> 25
+        maxValue <= 50 -> 50
+        maxValue <= 100 -> 100
+        maxValue <= 250 -> 250
+        maxValue <= 500 -> 500
+        else -> 1000
+        // If someone does more than 1000 reviews a day create an issue on github and ill change it
+    }
 
-    val yStepSize = 10
+
+    // Determine a reasonable number of steps based on maxRange
+//    val yStepSize = when {
+//        maxRange <= 10 -> 10
+//        maxRange <= 25 -> 10
+//        maxRange <= 50 -> 10
+//        maxRange <= 100 -> 20
+//        maxRange <= 250 -> 50
+//        maxRange <= 500 -> 100
+//        else -> 200
+//    }
+
+    val yStepSize = maxValue
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(30.dp)
         .steps(barData.size - 1)
         .bottomPadding(40.dp)
         .axisLabelAngle(20f)
+        .axisLabelColor(MaterialTheme.colorScheme.onBackground)
+        .axisLineColor(MaterialTheme.colorScheme.secondary)
         .startDrawPadding(48.dp)
         .labelData { index -> barData[index].label }
         .build()
     val yAxisData = AxisData.Builder()
         .steps(yStepSize)
         .labelAndAxisLinePadding(20.dp)
+        .axisLabelColor(MaterialTheme.colorScheme.onBackground)
+        .axisLineColor(MaterialTheme.colorScheme.secondary)
         .axisOffset(20.dp)
         .labelData { index -> (index * (maxRange / yStepSize)).toString() }
         .build()
@@ -871,7 +904,11 @@ private fun BarchartWithSolidBars(barData: List<BarData>) {
         showYAxis = true,
         showXAxis = true,
         horizontalExtraSpace = 10.dp,
+        backgroundColor = Color.Transparent,
     )
-    BarChart(modifier = Modifier.height(350.dp), barChartData = barChartData)
+    BarChart(modifier = Modifier
+        .height(350.dp)
+        .fillMaxWidth(),
+        barChartData = barChartData)
 }
 
