@@ -3,6 +3,7 @@ package es.uam.eps.dadm.cards
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.LocalDateTime.parse
@@ -81,7 +82,9 @@ open class Card(
     }
 
 
-    fun isDue(date: LocalDateTime) = parse(nextPracticeDate) <= date
+    // Changed to LocalDate because it is 08 May 2024 00:36, and the cards that have nextPractice
+    // with today's date aren't working because the time is set to 13:09 and they should be displayed
+    fun isDue(date: LocalDate) = parse(nextPracticeDate).toLocalDate() <= date
 
 
 }

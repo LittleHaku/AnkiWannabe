@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.database.CardDao
 import es.uam.eps.dadm.cards.database.CardDatabase
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime.now
+import java.time.LocalDate
 import java.time.LocalDateTime.parse
 
 @Suppress("unused")
@@ -38,20 +38,20 @@ class CardViewModel(application: Application) : ViewModel() {
 
 
         dueCard = cards.map {
-            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }
+            it.filter { card -> (card.isDue(LocalDate.now()) && (card.userId == Firebase.auth.currentUser?.uid)) }
                 .run {
                     if (any()) random() else null
                 }
         }
 
         nDueCards = cards.map {
-            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
+            it.filter { card -> (card.isDue(LocalDate.now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
         }
     }
 
     fun getUserDueCard(userId: String): LiveData<Card?> {
         return cardDao.getCardsFromUser(userId).map {
-            it.filter { card -> (card.isDue(now())) }.run {
+            it.filter { card -> (card.isDue(LocalDate.now())) }.run {
                 if (any()) first() else null
             }
         }
