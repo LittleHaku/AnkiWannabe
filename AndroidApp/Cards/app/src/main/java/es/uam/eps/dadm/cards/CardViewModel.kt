@@ -57,12 +57,6 @@ class CardViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun getUserNumDueCards(userId: String): LiveData<Int> {
-        return cardDao.getCardsFromUser(userId).map {
-            it.filter { card -> (card.isDue(now()) && (card.userId == Firebase.auth.currentUser?.uid)) }.size
-        }
-    }
-
     fun addReview(review: Review) = viewModelScope.launch {
         cardDao.addReview(review)
     }
@@ -137,9 +131,6 @@ class CardViewModel(application: Application) : ViewModel() {
     fun getCardsFromUser(userId: String) = cardDao.getCardsFromUser(userId)
 
     fun getDecksFromUser(userId: String) = cardDao.getDecksFromUser(userId)
-
-    fun getCardsFromDeckAndUser(userId: String, deckId: String) =
-        cardDao.getCardsFromDeckAndUser(userId, deckId)
 
 
     fun uploadToFirebase(cards: List<Card>, decks: List<Deck>, reviews: List<Review>) {
