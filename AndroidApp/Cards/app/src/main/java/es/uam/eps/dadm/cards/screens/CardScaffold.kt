@@ -80,6 +80,8 @@ fun CardScaffold(
                 )
 
                 NavRoutes.Study.route -> StudyScreen(viewModel = viewModel)
+                
+                NavRoutes.Statistics.route -> StatisticsScreen(viewModel = viewModel)
             }
         }
     },

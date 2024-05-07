@@ -58,6 +58,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import co.yml.charts.axis.AxisData
+import co.yml.charts.common.model.Point
+import co.yml.charts.ui.barchart.BarChart
+import co.yml.charts.ui.barchart.models.BarChartData
+import co.yml.charts.ui.barchart.models.BarData
+import co.yml.charts.ui.barchart.models.BarStyle
+import com.google.android.gms.common.util.DataUtils
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.delay
@@ -804,5 +811,67 @@ fun EmailPassword(
 }
 
 @Composable
-fun Statistics(viewModel: CardViewModel) { }
+fun Statistics(viewModel: CardViewModel) {
+    val reviews by viewModel.reviews.observeAsState(listOf())
+    val barData = mutableListOf<BarData>()
+
+
+    reviews.let { reviewList ->
+        val reviewsMap = viewModel.fromReviewsToMap(reviewList)
+
+        reviewsMap.entries.forEachIndexed { index, entry ->
+            val date = entry.key
+            val numberOfReviews = entry.value
+
+            // Create a BarData point with x as the index and y as the number of reviews
+            val point = BarData(
+                point = Point(x = index.toFloat(), y = numberOfReviews.toFloat()),
+                label = date
+            )
+
+            barData.add(point)
+        }
+    }
+    //val point1 = BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")
+    //barData.add(point1)
+    // TODO: cant be empty, if not fails
+    BarchartWithSolidBars(barData)
+
+}
+
+@Composable
+private fun BarchartWithSolidBars(barData: List<BarData>) {
+
+    val maxRange = 50
+
+    val yStepSize = 10
+
+    val xAxisData = AxisData.Builder()
+        .axisStepSize(30.dp)
+        .steps(barData.size - 1)
+        .bottomPadding(40.dp)
+        .axisLabelAngle(20f)
+        .startDrawPadding(48.dp)
+        .labelData { index -> barData[index].label }
+        .build()
+    val yAxisData = AxisData.Builder()
+        .steps(yStepSize)
+        .labelAndAxisLinePadding(20.dp)
+        .axisOffset(20.dp)
+        .labelData { index -> (index * (maxRange / yStepSize)).toString() }
+        .build()
+    val barChartData = BarChartData(
+        chartData = barData,
+        xAxisData = xAxisData,
+        yAxisData = yAxisData,
+        barStyle = BarStyle(
+            paddingBetweenBars = 20.dp,
+            barWidth = 25.dp
+        ),
+        showYAxis = true,
+        showXAxis = true,
+        horizontalExtraSpace = 10.dp,
+    )
+    BarChart(modifier = Modifier.height(350.dp), barChartData = barChartData)
+}
 

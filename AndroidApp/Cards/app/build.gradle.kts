@@ -83,5 +83,6 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("androidx.compose.material:material-icons-extended:1.6.5")
+    implementation("co.yml:ycharts:2.1.0")
 
 }

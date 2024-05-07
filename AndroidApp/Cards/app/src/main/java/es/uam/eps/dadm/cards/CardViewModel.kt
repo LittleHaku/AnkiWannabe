@@ -15,7 +15,10 @@ import com.google.firebase.database.ValueEventListener
 import es.uam.eps.dadm.cards.database.CardDao
 import es.uam.eps.dadm.cards.database.CardDatabase
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalDateTime.now
+import java.time.LocalDateTime.parse
 
 class CardViewModel(application: Application) : ViewModel() {
     val cards: LiveData<List<Card>>
@@ -75,6 +78,25 @@ class CardViewModel(application: Application) : ViewModel() {
 
     private fun deleteReviews() = viewModelScope.launch {
         cardDao.deleteReviews()
+    }
+
+    // Shouldn't this also have a userId??
+    fun fromReviewsToMap(
+        reviews: List<Review>
+    ): Map<String, Int> {
+        val map = mutableMapOf<String, Int>()
+
+        reviews.forEach() { review ->
+            // get the previous number of reviews and add 1
+
+            // parse it because if not it takes the date and TIME and we don't need time
+            // because if not the mapping doesn't group them
+            val date = LocalDateTime.parse(review.reviewDate).toLocalDate().toString()
+            //val date = review.reviewDate
+            map[date] = map.getOrDefault(date, 0) + 1
+        }
+
+        return map
     }
 
     fun getCard(cardId: String): LiveData<Card> = cardDao.getCard(cardId)
