@@ -43,9 +43,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val MAX_NUMBER_CARDS_KEY = "max_number_cards"
-        const val MAX_NUMBER_CARDS_DEFAULT = "20"
-        const val LOGGED_IN_KEY = "logged_in_key"
+        private const val MAX_NUMBER_CARDS_KEY = "max_number_cards"
+        private const val MAX_NUMBER_CARDS_DEFAULT = "20"
+        private const val LOGGED_IN_KEY = "logged_in_key"
 
         fun getMaximumNumberOfCards(context: Context): String? {
             return PreferenceManager

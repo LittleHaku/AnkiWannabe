@@ -67,10 +67,9 @@ open class Card(
             val fakeEasiness = if (newEasiness < 1.3) 1.3 else newEasiness
 
             // reps
-            val fakeRepetitions = if (diff < 3) 0 else repetitions + 1
 
             // interval
-            val fakeInterval = when (fakeRepetitions) {
+            val fakeInterval = when (if (diff < 3) 0 else repetitions + 1) {
                 0, 1 -> 1
                 2 -> 6
                 else -> (interval * fakeEasiness).roundToLong()

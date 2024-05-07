@@ -23,7 +23,7 @@ class CardViewModel(application: Application) : ViewModel() {
     val cards: LiveData<List<Card>>
     val decks: LiveData<List<Deck>>
     val reviews: LiveData<List<Review>>
-    val dueCard: LiveData<Card?>
+    private val dueCard: LiveData<Card?>
     val nDueCards: LiveData<Int>
     private val cardDao: CardDao
     var auth = Firebase.auth
@@ -156,7 +156,7 @@ class CardViewModel(application: Application) : ViewModel() {
         decksReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val decks = mutableListOf<Deck>()
-                snapshot.children.forEach {
+                snapshot.children.forEach { it ->
                     it.getValue(Deck::class.java)?.let {
                         decks.add(it)
                     }
@@ -176,7 +176,7 @@ class CardViewModel(application: Application) : ViewModel() {
         cardsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val cards = mutableListOf<Card>()
-                snapshot.children.forEach {
+                snapshot.children.forEach { it ->
                     it.getValue(Card::class.java)?.let {
                         cards.add(it)
                     }
@@ -199,7 +199,7 @@ class CardViewModel(application: Application) : ViewModel() {
         reviewsReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val reviews = mutableListOf<Review>()
-                snapshot.children.forEach {
+                snapshot.children.forEach { it ->
                     it.getValue(Review::class.java)?.let {
                         reviews.add(it)
                     }
