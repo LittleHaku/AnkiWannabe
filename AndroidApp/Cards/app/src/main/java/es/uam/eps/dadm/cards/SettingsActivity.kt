@@ -44,6 +44,8 @@ class SettingsActivity : AppCompatActivity() {
         private const val MAX_NUMBER_CARDS_KEY = "max_number_cards"
         private const val MAX_NUMBER_CARDS_DEFAULT = "20"
         private const val LOGGED_IN_KEY = "logged_in_key"
+        private const val SHOW_ANSWERS = "show_answers"
+        private const val SHOW_ANSWERS_DEFAULT = true
 
         fun getMaximumNumberOfCards(context: Context): String? {
             return PreferenceManager.getDefaultSharedPreferences(context)
@@ -55,6 +57,11 @@ class SettingsActivity : AppCompatActivity() {
             val editor = sharedPreferences.edit()
             editor.putBoolean(LOGGED_IN_KEY, loggedin)
             editor.apply()
+        }
+
+        fun getShowAnswers(context: Context): Boolean {
+            return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(SHOW_ANSWERS, SHOW_ANSWERS_DEFAULT)
         }
     }
 }

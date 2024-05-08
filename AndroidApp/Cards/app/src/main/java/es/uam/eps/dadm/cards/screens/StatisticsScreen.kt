@@ -26,6 +26,7 @@ import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.barchart.models.BarStyle
 import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.R
+import java.time.LocalDate
 
 @Composable
 fun StatisticsScreen(viewModel: CardViewModel) {
@@ -55,8 +56,11 @@ fun Statistics(viewModel: CardViewModel) {
     reviews.let { reviewList ->
         val reviewsMap = viewModel.fromReviewsToMap(reviewList)
 
+        val sortedReviewsMap = reviewsMap.toList()
+            .sortedBy { (key, _) -> LocalDate.parse(key) }
+            .toMap()
 
-        reviewsMap.entries.forEachIndexed { index, entry ->
+        sortedReviewsMap.entries.forEachIndexed { index, entry ->
             val date = entry.key
             val numberOfReviews = entry.value
 
@@ -87,14 +91,6 @@ fun Statistics(viewModel: CardViewModel) {
         }
 
     }
-    //println(reviewsMap)
-    println( mutableListOf<BarData>(BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")))
-    //val point1 = BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")
-    //val barData =
-
-
-    // TODO: cant be empty, if not fails
-    //BarchartWithSolidBars(barData)
 
 }
 
@@ -114,17 +110,6 @@ private fun BarchartWithSolidBars(barData: List<BarData>) {
         // If someone does more than 1000 reviews a day create an issue on github and ill change it
     }
 
-
-    // Determine a reasonable number of steps based on maxRange
-//    val yStepSize = when {
-//        maxRange <= 10 -> 10
-//        maxRange <= 25 -> 10
-//        maxRange <= 50 -> 10
-//        maxRange <= 100 -> 20
-//        maxRange <= 250 -> 50
-//        maxRange <= 500 -> 100
-//        else -> 200
-//    }
 
     val xAxisData =
         AxisData.Builder().axisStepSize(30.dp).steps(barData.size - 1).bottomPadding(40.dp)

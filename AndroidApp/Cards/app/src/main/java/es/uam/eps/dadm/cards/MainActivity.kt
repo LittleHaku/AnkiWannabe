@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
         val reference = database.getReference("message")
-        reference.setValue("Hello from Cards")
+        reference.setValue("Remember to backup!")
         auth = Firebase.auth
 
         PreferenceManager.setDefaultValues(

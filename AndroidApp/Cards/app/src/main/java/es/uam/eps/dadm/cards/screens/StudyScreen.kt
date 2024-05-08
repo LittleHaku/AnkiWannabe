@@ -56,7 +56,7 @@ fun StudyScreen(viewModel: CardViewModel) {/*val card by viewModel.dueCard.obser
 fun Study(viewModel: CardViewModel) {
     val uid = Firebase.auth.currentUser?.uid ?: ""
     val card by viewModel.getUserDueCard(uid).observeAsState()
-    val nCards by viewModel.nDueCards.observeAsState(initial = 0)
+    val nCards by viewModel.nDueCards.observeAsState(0)
     val noMoreCards = stringResource(id = R.string.no_more_cards)
     val cardLimit = stringResource(id = R.string.card_limit)
     val context = LocalContext.current
@@ -74,15 +74,16 @@ fun Study(viewModel: CardViewModel) {
             verticalArrangement = Arrangement.Center
         ) {
             // cardsStudiedToday > maxCards is worse because maybe there are no more cards left
-            if (nCards > 0) {
+            if (nCards == 0) {
                 Text(
-                    text = cardLimit,
+                    text = noMoreCards,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
             } else {
+
                 Text(
-                    text = noMoreCards,
+                    text = cardLimit,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )

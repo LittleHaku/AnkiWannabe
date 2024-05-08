@@ -48,6 +48,7 @@ import es.uam.eps.dadm.cards.Card
 import es.uam.eps.dadm.cards.CardViewModel
 import es.uam.eps.dadm.cards.NavRoutes
 import es.uam.eps.dadm.cards.R
+import es.uam.eps.dadm.cards.SettingsActivity
 import kotlinx.coroutines.delay
 
 @Composable
@@ -186,7 +187,15 @@ fun CardItem(
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.bodyLarge
             )
-            Text(card.answer, modifier, style = MaterialTheme.typography.bodyMedium)
+            val context = LocalContext.current
+            val showCards = SettingsActivity.getShowAnswers(context)
+            if (showCards) {
+                Text(card.answer, modifier, style = MaterialTheme.typography.bodyMedium)
+            }
+            else {
+                Text(stringResource(id = R.string.show_answers), modifier, style = MaterialTheme.typography.bodyMedium)
+                
+            }
             if (switchState) {
                 Text(
                     stringResource(id = R.string.quality) + " = ${card.quality}\n" + stringResource(

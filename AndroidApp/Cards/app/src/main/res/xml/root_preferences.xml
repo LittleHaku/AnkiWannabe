@@ -6,9 +6,9 @@
             app:summary="@string/click_to_change"
             app:defaultValue="20" />
         <SwitchPreferenceCompat
-            app:key="board"
-            app:summaryOff="@string/board_summary_off"
-            app:summaryOn="@string/board_summary_on"
-            app:title="@string/board_title" />
+            app:key="show_answers"
+            app:summaryOff="@string/answers_off"
+            app:summaryOn="@string/answers_on"
+            app:title="@string/answers_settings_title" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -40,12 +40,13 @@
     <!-- Sync Preferences -->
     <string name="decks_header">Decks</string>
     <string name="max_number_cards">Maximum number of cards to study per day</string>
-    <string name="board_summary_off">Board unavailable</string>
-    <string name="board_summary_on">Board available</string>
-    <string name="board_title">Show board</string>
+    <string name="answers_off">The answers won\'t be shown in the card list</string>
+    <string name="answers_on">The answers will be shown in the card list</string>
+    <string name="answers_settings_title">Show answers</string>
     <string name="click_to_change">Tap to change the value (default is 20)</string>
     <string name="max_number_cards_short">Max cards per day</string>
     <string name="cards_studied_today">Cards studied today</string>
     <string name="not_enough_data">The user doesn\'t have enough data for statistics, try studying a bit more.</string>
     <string name="card_limit">Card limit reached, if you want to study more increase the limit in the settings menu.</string>
+    <string name="show_answers">To see the answers in this view, change the settings</string>
 </resources>
