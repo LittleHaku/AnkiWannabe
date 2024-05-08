@@ -36,6 +36,7 @@ import es.uam.eps.dadm.cards.RED
 import es.uam.eps.dadm.cards.Review
 import es.uam.eps.dadm.cards.SettingsActivity
 import es.uam.eps.dadm.cards.YELLOW
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Composable
@@ -57,7 +58,7 @@ fun Study(viewModel: CardViewModel) {
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
     val noMoreCards = stringResource(id = R.string.no_more_cards)
     val context = LocalContext.current
-    val maxCards = SettingsActivity.getMaximumNumberOfCards(context)
+    val maxCards = SettingsActivity.getMaximumNumberOfCards(context)?: "20"
 
     if (card?.userId == Firebase.auth.currentUser?.uid) {
         card?.let { CardView(viewModel = viewModel, it, nCards, maxCards) }
@@ -84,9 +85,10 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int, maxCards: String
     val maxCardsString = stringResource(id = R.string.max_number_cards_short)
     val cardsStudiedTodayString = stringResource(id = R.string.cards_studied_today)
     val remainingCardsString = stringResource(id = R.string.remaining_cards)
-    //val cardsStudiedToday = viewModel.getUserReviews(viewModel.userId).observeAsState()
+    val userReviews = viewModel.getUserReviews(viewModel.userId).observeAsState(listOf()).value
+    val cardsStudiedToday = viewModel.fromReviewsToMap(userReviews)[LocalDate.now().toString()]
     // TODO
-    val cardsStudiedToday = "TODO"
+    //val cardsStudiedToday = "TODO"
     val onAnswered = { value: Boolean ->
         answered = value
         if (nCards == 0) {
