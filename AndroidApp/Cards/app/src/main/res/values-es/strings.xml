@@ -18,7 +18,7 @@
     <string name="hard">Difícil</string>
     <string name="no_more_cards">No quedan tarjetas restantes</string>
     <string name="edited_succ">Editado Correctamente</string>
-    <string name="introduce_some_values">Introduce algún valor</string>
+    <string name="introduce_some_values">Completa todos campos</string>
     <string name="created_succ">Creado correctamente</string>
     <string name="next_practice">Próxima Práctica</string>
     <string name="days">día(s)</string>
@@ -43,4 +43,5 @@
     <string name="not_enough_data">El usuario no ha estudiado suficiente para poder generar estadísticas</string>
     <string name="card_limit">Límite de tarjetas alcanzado, si quieres seguir estudiando, por favot aumenta el límite en los ajustes</string>
     <string name="show_answers">Para ver las respuestas en esta lista, cambia los ajustes</string>
+    <string name="card_from_deck">Tarjetas del mazo</string>
 </resources>

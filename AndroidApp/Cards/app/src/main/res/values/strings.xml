@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cards</string>
-    <string name="remaining_cards">Remaining Cards</string>
+    <string name="remaining_cards">Remaining cards today</string>
     <string name="view_answer">View Answer</string>
     <string name="list_of_decks">Your Decks</string>
     <string name="decks_cards">Cards from Deck</string>
@@ -18,7 +18,7 @@
     <string name="hard">Hard</string>
     <string name="no_more_cards">No more cards left</string>
     <string name="edited_succ">Edited successfully</string>
-    <string name="introduce_some_values">Introduce some values</string>
+    <string name="introduce_some_values">Complete all the fields</string>
     <string name="created_succ">Created Successfully</string>
     <string name="next_practice">Next Practice</string>
     <string name="days">day(s)</string>
@@ -49,4 +49,5 @@
     <string name="not_enough_data">The user doesn\'t have enough data for statistics, try studying a bit more.</string>
     <string name="card_limit">Card limit reached, if you want to study more increase the limit in the settings menu.</string>
     <string name="show_answers">To see the answers in this view, change the settings</string>
+    <string name="card_from_deck">Card from deck</string>
 </resources>

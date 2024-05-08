@@ -99,11 +99,7 @@ fun Study(viewModel: CardViewModel) {
 
 @Composable
 fun CardView(
-    viewModel: CardViewModel,
-    card: Card,
-    nCards: Int,
-    maxCards: Int,
-    cardsStudiedToday: Int?
+    viewModel: CardViewModel, card: Card, nCards: Int, maxCards: Int, cardsStudiedToday: Int?
 ) {
 
 
@@ -114,6 +110,7 @@ fun CardView(
     val maxCardsString = stringResource(id = R.string.max_number_cards_short)
     val cardsStudiedTodayString = stringResource(id = R.string.cards_studied_today)
     val remainingCardsString = stringResource(id = R.string.remaining_cards)
+    val deckName = viewModel.getDeckById(card.deckId).observeAsState().value?.name ?: ""
 
     val onAnswered = { value: Boolean ->
         answered = value
@@ -125,11 +122,11 @@ fun CardView(
     }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxHeight()
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxHeight()
     ) {
-        //Text(text = stringResource(id = R.string.card_from_deck) +": " + )
-        Spacer(modifier = Modifier.weight(1f)) // Pushes the Box to the center
+
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Box(
             modifier = Modifier
@@ -140,19 +137,18 @@ fun CardView(
             CardData(card, answered, onAnswered, viewModel)
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Pushes the Text to the bottom
-
-        Text(
-            text = "$remainingCardsString: $nCards\n" +
-                    "$maxCardsString: $maxCards\n" +
-                    "$cardsStudiedTodayString: $cardsStudiedToday",
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = stringResource(id = R.string.card_from_deck) + ": " + deckName,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 50.dp), // Add padding to the bottom
+            modifier = Modifier.padding(vertical = 16.dp),
+            style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = "$remainingCardsString: $nCards\n" + "$maxCardsString: $maxCards\n" + "$cardsStudiedTodayString: $cardsStudiedToday",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 50.dp),
             style = MaterialTheme.typography.bodyLarge
         )
     }
-
-
 
 
 }
