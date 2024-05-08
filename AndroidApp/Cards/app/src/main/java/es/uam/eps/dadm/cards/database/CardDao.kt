@@ -90,4 +90,7 @@ interface CardDao {
     @Query("SELECT * FROM cards_table WHERE userId == :userId AND deckId == :deckId")
     fun getCardsFromDeckAndUser(userId: String, deckId: String): LiveData<List<Card>>
 
+    @Query("SELECT * FROM reviews_table WHERE userId == :userId")
+    fun getReviewsFromUser(userId: String): LiveData<List<Review>>
+
 }

@@ -1,7 +1,6 @@
 package es.uam.eps.dadm.cards.screens
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -164,12 +163,6 @@ fun CardScaffold(
                                         SettingsActivity::class.java
                                     )
                                 )
-                                val text = SettingsActivity.getMaximumNumberOfCards(context)
-                                Toast
-                                    .makeText(
-                                        context, text, Toast.LENGTH_SHORT
-                                    )
-                                    .show()
                             }
                             .padding(8.dp)
                     )

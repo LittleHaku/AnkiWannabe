@@ -49,6 +49,10 @@ class CardViewModel(application: Application) : ViewModel() {
         }
     }
 
+    fun getUserReviews(userId: String): LiveData<List<Review>> {
+        return cardDao.getReviewsFromUser(userId)
+    }
+
     fun getUserDueCard(userId: String): LiveData<Card?> {
         return cardDao.getCardsFromUser(userId).map {
             it.filter { card -> (card.isDue(LocalDate.now())) }.run {

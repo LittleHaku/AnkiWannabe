@@ -5,13 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
@@ -20,6 +25,7 @@ import co.yml.charts.ui.barchart.models.BarChartData
 import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.barchart.models.BarStyle
 import es.uam.eps.dadm.cards.CardViewModel
+import es.uam.eps.dadm.cards.R
 
 @Composable
 fun StatisticsScreen(viewModel: CardViewModel) {
@@ -35,12 +41,20 @@ fun StatisticsScreen(viewModel: CardViewModel) {
 
 @Composable
 fun Statistics(viewModel: CardViewModel) {
-    val reviews by viewModel.reviews.observeAsState(listOf())
+    //val reviews by viewModel.reviews.observeAsState(listOf())
+    val reviews by viewModel.getUserReviews(viewModel.userId).observeAsState(listOf())
     val barData = mutableListOf<BarData>()
 
 
+    // Print the content of the reviews list
+    /*println("Content of reviews list:")
+    reviews.forEach { review ->
+        println(review) // Or display it as needed
+    }*/
+
     reviews.let { reviewList ->
         val reviewsMap = viewModel.fromReviewsToMap(reviewList)
+
 
         reviewsMap.entries.forEachIndexed { index, entry ->
             val date = entry.key
@@ -49,19 +63,38 @@ fun Statistics(viewModel: CardViewModel) {
             // Create a BarData point with x as the index and y as the number of reviews
             val point = BarData(
                 point = Point(x = index.toFloat(), y = numberOfReviews.toFloat()),
+//                point = Point(x = 0.0F, y = 3.2F),
                 label = date,
+//                label = "AAA",
                 color = MaterialTheme.colorScheme.primary
             )
 
             barData.add(point)
         }
+        if (barData.isNotEmpty()) {
+            BarchartWithSolidBars(barData)
+        } else {
+            Text(
+                text = stringResource(id = R.string.not_enough_data),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(50.dp)
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            )
+
+
+        }
+
     }
+    //println(reviewsMap)
+    println( mutableListOf<BarData>(BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")))
     //val point1 = BarData(point = Point(x = 0.0F, y = 3.2F), label = "1")
-    //barData.add(point1)
+    //val barData =
 
 
     // TODO: cant be empty, if not fails
-    BarchartWithSolidBars(barData)
+    //BarchartWithSolidBars(barData)
 
 }
 

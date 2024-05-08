@@ -34,6 +34,7 @@ import es.uam.eps.dadm.cards.GREEN
 import es.uam.eps.dadm.cards.R
 import es.uam.eps.dadm.cards.RED
 import es.uam.eps.dadm.cards.Review
+import es.uam.eps.dadm.cards.SettingsActivity
 import es.uam.eps.dadm.cards.YELLOW
 import java.time.LocalDateTime
 
@@ -55,8 +56,11 @@ fun Study(viewModel: CardViewModel) {
     val card by viewModel.getUserDueCard(uid).observeAsState()
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
     val noMoreCards = stringResource(id = R.string.no_more_cards)
+    val context = LocalContext.current
+    val maxCards = SettingsActivity.getMaximumNumberOfCards(context)
+
     if (card?.userId == Firebase.auth.currentUser?.uid) {
-        card?.let { CardView(viewModel = viewModel, it, nCards) }
+        card?.let { CardView(viewModel = viewModel, it, nCards, maxCards) }
     } else {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -70,13 +74,19 @@ fun Study(viewModel: CardViewModel) {
 }
 
 @Composable
-fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
+fun CardView(viewModel: CardViewModel, card: Card, nCards: Int, maxCards: String?) {
 
 
     var answered by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val noMoreCardsString = stringResource(id = R.string.no_more_cards)
+    val maxCardsString = stringResource(id = R.string.max_number_cards_short)
+    val cardsStudiedTodayString = stringResource(id = R.string.cards_studied_today)
+    val remainingCardsString = stringResource(id = R.string.remaining_cards)
+    //val cardsStudiedToday = viewModel.getUserReviews(viewModel.userId).observeAsState()
+    // TODO
+    val cardsStudiedToday = "TODO"
     val onAnswered = { value: Boolean ->
         answered = value
         if (nCards == 0) {
@@ -88,10 +98,13 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            stringResource(id = R.string.remaining_cards) + ": $nCards",
+            text = "$remainingCardsString: $nCards\n" +
+                    "$maxCardsString: $maxCards\n" +
+                    "$cardsStudiedTodayString: $cardsStudiedToday",
             modifier = Modifier.padding(top = 50.dp),
             style = MaterialTheme.typography.bodyLarge
         )
+
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CardData(card, answered, onAnswered, viewModel)
         }
