@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -57,25 +58,49 @@ fun Study(viewModel: CardViewModel) {
     val card by viewModel.getUserDueCard(uid).observeAsState()
     val nCards by viewModel.nDueCards.observeAsState(initial = 0)
     val noMoreCards = stringResource(id = R.string.no_more_cards)
+    val cardLimit = stringResource(id = R.string.card_limit)
     val context = LocalContext.current
-    val maxCards = SettingsActivity.getMaximumNumberOfCards(context)?: "20"
+    val maxCards = (SettingsActivity.getMaximumNumberOfCards(context) ?: "20").toInt()
+    val userReviews = viewModel.getUserReviews(viewModel.userId).observeAsState(listOf()).value
+    val cardsStudiedToday = viewModel.fromReviewsToMap(userReviews)[LocalDate.now().toString()] ?: 0
 
-    if (card?.userId == Firebase.auth.currentUser?.uid) {
-        card?.let { CardView(viewModel = viewModel, it, nCards, maxCards) }
+    // Check the user is the real one and the limit of cards
+    if (card?.userId == Firebase.auth.currentUser?.uid && (cardsStudiedToday < maxCards)) {
+        card?.let { CardView(viewModel = viewModel, it, nCards, maxCards, cardsStudiedToday) }
     } else {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = noMoreCards, style = MaterialTheme.typography.titleLarge)
+            // cardsStudiedToday > maxCards is worse because maybe there are no more cards left
+            if (nCards > 0) {
+                Text(
+                    text = cardLimit,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            } else {
+                Text(
+                    text = noMoreCards,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+            }
         }
     }
 
 }
 
 @Composable
-fun CardView(viewModel: CardViewModel, card: Card, nCards: Int, maxCards: String?) {
+fun CardView(
+    viewModel: CardViewModel,
+    card: Card,
+    nCards: Int,
+    maxCards: Int,
+    cardsStudiedToday: Int?
+) {
 
 
     var answered by remember { mutableStateOf(false) }
@@ -85,10 +110,7 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int, maxCards: String
     val maxCardsString = stringResource(id = R.string.max_number_cards_short)
     val cardsStudiedTodayString = stringResource(id = R.string.cards_studied_today)
     val remainingCardsString = stringResource(id = R.string.remaining_cards)
-    val userReviews = viewModel.getUserReviews(viewModel.userId).observeAsState(listOf()).value
-    val cardsStudiedToday = viewModel.fromReviewsToMap(userReviews)[LocalDate.now().toString()]
-    // TODO
-    //val cardsStudiedToday = "TODO"
+
     val onAnswered = { value: Boolean ->
         answered = value
         if (nCards == 0) {
@@ -103,6 +125,7 @@ fun CardView(viewModel: CardViewModel, card: Card, nCards: Int, maxCards: String
             text = "$remainingCardsString: $nCards\n" +
                     "$maxCardsString: $maxCards\n" +
                     "$cardsStudiedTodayString: $cardsStudiedToday",
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 50.dp),
             style = MaterialTheme.typography.bodyLarge
         )

@@ -38,4 +38,8 @@
     <string name="board_summary_on">Con pizarra</string>
     <string name="board_title">Mostrar pizarra</string>
     <string name="click_to_change">Toca para cambiar (por defecto 20)</string>
+    <string name="max_number_cards_short">Límite de tarjetas diario</string>
+    <string name="cards_studied_today">Tarjetas estudiadas hoy</string>
+    <string name="not_enough_data">El usuario no ha estudiado suficiente para poder generar estadísticas</string>
+    <string name="card_limit">Límite de tarjetas alcanzado, si quieres seguir estudiando, por favot aumenta el límite en los ajustes</string>
 </resources>

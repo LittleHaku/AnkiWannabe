@@ -44,7 +44,8 @@
     <string name="board_summary_on">Board available</string>
     <string name="board_title">Show board</string>
     <string name="click_to_change">Tap to change the value (default is 20)</string>
-    <string name="max_number_cards_short">Max Cards per Day</string>
+    <string name="max_number_cards_short">Max cards per day</string>
     <string name="cards_studied_today">Cards studied today</string>
     <string name="not_enough_data">The user doesn\'t have enough data for statistics, try studying a bit more.</string>
+    <string name="card_limit">Card limit reached, if you want to study more increase the limit in the settings menu.</string>
 </resources>
