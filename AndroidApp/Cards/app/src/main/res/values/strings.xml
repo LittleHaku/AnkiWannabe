@@ -2,7 +2,7 @@
     <string name="app_name">Cards</string>
     <string name="remaining_cards">Remaining Cards</string>
     <string name="view_answer">View Answer</string>
-    <string name="list_of_decks">List of Decks</string>
+    <string name="list_of_decks">Your Decks</string>
     <string name="decks_cards">Cards from Deck</string>
     <string name="deck_name">Deck Name</string>
     <string name="deck_description">Deck Description</string>
