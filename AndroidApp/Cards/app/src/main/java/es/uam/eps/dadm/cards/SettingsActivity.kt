@@ -47,9 +47,11 @@ class SettingsActivity : AppCompatActivity() {
         private const val SHOW_ANSWERS = "show_answers"
         private const val SHOW_ANSWERS_DEFAULT = true
 
-        fun getMaximumNumberOfCards(context: Context): String? {
+        fun getMaximumNumberOfCards(context: Context): Int {
             return PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(MAX_NUMBER_CARDS_KEY, MAX_NUMBER_CARDS_DEFAULT)
+                // Uses default if the input isn't a number
+                .getString(MAX_NUMBER_CARDS_KEY, MAX_NUMBER_CARDS_DEFAULT)?.toIntOrNull()
+                ?: MAX_NUMBER_CARDS_DEFAULT.toInt()
         }
 
         fun setLoggedIn(context: Context, loggedin: Boolean) {

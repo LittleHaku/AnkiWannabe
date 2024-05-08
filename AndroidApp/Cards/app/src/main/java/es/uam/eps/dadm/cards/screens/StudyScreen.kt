@@ -60,7 +60,7 @@ fun Study(viewModel: CardViewModel) {
     val noMoreCards = stringResource(id = R.string.no_more_cards)
     val cardLimit = stringResource(id = R.string.card_limit)
     val context = LocalContext.current
-    val maxCards = (SettingsActivity.getMaximumNumberOfCards(context) ?: "20").toInt()
+    val maxCards = SettingsActivity.getMaximumNumberOfCards(context)
     val userReviews = viewModel.getUserReviews(viewModel.userId).observeAsState(listOf()).value
     val cardsStudiedToday = viewModel.fromReviewsToMap(userReviews)[LocalDate.now().toString()] ?: 0
 
