@@ -143,7 +143,7 @@ fun CardView(
             modifier = Modifier.padding(vertical = 16.dp),
             style = MaterialTheme.typography.bodyLarge)
         Text(
-            text = "$remainingCardsString: $nCards\n" + "$maxCardsString: $maxCards\n" + "$cardsStudiedTodayString: $cardsStudiedToday",
+            text = "$remainingCardsString: $nCards\n$maxCardsString: $maxCards\n$cardsStudiedTodayString: $cardsStudiedToday",
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 50.dp),
             style = MaterialTheme.typography.bodyLarge
