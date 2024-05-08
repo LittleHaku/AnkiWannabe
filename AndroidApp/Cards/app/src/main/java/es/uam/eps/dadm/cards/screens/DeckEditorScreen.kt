@@ -2,9 +2,11 @@ package es.uam.eps.dadm.cards.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -78,13 +80,32 @@ fun InnerDeckEditor(navController: NavController, viewModel: CardViewModel, deck
 
     val context = LocalContext.current
 
-    OutlinedTextField(value = name,
-        onValueChange = onNameChanged,
-        label = { Text(text = stringResource(id = R.string.deck_name)) })
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChanged,
+                label = { Text(stringResource(id = R.string.deck_name)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
 
-    OutlinedTextField(value = description,
-        onValueChange = onDescriptionChanged,
-        label = { Text(stringResource(id = R.string.deck_description)) })
+            OutlinedTextField(
+                value = description,
+                onValueChange = onDescriptionChanged,
+                label = { Text(stringResource(id = R.string.deck_description)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+        }
+    }
+
 
     Row {
         Button(

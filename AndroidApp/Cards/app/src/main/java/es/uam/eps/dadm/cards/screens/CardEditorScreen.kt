@@ -2,9 +2,11 @@ package es.uam.eps.dadm.cards.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -74,15 +76,33 @@ fun InnerCardEditor(navController: NavController, viewModel: CardViewModel, card
     var question by remember { mutableStateOf(card.question) }
     var answer by remember { mutableStateOf(card.answer) }
     val onQuestionChanged = { value: String -> question = value }
-
-    OutlinedTextField(value = question,
-        onValueChange = onQuestionChanged,
-        label = { Text(stringResource(id = R.string.card_question)) })
     val onAnswerChanged = { value: String -> answer = value }
-    OutlinedTextField(value = answer,
-        onValueChange = onAnswerChanged,
-        label = { Text(stringResource(id = R.string.card_answer)) })
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = question,
+                onValueChange = onQuestionChanged,
+                label = { Text(stringResource(id = R.string.card_question)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+
+            OutlinedTextField(
+                value = answer,
+                onValueChange = onAnswerChanged,
+                label = { Text(stringResource(id = R.string.card_answer)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+        }
+    }
     val context = LocalContext.current
     Row {
 
