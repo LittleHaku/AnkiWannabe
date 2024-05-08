@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -74,10 +75,14 @@ fun CardList(viewModel: CardViewModel, navController: NavController, deckId: Str
     LazyColumn {
         item {
             Text(
-                stringResource(id = R.string.decks_cards) + ": $selectedDeck",
-                Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.decks_cards) + ": $selectedDeck",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.displayLarge
+                modifier = Modifier.run {
+                    fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                        .fillMaxHeight()
+                },
+                style = MaterialTheme.typography.headlineSmall
             )
         }
         items(cards) { card ->
@@ -191,10 +196,13 @@ fun CardItem(
             val showCards = SettingsActivity.getShowAnswers(context)
             if (showCards) {
                 Text(card.answer, modifier, style = MaterialTheme.typography.bodyMedium)
-            }
-            else {
-                Text(stringResource(id = R.string.show_answers), modifier, style = MaterialTheme.typography.bodyMedium)
-                
+            } else {
+                Text(
+                    stringResource(id = R.string.show_answers),
+                    modifier,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
             }
             if (switchState) {
                 Text(

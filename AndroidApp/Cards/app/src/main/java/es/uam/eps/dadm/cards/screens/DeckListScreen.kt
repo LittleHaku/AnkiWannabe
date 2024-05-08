@@ -87,9 +87,9 @@ fun DeckList(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.run {
                     fillMaxWidth()
-                                .padding(vertical = 16.dp) // Add some vertical padding (optional)
-                                .fillMaxHeight()
-                }, // Restrict height to content
+                        .padding(vertical = 16.dp)
+                        .fillMaxHeight()
+                },
                 style = MaterialTheme.typography.headlineSmall
             )
         }
