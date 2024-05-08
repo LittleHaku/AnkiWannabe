@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -69,7 +70,9 @@ fun Study(viewModel: CardViewModel) {
         card?.let { CardView(viewModel = viewModel, it, nCards, maxCards, cardsStudiedToday) }
     } else {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -78,14 +81,14 @@ fun Study(viewModel: CardViewModel) {
                 Text(
                     text = noMoreCards,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
             } else {
 
                 Text(
                     text = cardLimit,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
             }
@@ -121,20 +124,35 @@ fun CardView(
         }
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxHeight()
+    ) {
+        //Text(text = stringResource(id = R.string.card_from_deck) +": " + )
+        Spacer(modifier = Modifier.weight(1f)) // Pushes the Box to the center
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CardData(card, answered, onAnswered, viewModel)
+        }
+
+        Spacer(modifier = Modifier.weight(1f)) // Pushes the Text to the bottom
+
         Text(
             text = "$remainingCardsString: $nCards\n" +
                     "$maxCardsString: $maxCards\n" +
                     "$cardsStudiedTodayString: $cardsStudiedToday",
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 50.dp),
+            modifier = Modifier.padding(bottom = 50.dp), // Add padding to the bottom
             style = MaterialTheme.typography.bodyLarge
         )
-
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CardData(card, answered, onAnswered, viewModel)
-        }
     }
+
+
 
 
 }
@@ -164,7 +182,8 @@ fun CardData(
         Text(stringResource(id = R.string.card_question) + ":")
         Text(
             card.question,
-            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(8.dp)
         )
 
@@ -174,7 +193,8 @@ fun CardData(
             Text(stringResource(id = R.string.card_answer) + ":")
             Text(
                 card.answer,
-                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(8.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
